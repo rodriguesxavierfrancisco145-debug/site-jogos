@@ -1,4 +1,4 @@
-Nx.%<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
@@ -370,7 +370,6 @@ Nx.%<!DOCTYPE html>
             gap: 14px;
         }
 
-        /* Animação suave para aparecimento dos cards de jogo */
         @keyframes fadeInGame {
             from {
                 opacity: 0;
@@ -382,7 +381,6 @@ Nx.%<!DOCTYPE html>
             }
         }
 
-        /* Cartão de Jogo com Estilo Neon Animado */
         .game-card {
             background: linear-gradient(145deg, #15151f, #0f0f16);
             border-radius: 14px;
@@ -422,7 +420,6 @@ Nx.%<!DOCTYPE html>
             transform: scale(1.1);
         }
 
-        /* Selo de Status/Preço Flutuante */
         .price-badge {
             position: absolute;
             top: 8px;
@@ -530,7 +527,6 @@ Nx.%<!DOCTYPE html>
             border: 1px dashed rgba(255,255,255,0.08);
         }
 
-        /* Estilo da Página de Detalhes do Jogo Neon */
         .game-detail-card {
             background: linear-gradient(145deg, #161622, #101017);
             border-radius: 16px;
@@ -602,7 +598,6 @@ Nx.%<!DOCTYPE html>
             border: 1px solid rgba(255,255,255,0.04);
         }
 
-        /* Barra de Ação (Apenas Compartilhar) */
         .action-bar {
             display: flex;
             align-items: center;
@@ -633,7 +628,6 @@ Nx.%<!DOCTYPE html>
             box-shadow: 0 4px 15px rgba(255,0,127,0.5);
         }
 
-        /* Rodapé com mensagem */
         .admin-login-area {
             text-align: center;
             margin-top: 40px;
@@ -776,7 +770,6 @@ Nx.%<!DOCTYPE html>
     </div>
 
     <script>
-        // Sistema de Nuvem Público com JSONBin.io (Grátis e Compartilhado para Todos)
         const BIN_ID = "66f361cbe41b4d34e4337b58"; 
         const API_KEY = "$2a$10$7R9fXvY6Wv3H1x2Y9x8Z2e7Z2e7Z2e7Z2e7Z2e7Z2e7Z2e7Z2e7Z2"; 
 
@@ -787,7 +780,17 @@ Nx.%<!DOCTYPE html>
         let categoriaAtual = 'Todos';
 
         document.addEventListener('DOMContentLoaded', () => {
+            // Carrega instantaneamente do localStorage se houver dados salvos anteriormente
+            let localSalvo = localStorage.getItem('global_shared_psp_games');
+            if (localSalvo) {
+                try {
+                    listaJogosCache = JSON.parse(localSalvo);
+                    renderGames();
+                } catch(e) {}
+            }
+
             carregarJogosDaNuvem();
+
             if (localStorage.getItem('isAdmin') === 'true') {
                 liberarAdmin();
             }
@@ -865,39 +868,32 @@ Nx.%<!DOCTYPE html>
         }
 
         async function carregarJogosDaNuvem() {
-            let dadosLocais = localStorage.getItem('global_shared_psp_games');
-            if (dadosLocais) {
-                listaJogosCache = JSON.parse(dadosLocais);
-                renderGames();
-            }
-
             try {
                 let resposta = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
                     headers: { 'X-Master-Key': API_KEY }
                 });
                 if (resposta.ok) {
                     let dados = await resposta.json();
-                    if (dados.record && dados.record.games) {
-                        listaJogosCache = dados.record.games;
-                        localStorage.setItem('global_shared_psp_games', JSON.stringify(listaJogosCache));
-                        renderGames();
-                    }
+                    listaJogosCache = dados.record.games || [];
+                    localStorage.setItem('global_shared_psp_games', JSON.stringify(listaJogosCache));
+                    renderGames();
+                } else if (listaJogosCache.length === 0) {
+                    gamesGrid.innerHTML = '<p class="empty-msg">Erro ao carregar jogos da nuvem.</p>';
                 }
             } catch (e) {
-                console.log("Modo offline / Falha na nuvem, usando dados locais.");
-            }
-
-            if (listaJogosCache.length === 0) {
-                gamesGrid.innerHTML = '<p class="empty-msg">Nenhum jogo cadastrado ainda. Abra o painel com a senha para adicionar.</p>';
+                let local = localStorage.getItem('global_shared_psp_games');
+                listaJogosCache = local ? JSON.parse(local) : [];
+                renderGames();
             }
         }
 
         async function salvarJogosNaNuvem(gamesArray) {
             listaJogosCache = gamesArray;
             localStorage.setItem('global_shared_psp_games', JSON.stringify(gamesArray));
+            renderGames(); // Atualiza a tela imediatamente na hora
             
             try {
-                await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
+                let resposta = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
@@ -905,8 +901,9 @@ Nx.%<!DOCTYPE html>
                     },
                     body: JSON.stringify({ games: gamesArray })
                 });
+                return resposta.ok;
             } catch (e) {
-                console.log("Erro ao salvar na nuvem, salvo localmente.");
+                return false;
             }
         }
 
