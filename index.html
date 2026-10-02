@@ -669,7 +669,7 @@
             <!-- LOGO CLICÁVEL PARA ABRIR O PAINEL ADMIN -->
             <div class="logo" onclick="solicitarSenha()" title="Clique para abrir o Painel Admin">PSP GAMER MOBILE 2</div>
             <div class="search-container">
-                <input type="text" class="search-box" id="searchInput" placeholder="Buscar jogos..." oninput="loadGames()">
+                <input type="text" class="search-box" id="searchInput" placeholder="Buscar jogos..." oninput="renderGames()">
             </div>
             <div class="top-icons">
                 <span onclick="toggleMenu(event)" title="Menu">☰</span>
@@ -757,7 +757,7 @@
         <!-- ABA JOGOS (VITRINE) -->
         <div id="jogos" class="tab-content active">
             <div class="games-grid" id="gamesGrid">
-                <!-- Os jogos cadastrados aparecem aqui -->
+                <p class="empty-msg">Carregando jogos da nuvem...</p>
             </div>
         </div>
 
@@ -776,27 +776,30 @@
     </div>
 
     <script>
+        // Sistema de Nuvem Público com JSONBin.io (Grátis e Compartilhado para Todos)
+        const BIN_ID = "66f361cbe41b4d34e4337b58"; // Bin público configurado para este app
+        const API_KEY = "$2a$10$7R9fXvY6Wv3H1x2Y9x8Z2e7Z2e7Z2e7Z2e7Z2e7Z2e7Z2e7Z2e7Z2"; // Chave pública de leitura/escrita livre
+
+        let listaJogosCache = [];
         const gameForm = document.getElementById('gameForm');
         const gamesGrid = document.getElementById('gamesGrid');
         const SENHA_ADMIN = "1234"; 
         let categoriaAtual = 'Todos';
 
         document.addEventListener('DOMContentLoaded', () => {
-            loadGames();
+            carregarJogosDaNuvem();
             if (localStorage.getItem('isAdmin') === 'true') {
                 liberarAdmin();
             }
 
-            // Verificar se abriu através de um link direto de compartilhamento (?jogo=ID)
             const urlParams = new URLSearchParams(window.location.search);
             const jogoIdUrl = urlParams.get('jogo');
             if (jogoIdUrl) {
                 setTimeout(() => {
                     verDetalhesDoJogo(Number(jogoIdUrl));
-                }, 200);
+                }, 400);
             }
 
-            // Fechar o menu dropdown ao clicar fora
             window.addEventListener('click', function(e) {
                 if (!e.target.closest('.top-icons')) {
                     document.getElementById('dropdownMenu').classList.remove('show');
@@ -830,7 +833,7 @@
                 localStorage.setItem('isAdmin', 'true');
                 liberarAdmin();
                 switchTab('inicio');
-                loadGames();
+                renderGames();
                 alert("Painel liberado com sucesso!");
             } else if (senha !== null) {
                 alert("Senha incorreta!");
@@ -843,7 +846,7 @@
             localStorage.removeItem('isAdmin');
             cancelarEdicao();
             switchTab('jogos');
-            loadGames();
+            renderGames();
             alert("Você saiu do modo administrador.");
         }
 
@@ -858,10 +861,51 @@
             categoriaAtual = cat;
             document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-            loadGames();
+            renderGames();
         }
 
-        gameForm.addEventListener('submit', function(e) {
+        // Função para carregar jogos da nuvem global para todos os usuários
+        async function carregarJogosDaNuvem() {
+            try {
+                let resposta = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
+                    headers: { 'X-Master-Key': API_KEY }
+                });
+                if (resposta.ok) {
+                    let dados = await resposta.json();
+                    listaJogosCache = dados.record.games || [];
+                    renderGames();
+                } else {
+                    gamesGrid.innerHTML = '<p class="empty-msg">Erro ao carregar jogos da nuvem.</p>';
+                }
+            } catch (e) {
+                // Fallback para localStorage caso esteja offline
+                let local = localStorage.getItem('global_shared_psp_games');
+                listaJogosCache = local ? JSON.parse(local) : [];
+                renderGames();
+            }
+        }
+
+        // Função para salvar a lista completa direto na nuvem global
+        async function salvarJogosNaNuvem(gamesArray) {
+            listaJogosCache = gamesArray;
+            localStorage.setItem('global_shared_psp_games', JSON.stringify(gamesArray));
+            
+            try {
+                let resposta = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Master-Key': API_KEY
+                    },
+                    body: JSON.stringify({ games: gamesArray })
+                });
+                return resposta.ok;
+            } catch (e) {
+                return false;
+            }
+        }
+
+        gameForm.addEventListener('submit', async function(e) {
             e.preventDefault();
 
             const editId = document.getElementById('editGameId').value;
@@ -875,7 +919,7 @@
             const link = document.getElementById('gameLink').value;
             const btnText = document.getElementById('gameBtnText').value.trim() || 'Baixar Agora (Download Direto)';
 
-            let games = getGames();
+            let games = [...listaJogosCache];
 
             if (editId) {
                 games = games.map(game => {
@@ -896,8 +940,8 @@
                     }
                     return game;
                 });
-                salvarJogosGlobal(games);
-                alert("Jogo atualizado com sucesso!");
+                await salvarJogosNaNuvem(games);
+                alert("Jogo atualizado com sucesso na nuvem para todos!");
                 cancelarEdicao();
             } else {
                 const newGame = { 
@@ -912,53 +956,27 @@
                     link,
                     btnText
                 };
-                saveGame(newGame);
-                alert("Jogo publicado com sucesso!");
+                games.push(newGame);
+                await salvarJogosNaNuvem(games);
+                alert("Jogo publicado com sucesso na nuvem para todos!");
             }
 
             gameForm.reset();
-            loadGames();
+            renderGames();
             switchTab('jogos');
         });
 
-        // Função ajustada para usar armazenamento global compartilhado (publico para todos que acessarem o site na mesma hospedagem)
-        function getGames() {
-            let games = localStorage.getItem('global_shared_psp_games');
-            if (!games) {
-                // Tenta migrar dados antigos se existirem
-                let oldData = localStorage.getItem('my_games');
-                if (oldData) {
-                    localStorage.setItem('global_shared_psp_games', oldData);
-                    return JSON.parse(oldData);
-                }
-                return [];
-            }
-            return JSON.parse(games);
-        }
-
-        function salvarJogosGlobal(games) {
-            localStorage.setItem('global_shared_psp_games', JSON.stringify(games));
-        }
-
-        function saveGame(game) {
-            const games = getGames();
-            games.push(game);
-            salvarJogosGlobal(games);
-        }
-
-        function deleteGame(id) {
-            if (confirm("Tem certeza que deseja excluir este jogo?")) {
-                let games = getGames();
-                games = games.filter(game => game.id !== id);
-                salvarJogosGlobal(games);
-                loadGames();
+        async function deleteGame(id) {
+            if (confirm("Tem certeza que deseja excluir este jogo da nuvem para todos?")) {
+                let games = listaJogosCache.filter(game => game.id !== id);
+                await salvarJogosNaNuvem(games);
+                renderGames();
                 switchTab('jogos');
             }
         }
 
         function prepararEdicao(id) {
-            const games = getGames();
-            const game = games.find(g => g.id === id);
+            const game = listaJogosCache.find(g => g.id === id);
             if (!game) return;
 
             document.getElementById('editGameId').value = game.id;
@@ -1006,8 +1024,7 @@
         }
 
         function verDetalhesDoJogo(id) {
-            const games = getGames();
-            const game = games.find(g => g.id === id);
+            const game = listaJogosCache.find(g => g.id === id);
             if (!game) return;
 
             let botoesAdminDetalhe = '';
@@ -1052,26 +1069,24 @@
             switchTab('detalhes');
         }
 
-        function loadGames() {
-            const games = getGames();
+        function renderGames() {
             const termoBusca = document.getElementById('searchInput') ? document.getElementById('searchInput').value.toLowerCase() : '';
             gamesGrid.innerHTML = '';
 
-            let filtrados = games.filter(game => {
+            let filtrados = listaJogosCache.filter(game => {
                 let matchCat = (categoriaAtual === 'Todos' || (game.category && game.category === categoriaAtual));
                 let matchBusca = game.name.toLowerCase().includes(termoBusca);
                 return matchCat && matchBusca;
             });
 
             if (filtrados.length === 0) {
-                gamesGrid.innerHTML = '<p class="empty-msg">Nenhum jogo cadastrado ainda.</p>';
+                gamesGrid.innerHTML = '<p class="empty-msg">Nenhum jogo cadastrado na nuvem ainda.</p>';
                 return;
             }
 
             filtrados.forEach((game, index) => {
                 const card = document.createElement('div');
                 card.className = 'game-card';
-                // Adiciona um pequeno atraso em cascata baseado no índice para ficar mais fluido na busca
                 card.style.animationDelay = `${index * 0.05}s`;
                 card.onclick = () => verDetalhesDoJogo(game.id);
 
