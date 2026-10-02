@@ -7,11 +7,14 @@
     <style>
         :root {
             --bg-color: #121214;
-            --card-bg: #202024;
+            --card-bg: #1a1a1e;
             --text-color: #e1e1e6;
+            --text-muted: #7c7c8a;
             --primary: #00b37e;
             --primary-hover: #00875f;
+            --accent-pink: #f72585;
             --danger: #f75a68;
+            --warning: #f59e0b;
         }
 
         * {
@@ -24,96 +27,124 @@
         body {
             background-color: var(--bg-color);
             color: var(--text-color);
-            padding: 20px;
-        }
-
-        header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        header h1 {
-            color: var(--primary);
-            font-size: 2.5rem;
-            margin-bottom: 5px;
+            padding: 15px;
         }
 
         .container {
-            max-width: 1000px;
+            max-width: 500px;
             margin: 0 auto;
         }
 
-        /* Menu de Navegação (Abas) */
-        nav {
+        /* Topo / Header Moderno */
+        .top-bar {
             display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-bottom: 30px;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
         }
 
-        .nav-btn {
-            background-color: var(--card-bg);
-            color: var(--text-color);
-            border: 1px solid #323238;
-            padding: 10px 25px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 1rem;
+        .logo {
+            color: var(--accent-pink);
+            font-size: 1.5rem;
             font-weight: bold;
-            transition: 0.2s;
-            width: auto;
         }
 
-        .nav-btn.active, .nav-btn:hover {
-            background-color: var(--primary);
-            border-color: var(--primary);
+        .search-container {
+            flex: 1;
+            margin: 0 12px;
+        }
+
+        .search-box {
+            width: 100%;
+            background-color: #202024;
+            border: none;
+            border-radius: 20px;
+            padding: 8px 15px;
             color: white;
+            font-size: 0.9rem;
+            outline: none;
         }
 
-        .tab-content {
+        .top-icons {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: white;
+            font-size: 1.1rem;
+            cursor: pointer;
+        }
+
+        /* Categorias (Filtros redondos em rolagem horizontal) */
+        .categories {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+            scrollbar-width: none;
+        }
+
+        .categories::-webkit-scrollbar {
             display: none;
         }
 
+        .cat-btn {
+            background-color: #202024;
+            color: white;
+            border: none;
+            padding: 8px 18px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: 0.2s;
+        }
+
+        .cat-btn.active {
+            background-color: var(--accent-pink);
+        }
+
+        /* Abas de Navegação */
+        .tab-content {
+            display: none;
+        }
         .tab-content.active {
             display: block;
         }
 
-        /* Oculto por padrão para visitantes */
-        #admin-panel {
-            display: none;
-        }
-
+        /* Formulário do Painel Admin */
         .form-card {
             background-color: var(--card-bg);
             padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 30px;
+            border-radius: 12px;
+            margin-bottom: 20px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.3);
         }
 
         .form-card h2 {
             margin-bottom: 15px;
-            font-size: 1.5rem;
+            font-size: 1.3rem;
         }
 
         .input-group {
-            margin-bottom: 15px;
+            margin-bottom: 12px;
         }
 
         .input-group label {
             display: block;
-            margin-bottom: 5px;
-            font-size: 0.9rem;
+            margin-bottom: 4px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
         }
 
-        .input-group input {
+        .input-group input, .input-group select {
             width: 100%;
             padding: 10px;
-            border-radius: 4px;
+            border-radius: 8px;
             border: 1px solid #323238;
             background-color: #121214;
             color: white;
-            font-size: 1rem;
+            font-size: 0.9rem;
         }
 
         .form-row {
@@ -132,7 +163,7 @@
             padding: 10px 20px;
             font-size: 1rem;
             font-weight: bold;
-            border-radius: 4px;
+            border-radius: 8px;
             cursor: pointer;
             transition: background 0.2s;
             width: 100%;
@@ -142,47 +173,81 @@
             background-color: var(--primary-hover);
         }
 
+        /* Grid de Jogos (2 colunas) */
         .games-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 20px;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
         }
 
         .game-card {
             background-color: var(--card-bg);
-            border-radius: 8px;
+            border-radius: 12px;
             overflow: hidden;
             box-shadow: 0 4px 10px rgba(0,0,0,0.3);
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            position: relative;
+        }
+
+        .card-img-container {
+            position: relative;
+            width: 100%;
+            height: 140px;
         }
 
         .game-card img {
             width: 100%;
-            height: 160px;
+            height: 100%;
             object-fit: cover;
         }
 
+        /* Selo de Status/Preço Flutuante na Imagem */
+        .price-badge {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background-color: rgba(0, 0, 0, 0.75);
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            color: #10b981;
+        }
+
         .game-info {
-            padding: 15px;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
         }
 
         .game-info h3 {
-            font-size: 1.2rem;
-            margin-bottom: 8px;
+            font-size: 0.95rem;
+            margin-bottom: 6px;
+            color: white;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
 
         .game-details {
-            font-size: 0.85rem;
-            color: #afafbc;
-            margin-bottom: 12px;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-bottom: 8px;
             display: flex;
             flex-direction: column;
             gap: 3px;
+        }
+
+        /* Curtidas estilo o novo design */
+        .likes-row {
+            display: flex;
+            gap: 12px;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-bottom: 8px;
         }
 
         .download-btn {
@@ -192,9 +257,10 @@
             color: white;
             text-decoration: none;
             padding: 8px;
-            border-radius: 4px;
+            border-radius: 20px;
+            font-size: 0.8rem;
             font-weight: bold;
-            margin-top: 10px;
+            margin-top: auto;
         }
 
         .download-btn:hover {
@@ -205,8 +271,9 @@
             background-color: var(--danger);
             margin-top: 8px;
             padding: 6px;
-            font-size: 0.85rem;
+            font-size: 0.75rem;
             width: 100%;
+            border-radius: 6px;
         }
 
         .delete-btn:hover {
@@ -216,23 +283,24 @@
         .empty-msg {
             text-align: center;
             grid-column: 1 / -1;
-            color: #7c7c8a;
+            color: var(--text-muted);
             font-style: italic;
+            padding: 30px;
         }
 
-        /* Botão secreto de admin no rodapé */
+        /* Acesso restrito no rodapé */
         .admin-login-area {
             text-align: center;
-            margin-top: 50px;
-            padding-top: 20px;
+            margin-top: 40px;
+            padding-top: 15px;
             border-top: 1px solid #202024;
         }
 
         .admin-link {
             background: none;
             border: none;
-            color: #7c7c8a;
-            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-size: 0.75rem;
             cursor: pointer;
             text-decoration: underline;
             width: auto;
@@ -245,20 +313,33 @@
 <body>
 
     <div class="container">
-        <!-- Menu de Abas -->
-        <nav>
-            <button class="nav-btn active" onclick="switchTab('jogos')">Jogos</button>
-            <button class="nav-btn" id="tab-inicio-btn" style="display:none;" onclick="switchTab('inicio')">Painel Admin</button>
-        </nav>
+        <!-- TOPO NOVO ESTILO -->
+        <div class="top-bar">
+            <div class="logo">ZonaXP</div>
+            <div class="search-container">
+                <input type="text" class="search-box" id="searchInput" placeholder="Buscar jogos..." oninput="loadGames()">
+            </div>
+            <div class="top-icons" onclick="solicitarSenha()">
+                🌙 ☰
+            </div>
+        </div>
 
-        <!-- ABA INÍCIO (SÓ APARECE QUANDO VOCÊ COLOCA A SENHA) -->
+        <!-- CATEGORIAS REDONDAS NOVAS -->
+        <div class="categories">
+            <button class="cat-btn active" onclick="filtrarCategoria('Todos', this)">Todos</button>
+            <button class="cat-btn" onclick="filtrarCategoria('PSP', this)">PSP</button>
+            <button class="cat-btn" onclick="filtrarCategoria('PS2', this)">PS2</button>
+            <button class="cat-btn" onclick="filtrarCategoria('PC', this)">PC</button>
+            <button class="cat-btn" onclick="filtrarCategoria('APK', this)">APK</button>
+        </div>
+
+        <!-- ABA INÍCIO (PAINEL ADMIN) -->
         <div id="inicio" class="tab-content">
-            <header>
-                <h1>🔒 Painel Restrito</h1>
-                <p>Adicione novos jogos à vitrine</p>
+            <header style="margin-bottom: 15px;">
+                <h1 style="font-size: 1.8rem;">🔒 Painel Restrito</h1>
+                <p style="font-size: 0.85rem; color: var(--text-muted);">Adicione novos jogos à vitrine</p>
             </header>
 
-            <!-- Formulário para cadastrar o jogo -->
             <div class="form-card">
                 <h2>Publicar Novo Jogo</h2>
                 <form id="gameForm">
@@ -269,6 +350,15 @@
                     <div class="input-group">
                         <label for="gameImage">Link da Imagem (URL):</label>
                         <input type="url" id="gameImage" required placeholder="Cole o link direto da imagem">
+                    </div>
+                    <div class="input-group">
+                        <label for="gameCategory">Categoria:</label>
+                        <select id="gameCategory" style="width:150px;">
+                            <option value="PSP">PSP</option>
+                            <option value="PS2">PS2</option>
+                            <option value="PC">PC</option>
+                            <option value="APK">APK</option>
+                        </select>
                     </div>
                     <div class="form-row">
                         <div class="input-group">
@@ -294,20 +384,15 @@
             </div>
         </div>
 
-        <!-- ABA JOGOS (O QUE TODO MUNDO VÊ) -->
+        <!-- ABA JOGOS (VITRINE) -->
         <div id="jogos" class="tab-content active">
-            <header>
-                <h1>🎮 Meus Jogos</h1>
-                <p>Explore todos os jogos disponíveis para download</p>
-            </header>
-
             <!-- Vitrine de Jogos -->
             <div class="games-grid" id="gamesGrid">
                 <!-- Os jogos cadastrados vão aparecer aqui automaticamente -->
             </div>
         </div>
 
-        <!-- Rodapé com acesso restrito para você -->
+        <!-- Rodapé com acesso restrito -->
         <div class="admin-login-area">
             <button class="admin-link" onclick="solicitarSenha()">Entrar como Administrador</button>
         </div>
@@ -316,11 +401,9 @@
     <script>
         const gameForm = document.getElementById('gameForm');
         const gamesGrid = document.getElementById('gamesGrid');
-
-        // Senha de administrador (mude aqui se quiser outra senha)
         const SENHA_ADMIN = "1234"; 
+        let categoriaAtual = 'Todos';
 
-        // Verificar se já está logado como admin ao carregar a página
         document.addEventListener('DOMContentLoaded', () => {
             loadGames();
             if (localStorage.getItem('isAdmin') === 'true') {
@@ -345,33 +428,27 @@
         }
 
         function liberarAdmin() {
-            document.getElementById('tab-inicio-btn').style.display = 'inline-block';
+            // Admin liberado
         }
 
         function logoutAdmin() {
             localStorage.removeItem('isAdmin');
-            document.getElementById('tab-inicio-btn').style.display = 'none';
             switchTab('jogos');
             alert("Você saiu do modo administrador.");
         }
 
-        // Função para alternar as abas
         function switchTab(tabId) {
             document.querySelectorAll('.tab-content').forEach(tab => {
                 tab.classList.remove('active');
             });
-            document.querySelectorAll('.nav-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-
             document.getElementById(tabId).classList.add('active');
-            
-            // Ativa o botão correspondente no menu
-            if(tabId === 'jogos') {
-                document.querySelector("button[onclick*='jogos']").classList.add('active');
-            } else {
-                document.getElementById('tab-inicio-btn').classList.add('active');
-            }
+        }
+
+        function filtrarCategoria(cat, btn) {
+            categoriaAtual = cat;
+            document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            loadGames();
         }
 
         gameForm.addEventListener('submit', function(e) {
@@ -379,18 +456,28 @@
 
             const name = document.getElementById('gameName').value;
             const image = document.getElementById('gameImage').value;
+            const category = document.getElementById('gameCategory').value || 'PSP';
             const size = document.getElementById('gameSize').value;
             const format = document.getElementById('gameFormat').value;
             const status = document.getElementById('gameStatus').value;
             const link = document.getElementById('gameLink').value;
 
-            const newGame = { id: Date.now(), name, image, size, format, status, link };
+            const newGame = { 
+                id: Date.now(), 
+                name, 
+                image, 
+                category, 
+                size, 
+                format, 
+                status, 
+                link,
+                likes: Math.floor(Math.random() * 25) + 1,
+                dislikes: Math.floor(Math.random() * 4)
+            };
 
             saveGame(newGame);
             gameForm.reset();
             loadGames();
-
-            // Vai automaticamente para a vitrine de jogos após publicar
             switchTab('jogos');
         });
 
@@ -413,22 +500,28 @@
 
         function loadGames() {
             const games = getGames();
+            const termoBusca = document.getElementById('searchInput') ? document.getElementById('searchInput').value.toLowerCase() : '';
             gamesGrid.innerHTML = '';
 
-            if (games.length === 0) {
+            let filtrados = games.filter(game => {
+                let matchCat = (categoriaAtual === 'Todos' || (game.category && game.category === categoriaAtual));
+                let matchBusca = game.name.toLowerCase().includes(termoBusca);
+                return matchCat && matchBusca;
+            });
+
+            if (filtrados.length === 0) {
                 gamesGrid.innerHTML = '<p class="empty-msg">Nenhum jogo cadastrado ainda.</p>';
                 return;
             }
 
-            games.forEach(game => {
+            filtrados.forEach(game => {
                 const card = document.createElement('div');
                 card.className = 'game-card';
 
-                // O botão de excluir só aparece se você estiver logado como admin
                 let botaoExcluirHtml = '';
                 if (localStorage.getItem('isAdmin') === 'true') {
                     botaoExcluirHtml = `
-                        <div style="padding: 0 15px 15px 15px;">
+                        <div style="padding: 0 10px 10px 10px;">
                             <button class="delete-btn" onclick="deleteGame(${game.id})">Excluir</button>
                         </div>
                     `;
@@ -436,13 +529,19 @@
 
                 card.innerHTML = `
                     <div>
-                        <img src="${game.image}" alt="${game.name}" onerror="this.src='https://via.placeholder.com/250x160?text=Erro+na+Imagem'">
+                        <div class="card-img-container">
+                            <img src="${game.image}" alt="${game.name}" onerror="this.src='https://via.placeholder.com/250x140?text=Erro+na+Imagem'">
+                            <div class="price-badge">${game.status}</div>
+                        </div>
                         <div class="game-info">
                             <h3>${game.name}</h3>
+                            <div class="likes-row">
+                                <span>❤ ${game.likes || 12}</span>
+                                <span>👎 ${game.dislikes || 1}</span>
+                            </div>
                             <div class="game-details">
                                 <span>📦 Tamanho: <strong>${game.size}</strong></span>
                                 <span>📁 Formato: <strong>${game.format}</strong></span>
-                                <span>💰 Status: <strong>${game.status}</strong></span>
                             </div>
                             <a href="${game.link}" target="_blank" class="download-btn">Baixar Jogo</a>
                         </div>
