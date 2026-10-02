@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu Site de Jogos</title>
+    <style>
+        :root {
+            --bg-color: #121214;
+            --card-bg: #202024;
+            --text-color: #e1e1e6;
+            --primary: #00b37e;
+            --primary-hover: #00875f;
+            --danger: #f75a68;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        header h1 {
+            color: var(--primary);
+            font-size: 2.5rem;
+            margin-bottom: 5px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .form-card {
+            background-color: var(--card-bg);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+
+        .form-card h2 {
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid #323238;
+            background-color: #121214;
+            color: white;
+            font-size: 1rem;
+        }
+
+        button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .game-card {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .game-card img {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+        }
+
+        .game-info {
+            padding: 15px;
+        }
+
+        .game-info h3 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .download-btn {
+            display: block;
+            text-align: center;
+            background-color: var(--primary);
+            color: white;
+            text-decoration: none;
+            padding: 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .download-btn:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .delete-btn {
+            background-color: var(--danger);
+            margin-top: 8px;
+            padding: 6px;
+            font-size: 0.85rem;
+        }
+
+        .delete-btn:hover {
+            background-color: #d93848;
+        }
+
+        .empty-msg {
+            text-align: center;
+            grid-column: 1 / -1;
+            color: #7c7c8a;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>🎮 Meus Jogos</h1>
+            <p>Adicione e baixe seus jogos favoritos</p>
+        </header>
+
+        <!-- Formulário para cadastrar o jogo -->
+        <div class="form-card">
+            <h2>Publicar Novo Jogo</h2>
+            <form id="gameForm">
+                <div class="input-group">
+                    <label for="gameName">Nome do Jogo:</label>
+                    <input type="text" id="gameName" required placeholder="Ex: GTA San Andreas">
+                </div>
+                <div class="input-group">
+                    <label for="gameImage">Link da Imagem (URL):</label>
+                    <input type="url" id="gameImage" required placeholder="Cole o link direto da imagem">
+                </div>
+                <div class="input-group">
+                    <label for="gameLink">Link de Download:</label>
+                    <input type="url" id="gameLink" required placeholder="Cole o link do MediaFire, Mega, etc.">
+                </div>
+                <button type="submit">Publicar Jogo</button>
+            </form>
+        </div>
+
+        <!-- Vitrine de Jogos -->
+        <h2>Jogos Disponíveis</h2>
+        <div class="games-grid" id="gamesGrid">
+            <!-- Os jogos cadastrados vão aparecer aqui automaticamente -->
+        </div>
+    </div>
+
+    <script>
+        const gameForm = document.getElementById('gameForm');
+        const gamesGrid = document.getElementById('gamesGrid');
+
+        // Carregar jogos salvos ao abrir a página
+        document.addEventListener('DOMContentLoaded', loadGames);
+
+        gameForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const name = document.getElementById('gameName').value;
+            const image = document.getElementById('gameImage').value;
+            const link = document.getElementById('gameLink').value;
+
+            const newGame = { id: Date.now(), name, image, link };
+
+            saveGame(newGame);
+            gameForm.reset();
+            loadGames();
+        });
+
+        function getGames() {
+            return JSON.parse(localStorage.getItem('my_games')) || [];
+        }
+
+        function saveGame(game) {
+            const games = getGames();
+            games.push(game);
+            localStorage.setItem('my_games', JSON.stringify(games));
+        }
+
+        function deleteGame(id) {
+            let games = getGames();
+            games = games.filter(game => game.id !== id);
+            localStorage.setItem('my_games', JSON.stringify(games));
+            loadGames();
+        }
+
+        function loadGames() {
+            const games = getGames();
+            gamesGrid.innerHTML = '';
+
+            if (games.length === 0) {
+                gamesGrid.innerHTML = '<p class="empty-msg">Nenhum jogo cadastrado ainda. Adicione o primeiro acima!</p>';
+                return;
+            }
+
+            games.forEach(game => {
+                const card = document.createElement('div');
+                card.className = 'game-card';
+
+                card.innerHTML = `
+                    <div>
+                        <img src="${game.image}" alt="${game.name}" onerror="this.src='https://via.placeholder.com/250x160?text=Erro+na+Imagem'">
+                        <div class="game-info">
+                            <h3>${game.name}</h3>
+                            <a href="${game.link}" target="_blank" class="download-btn">Baixar Jogo</a>
+                        </div>
+                    </div>
+                    <div style="padding: 0 15px 15px 15px;">
+                        <button class="delete-btn" onclick="deleteGame(${game.id})">Excluir</button>
+                    </div>
+                `;
+
+                gamesGrid.appendChild(card);
+            });
+        }
+    </script>
+</body>
+</html>
