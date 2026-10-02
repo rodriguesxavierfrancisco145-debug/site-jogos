@@ -78,6 +78,11 @@
             display: block;
         }
 
+        /* Oculto por padrão para visitantes */
+        #admin-panel {
+            display: none;
+        }
+
         .form-card {
             background-color: var(--card-bg);
             padding: 20px;
@@ -214,6 +219,27 @@
             color: #7c7c8a;
             font-style: italic;
         }
+
+        /* Botão secreto de admin no rodapé */
+        .admin-login-area {
+            text-align: center;
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #202024;
+        }
+
+        .admin-link {
+            background: none;
+            border: none;
+            color: #7c7c8a;
+            font-size: 0.8rem;
+            cursor: pointer;
+            text-decoration: underline;
+            width: auto;
+        }
+        .admin-link:hover {
+            color: var(--primary);
+        }
     </style>
 </head>
 <body>
@@ -221,15 +247,15 @@
     <div class="container">
         <!-- Menu de Abas -->
         <nav>
-            <button class="nav-btn active" onclick="switchTab('inicio')">Início</button>
-            <button class="nav-btn" onclick="switchTab('jogos')">Jogos</button>
+            <button class="nav-btn active" onclick="switchTab('jogos')">Jogos</button>
+            <button class="nav-btn" id="tab-inicio-btn" style="display:none;" onclick="switchTab('inicio')">Painel Admin</button>
         </nav>
 
-        <!-- ABA INÍCIO -->
-        <div id="inicio" class="tab-content active">
+        <!-- ABA INÍCIO (SÓ APARECE QUANDO VOCÊ COLOCA A SENHA) -->
+        <div id="inicio" class="tab-content">
             <header>
-                <h1>🎮 Meus Jogos</h1>
-                <p>Adicione e baixe seus jogos favoritos</p>
+                <h1>🔒 Painel Restrito</h1>
+                <p>Adicione novos jogos à vitrine</p>
             </header>
 
             <!-- Formulário para cadastrar o jogo -->
@@ -264,13 +290,14 @@
                     </div>
                     <button type="submit">Publicar Jogo</button>
                 </form>
+                <button onclick="logoutAdmin()" style="background-color: var(--danger); margin-top: 15px;">Sair do Painel Admin</button>
             </div>
         </div>
 
-        <!-- ABA JOGOS -->
-        <div id="jogos" class="tab-content">
+        <!-- ABA JOGOS (O QUE TODO MUNDO VÊ) -->
+        <div id="jogos" class="tab-content active">
             <header>
-                <h1>🕹️ Vitrine de Jogos</h1>
+                <h1>🎮 Meus Jogos</h1>
                 <p>Explore todos os jogos disponíveis para download</p>
             </header>
 
@@ -279,11 +306,54 @@
                 <!-- Os jogos cadastrados vão aparecer aqui automaticamente -->
             </div>
         </div>
+
+        <!-- Rodapé com acesso restrito para você -->
+        <div class="admin-login-area">
+            <button class="admin-link" onclick="solicitarSenha()">Entrar como Administrador</button>
+        </div>
     </div>
 
     <script>
         const gameForm = document.getElementById('gameForm');
         const gamesGrid = document.getElementById('gamesGrid');
+
+        // Senha de administrador (mude aqui se quiser outra senha)
+        const SENHA_ADMIN = "1234"; 
+
+        // Verificar se já está logado como admin ao carregar a página
+        document.addEventListener('DOMContentLoaded', () => {
+            loadGames();
+            if (localStorage.getItem('isAdmin') === 'true') {
+                liberarAdmin();
+            }
+        });
+
+        function solicitarSenha() {
+            if (localStorage.getItem('isAdmin') === 'true') {
+                switchTab('inicio');
+                return;
+            }
+            let senha = prompt("Digite a senha de administrador:");
+            if (senha === SENHA_ADMIN) {
+                localStorage.setItem('isAdmin', 'true');
+                liberarAdmin();
+                switchTab('inicio');
+                alert("Painel liberado com sucesso!");
+            } else if (senha !== null) {
+                alert("Senha incorreta!");
+            }
+        }
+
+        function liberarAdmin() {
+            document.getElementById('tab-inicio-btn').style.display = 'inline-block';
+        }
+
+        function logoutAdmin() {
+            localStorage.removeItem('isAdmin');
+            document.getElementById('tab-inicio-btn').style.display = 'none';
+            switchTab('jogos');
+            alert("Você saiu do modo administrador.");
+        }
 
         // Função para alternar as abas
         function switchTab(tabId) {
@@ -295,11 +365,14 @@
             });
 
             document.getElementById(tabId).classList.add('active');
-            event.currentTarget.classList.add('active');
+            
+            // Ativa o botão correspondente no menu
+            if(tabId === 'jogos') {
+                document.querySelector("button[onclick*='jogos']").classList.add('active');
+            } else {
+                document.getElementById('tab-inicio-btn').classList.add('active');
+            }
         }
-
-        // Carregar jogos salvos ao abrir a página
-        document.addEventListener('DOMContentLoaded', loadGames);
 
         gameForm.addEventListener('submit', function(e) {
             e.preventDefault();
@@ -317,8 +390,8 @@
             gameForm.reset();
             loadGames();
 
-            // Vai automaticamente para a aba de jogos após publicar
-            document.querySelector("button[onclick=\"switchTab('jogos')\"]").click();
+            // Vai automaticamente para a vitrine de jogos após publicar
+            switchTab('jogos');
         });
 
         function getGames() {
@@ -343,13 +416,23 @@
             gamesGrid.innerHTML = '';
 
             if (games.length === 0) {
-                gamesGrid.innerHTML = '<p class="empty-msg">Nenhum jogo cadastrado ainda. Vá na aba Início e adicione o primeiro!</p>';
+                gamesGrid.innerHTML = '<p class="empty-msg">Nenhum jogo cadastrado ainda.</p>';
                 return;
             }
 
             games.forEach(game => {
                 const card = document.createElement('div');
                 card.className = 'game-card';
+
+                // O botão de excluir só aparece se você estiver logado como admin
+                let botaoExcluirHtml = '';
+                if (localStorage.getItem('isAdmin') === 'true') {
+                    botaoExcluirHtml = `
+                        <div style="padding: 0 15px 15px 15px;">
+                            <button class="delete-btn" onclick="deleteGame(${game.id})">Excluir</button>
+                        </div>
+                    `;
+                }
 
                 card.innerHTML = `
                     <div>
@@ -364,9 +447,7 @@
                             <a href="${game.link}" target="_blank" class="download-btn">Baixar Jogo</a>
                         </div>
                     </div>
-                    <div style="padding: 0 15px 15px 15px;">
-                        <button class="delete-btn" onclick="deleteGame(${game.id})">Excluir</button>
-                    </div>
+                    ${botaoExcluirHtml}
                 `;
 
                 gamesGrid.appendChild(card);
