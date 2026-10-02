@@ -377,14 +377,6 @@
             gap: 3px;
         }
 
-        .likes-row {
-            display: flex;
-            gap: 12px;
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            margin-bottom: 8px;
-        }
-
         .download-btn {
             display: block;
             text-align: center;
@@ -724,9 +716,7 @@
                 format, 
                 status, 
                 description,
-                link,
-                likes: Math.floor(Math.random() * 25) + 1,
-                dislikes: Math.floor(Math.random() * 4)
+                link
             };
 
             saveGame(newGame);
@@ -769,11 +759,6 @@
                     <img src="${game.image}" class="detail-img" alt="${game.name}" onerror="this.src='https://via.placeholder.com/250x140?text=Erro+na+Imagem'">
                     <div class="detail-info">
                         <h2>${game.name}</h2>
-                        <div class="likes-row" style="font-size: 0.85rem; margin-bottom: 12px;">
-                            <span>❤ ${game.likes || 12} Curtidas</span>
-                            <span>👎 ${game.dislikes || 1} Descurtidas</span>
-                            <span style="color: var(--primary);">🏷️ ${game.status}</span>
-                        </div>
                         <div class="game-details" style="font-size: 0.85rem; margin-bottom: 15px; gap: 6px;">
                             <span>📦 Tamanho: <strong>${game.size}</strong></span>
                             <span>📁 Formato: <strong>${game.format}</strong></span>
@@ -828,10 +813,6 @@
                         </div>
                         <div class="game-info">
                             <h3>${game.name}</h3>
-                            <div class="likes-row">
-                                <span>❤ ${game.likes || 12}</span>
-                                <span>👎 ${game.dislikes || 1}</span>
-                            </div>
                             <div class="game-details">
                                 <span>📦 Tamanho: <strong>${game.size}</strong></span>
                                 <span>📁 Formato: <strong>${game.format}</strong></span>
