@@ -159,6 +159,79 @@
             padding-left: 18px;
         }
 
+        /* Modal Personalizado Animado */
+        .custom-modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(11, 11, 15, 0.8);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .custom-modal-overlay.show {
+            display: flex;
+            opacity: 1;
+        }
+
+        .custom-modal {
+            background: linear-gradient(145deg, #161622, #101017);
+            border: 1px solid rgba(0, 240, 255, 0.3);
+            border-radius: 16px;
+            padding: 22px;
+            width: 100%;
+            max-width: 380px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.8), 0 0 20px rgba(0, 240, 255, 0.2);
+            transform: scale(0.8) translateY(20px);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .custom-modal-overlay.show .custom-modal {
+            transform: scale(1) translateY(0);
+        }
+
+        .custom-modal h3 {
+            color: var(--accent-cyan);
+            font-size: 1.2rem;
+            margin-bottom: 12px;
+            text-shadow: 0 0 8px rgba(0, 240, 255, 0.4);
+        }
+
+        .custom-modal p {
+            color: var(--text-color);
+            font-size: 0.9rem;
+            line-height: 1.5;
+            margin-bottom: 20px;
+            white-space: pre-wrap;
+        }
+
+        .custom-modal-btn {
+            background: linear-gradient(135deg, var(--accent-pink), #b00055);
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            width: 100%;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(255, 0, 127, 0.4);
+            transition: all 0.2s;
+        }
+
+        .custom-modal-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 0, 127, 0.6);
+        }
+
         /* Categorias (Filtros redondos em rolagem horizontal com estilo Neo) */
         .categories {
             display: flex;
@@ -568,6 +641,15 @@
 </head>
 <body>
 
+    <!-- MODAL PERSONALIZADO ANIMADO -->
+    <div id="customModalOverlay" class="custom-modal-overlay">
+        <div class="custom-modal">
+            <h3 id="modalTitle">Título</h3>
+            <p id="modalText">Mensagem</p>
+            <button class="custom-modal-btn" onclick="fecharModalInfo()">OK</button>
+        </div>
+    </div>
+
     <div class="container">
         <!-- TOPO NOVO ESTILO -->
         <div class="top-bar">
@@ -715,8 +797,14 @@
         }
 
         function abrirModalInfo(titulo, texto) {
-            alert(titulo + "\n\n" + texto);
+            document.getElementById('modalTitle').innerText = titulo;
+            document.getElementById('modalText').innerText = texto;
+            document.getElementById('customModalOverlay').classList.add('show');
             document.getElementById('dropdownMenu').classList.remove('show');
+        }
+
+        function fecharModalInfo() {
+            document.getElementById('customModalOverlay').classList.remove('show');
         }
 
         function solicitarSenha() {
@@ -990,4 +1078,4 @@
         }
     </script>
 </body>
-    </html>
+</html>
