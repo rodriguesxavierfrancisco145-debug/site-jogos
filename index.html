@@ -45,17 +45,19 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
+            gap: 10px;
             margin-bottom: 20px;
             position: relative;
         }
 
         .logo {
             color: var(--accent-pink);
-            font-size: 1.25rem;
+            font-size: 1.1rem;
             font-weight: 900;
             text-shadow: 0 0 10px rgba(255, 0, 127, 0.5);
             letter-spacing: 0.5px;
             animation: pulseLogo 3s infinite alternate;
+            white-space: nowrap;
         }
 
         @keyframes pulseLogo {
@@ -65,7 +67,6 @@
 
         .search-container {
             flex: 1;
-            margin: 0 10px;
         }
 
         .search-box {
@@ -89,7 +90,6 @@
         .top-icons {
             display: flex;
             align-items: center;
-            gap: 12px;
             color: white;
             font-size: 1.1rem;
             cursor: pointer;
@@ -98,7 +98,7 @@
 
         .top-icons span {
             background: #1a1a24;
-            padding: 8px;
+            padding: 8px 10px;
             border-radius: 50%;
             border: 1px solid rgba(255,255,255,0.05);
             display: flex;
@@ -499,7 +499,7 @@
             border: 1px solid rgba(255,255,255,0.04);
         }
 
-        /* Rodapé com acesso restrito */
+        /* Rodapé com mensagem e acesso restrito */
         .admin-login-area {
             text-align: center;
             margin-top: 40px;
@@ -511,15 +511,14 @@
             background: none;
             border: none;
             color: var(--text-muted);
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             cursor: pointer;
-            text-decoration: underline;
-            width: auto;
+            width: 100%;
+            line-height: 1.4;
             transition: color 0.2s;
         }
         .admin-link:hover {
-            color: var(--accent-pink);
-            text-shadow: 0 0 8px rgba(255, 0, 127, 0.4);
+            color: var(--accent-cyan);
         }
     </style>
 </head>
@@ -533,7 +532,6 @@
                 <input type="text" class="search-box" id="searchInput" placeholder="Buscar jogos..." oninput="loadGames()">
             </div>
             <div class="top-icons">
-                <span onclick="solicitarSenha()" title="Admin">🌙</span>
                 <span onclick="toggleMenu(event)" title="Menu">☰</span>
                 <!-- Menu Dropdown -->
                 <div id="dropdownMenu" class="dropdown-menu">
@@ -623,9 +621,9 @@
             </div>
         </div>
 
-        <!-- Rodapé com acesso restrito -->
+        <!-- Rodapé com mensagem de boas-vindas e acesso restrito -->
         <div class="admin-login-area">
-            <button class="admin-link" onclick="solicitarSenha()">Entrar como Administrador</button>
+            <button class="admin-link" onclick="solicitarSenha()">Bem vindos au PSP GAMER MOBILE 2 esperamos que vcs gostem dos jogos.</button>
         </div>
     </div>
 
@@ -849,4 +847,4 @@
         }
     </script>
 </body>
-    </html>
+</html>
