@@ -41,6 +41,7 @@
             align-items: center;
             justify-content: space-between;
             margin-bottom: 15px;
+            position: relative;
         }
 
         .logo {
@@ -72,6 +73,45 @@
             color: white;
             font-size: 1.1rem;
             cursor: pointer;
+            position: relative;
+        }
+
+        /* Menu Dropdown dos Três Pontinhos */
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 35px;
+            background-color: var(--card-bg);
+            border: 1px solid #323238;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            width: 150px;
+            z-index: 100;
+            overflow: hidden;
+        }
+
+        .dropdown-menu.show {
+            display: block;
+        }
+
+        .dropdown-item {
+            padding: 10px 15px;
+            font-size: 0.85rem;
+            color: var(--text-color);
+            cursor: pointer;
+            border-bottom: 1px solid #202024;
+            text-decoration: none;
+            display: block;
+        }
+
+        .dropdown-item:last-child {
+            border-bottom: none;
+        }
+
+        .dropdown-item:hover {
+            background-color: #202024;
+            color: var(--accent-pink);
         }
 
         /* Categorias (Filtros redondos em rolagem horizontal) */
@@ -137,7 +177,7 @@
             color: var(--text-muted);
         }
 
-        .input-group input, .input-group select {
+        .input-group input, .input-group select, .input-group textarea {
             width: 100%;
             padding: 10px;
             border-radius: 8px;
@@ -145,6 +185,7 @@
             background-color: #121214;
             color: white;
             font-size: 0.9rem;
+            outline: none;
         }
 
         .form-row {
@@ -189,6 +230,7 @@
             flex-direction: column;
             justify-content: space-between;
             position: relative;
+            cursor: pointer;
         }
 
         .card-img-container {
@@ -288,6 +330,52 @@
             padding: 30px;
         }
 
+        /* Estilo da Página de Detalhes do Jogo */
+        .game-detail-card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+
+        .back-btn {
+            background-color: #202024;
+            color: var(--text-color);
+            border: none;
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            margin-bottom: 15px;
+            width: auto;
+        }
+        .back-btn:hover {
+            background-color: #323238;
+        }
+
+        .detail-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .detail-info h2 {
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+            color: white;
+        }
+
+        .detail-desc {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin: 15px 0;
+            line-height: 1.4;
+            white-space: pre-wrap;
+        }
+
         /* Acesso restrito no rodapé */
         .admin-login-area {
             text-align: center;
@@ -319,8 +407,15 @@
             <div class="search-container">
                 <input type="text" class="search-box" id="searchInput" placeholder="Buscar jogos..." oninput="loadGames()">
             </div>
-            <div class="top-icons" onclick="solicitarSenha()">
-                🌙 ☰
+            <div class="top-icons">
+                <span onclick="solicitarSenha()" title="Admin">🌙</span>
+                <span onclick="toggleMenu(event)" title="Menu">☰</span>
+                <!-- Menu Dropdown -->
+                <div id="dropdownMenu" class="dropdown-menu">
+                    <div class="dropdown-item" onclick="abrirModalInfo('Suporte', 'Precisa de ajuda com algum jogo, link quebrado ou dúvida? Entre em contato com nossa equipe de suporte pelo WhatsApp do canal ou comunidade.')">Suporte</div>
+                    <div class="dropdown-item" onclick="abrirModalInfo('Ajuda', '1. Escolha o jogo desejado.\n2. Clique nele para ver as informações completas.\n3. Clique em Baixar para obter o arquivo direto.')">Ajuda</div>
+                    <div class="dropdown-item" onclick="abrirModalInfo('Parceria', 'Tem interesse em divulgar seu canal, jogo ou site aqui na ZonaXP? Entre em contato para parcerias e anúncios!')">Parceria</div>
+                </div>
             </div>
         </div>
 
@@ -375,6 +470,10 @@
                         <input type="text" id="gameStatus" required placeholder="Ex: Grátis">
                     </div>
                     <div class="input-group">
+                        <label for="gameDescription">Informações / Descrição do Jogo:</label>
+                        <textarea id="gameDescription" rows="3" placeholder="Digite os detalhes, requisitos ou instruções de instalação..."></textarea>
+                    </div>
+                    <div class="input-group">
                         <label for="gameLink">Link de Download:</label>
                         <input type="url" id="gameLink" required placeholder="Cole o link do MediaFire, Mega, etc.">
                     </div>
@@ -386,9 +485,16 @@
 
         <!-- ABA JOGOS (VITRINE) -->
         <div id="jogos" class="tab-content active">
-            <!-- Vitrine de Jogos -->
             <div class="games-grid" id="gamesGrid">
-                <!-- Os jogos cadastrados vão aparecer aqui automaticamente -->
+                <!-- Os jogos cadastrados aparecem aqui -->
+            </div>
+        </div>
+
+        <!-- ABA DETALHES DO JOGO -->
+        <div id="detalhes" class="tab-content">
+            <button class="back-btn" onclick="switchTab('jogos')">← Voltar</button>
+            <div id="gameDetailContent">
+                <!-- Informações detalhadas do jogo carregadas via JS -->
             </div>
         </div>
 
@@ -409,7 +515,30 @@
             if (localStorage.getItem('isAdmin') === 'true') {
                 liberarAdmin();
             }
+
+            // Fechar o menu dropdown ao clicar fora
+            window.addEventListener('click', function(e) {
+                if (!e.target.closest('.top-icons')) {
+                    document.getElementById('dropdownMenu').classList.remove('show');
+                }
+            });
         });
+
+        function toggleMenu(event) {
+            event.stopPropagation();
+            document.getElementById('dropdownMenu').classList.toggle('show');
+        }
+
+        function abrirInfo(titulo, texto) {
+            alert(titulo + ":\n\n" + texto);
+            document.getElementById('dropdownMenu').classList.remove('show');
+        }
+
+        // Função ajustada para abrir a notificação informativa do menu superior
+        function abrirModalInfo(titulo, texto) {
+            alert(titulo + "\n\n" + texto);
+            document.getElementById('dropdownMenu').classList.remove('show');
+        }
 
         function solicitarSenha() {
             if (localStorage.getItem('isAdmin') === 'true') {
@@ -460,6 +589,7 @@
             const size = document.getElementById('gameSize').value;
             const format = document.getElementById('gameFormat').value;
             const status = document.getElementById('gameStatus').value;
+            const description = document.getElementById('gameDescription').value || 'Nenhuma informação adicional informada.';
             const link = document.getElementById('gameLink').value;
 
             const newGame = { 
@@ -470,6 +600,7 @@
                 size, 
                 format, 
                 status, 
+                description,
                 link,
                 likes: Math.floor(Math.random() * 25) + 1,
                 dislikes: Math.floor(Math.random() * 4)
@@ -496,6 +627,44 @@
             games = games.filter(game => game.id !== id);
             localStorage.setItem('my_games', JSON.stringify(games));
             loadGames();
+            switchTab('jogos');
+        }
+
+        function verDetalhesDoJogo(id) {
+            const games = getGames();
+            const game = games.find(g => g.id === id);
+            if (!game) return;
+
+            let botaoExcluirDetalhe = '';
+            if (localStorage.getItem('isAdmin') === 'true') {
+                botaoExcluirDetalhe = `<button class="delete-btn" onclick="deleteGame(${game.id})" style="margin-top: 15px;">Excluir Jogo do Site</button>`;
+            }
+
+            const detailContainer = document.getElementById('gameDetailContent');
+            detailContainer.innerHTML = `
+                <div class="game-detail-card">
+                    <img src="${game.image}" class="detail-img" alt="${game.name}" onerror="this.src='https://via.placeholder.com/250x140?text=Erro+na+Imagem'">
+                    <div class="detail-info">
+                        <h2>${game.name}</h2>
+                        <div class="likes-row" style="font-size: 0.85rem; margin-bottom: 12px;">
+                            <span>❤ ${game.likes || 12} Curtidas</span>
+                            <span>👎 ${game.dislikes || 1} Descurtidas</span>
+                            <span style="color: var(--primary);">🏷️ ${game.status}</span>
+                        </div>
+                        <div class="game-details" style="font-size: 0.85rem; margin-bottom: 15px; gap: 6px;">
+                            <span>📦 Tamanho: <strong>${game.size}</strong></span>
+                            <span>📁 Formato: <strong>${game.format}</strong></span>
+                            <span>📂 Categoria: <strong>${game.category}</strong></span>
+                        </div>
+                        <h4 style="font-size: 0.95rem; color: white; margin-bottom: 5px;">Informações do Jogo:</h4>
+                        <p class="detail-desc">${game.description}</p>
+                        
+                        <a href="${game.link}" target="_blank" class="download-btn" style="padding: 12px; font-size: 0.95rem; margin-top: 20px;">Baixar Agora (Download Direto)</a>
+                        ${botaoExcluirDetalhe}
+                    </div>
+                </div>
+            `;
+            switchTab('detalhes');
         }
 
         function loadGames() {
@@ -517,11 +686,12 @@
             filtrados.forEach(game => {
                 const card = document.createElement('div');
                 card.className = 'game-card';
+                card.onclick = () => verDetalhesDoJogo(game.id);
 
                 let botaoExcluirHtml = '';
                 if (localStorage.getItem('isAdmin') === 'true') {
                     botaoExcluirHtml = `
-                        <div style="padding: 0 10px 10px 10px;">
+                        <div style="padding: 0 10px 10px 10px;" onclick="event.stopPropagation()">
                             <button class="delete-btn" onclick="deleteGame(${game.id})">Excluir</button>
                         </div>
                     `;
@@ -543,7 +713,7 @@
                                 <span>📦 Tamanho: <strong>${game.size}</strong></span>
                                 <span>📁 Formato: <strong>${game.format}</strong></span>
                             </div>
-                            <a href="${game.link}" target="_blank" class="download-btn">Baixar Jogo</a>
+                            <span class="download-btn" style="display: block;">Ver Detalhes / Baixar</span>
                         </div>
                     </div>
                     ${botaoExcluirHtml}
