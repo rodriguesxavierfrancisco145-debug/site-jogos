@@ -777,8 +777,8 @@
 
     <script>
         // Sistema de Nuvem Público com JSONBin.io (Grátis e Compartilhado para Todos)
-        const BIN_ID = "66f361cbe41b4d34e4337b58"; // Bin público configurado para este app
-        const API_KEY = "$2a$10$7R9fXvY6Wv3H1x2Y9x8Z2e7Z2e7Z2e7Z2e7Z2e7Z2e7Z2e7Z2e7Z2"; // Chave pública de leitura/escrita livre
+        const BIN_ID = "66f361cbe41b4d34e4337b58"; 
+        const API_KEY = "$2a$10$7R9fXvY6Wv3H1x2Y9x8Z2e7Z2e7Z2e7Z2e7Z2e7Z2e7Z2e7Z2e7Z2"; 
 
         let listaJogosCache = [];
         const gameForm = document.getElementById('gameForm');
@@ -864,7 +864,6 @@
             renderGames();
         }
 
-        // Função para carregar jogos da nuvem global para todos os usuários
         async function carregarJogosDaNuvem() {
             try {
                 let resposta = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
@@ -878,14 +877,12 @@
                     gamesGrid.innerHTML = '<p class="empty-msg">Erro ao carregar jogos da nuvem.</p>';
                 }
             } catch (e) {
-                // Fallback para localStorage caso esteja offline
                 let local = localStorage.getItem('global_shared_psp_games');
                 listaJogosCache = local ? JSON.parse(local) : [];
                 renderGames();
             }
         }
 
-        // Função para salvar a lista completa direto na nuvem global
         async function salvarJogosNaNuvem(gamesArray) {
             listaJogosCache = gamesArray;
             localStorage.setItem('global_shared_psp_games', JSON.stringify(gamesArray));
@@ -1123,4 +1120,4 @@
         }
     </script>
 </body>
-</html>
+            </html>
