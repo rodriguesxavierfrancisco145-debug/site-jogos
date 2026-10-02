@@ -452,6 +452,7 @@
             box-shadow: 0 10px 35px rgba(0,0,0,0.6);
             border: 1px solid rgba(0, 240, 255, 0.2);
             animation: scaleIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
         }
 
         @keyframes scaleIn {
@@ -479,12 +480,18 @@
             color: var(--accent-cyan);
         }
 
-        .detail-img {
+        .detail-img-container {
+            position: relative;
             width: 100%;
             height: 210px;
+            margin-bottom: 15px;
+        }
+
+        .detail-img {
+            width: 100%;
+            height: 100%;
             object-fit: cover;
             border-radius: 12px;
-            margin-bottom: 15px;
             border: 1px solid rgba(255,255,255,0.06);
             box-shadow: 0 5px 15px rgba(0,0,0,0.4);
         }
@@ -506,6 +513,37 @@
             padding: 12px;
             border-radius: 10px;
             border: 1px solid rgba(255,255,255,0.04);
+        }
+
+        /* Barra de Ação (Apenas Compartilhar) */
+        .action-bar {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            background: #0b0b0f;
+            padding: 10px 15px;
+            border-radius: 12px;
+            margin-top: 15px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .share-btn {
+            background: linear-gradient(135deg, var(--accent-pink), #b00055);
+            color: white;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            cursor: pointer;
+            width: auto;
+            box-shadow: 0 2px 10px rgba(255,0,127,0.3);
+            transition: all 0.2s;
+        }
+
+        .share-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px rgba(255,0,127,0.5);
         }
 
         /* Rodapé com mensagem e acesso restrito */
@@ -656,6 +694,15 @@
                 liberarAdmin();
             }
 
+            // Verificar se abriu através de um link direto de compartilhamento (?jogo=ID)
+            const urlParams = new URLSearchParams(window.location.search);
+            const jogoIdUrl = urlParams.get('jogo');
+            if (jogoIdUrl) {
+                setTimeout(() => {
+                    verDetalhesDoJogo(Number(jogoIdUrl));
+                }, 200);
+            }
+
             // Fechar o menu dropdown ao clicar fora
             window.addEventListener('click', function(e) {
                 if (!e.target.closest('.top-icons')) {
@@ -669,7 +716,6 @@
             document.getElementById('dropdownMenu').classList.toggle('show');
         }
 
-        // Função ajustada para abrir a notificação informativa do menu superior
         function abrirModalInfo(titulo, texto) {
             alert(titulo + "\n\n" + texto);
             document.getElementById('dropdownMenu').classList.remove('show');
@@ -691,9 +737,7 @@
             }
         }
 
-        function liberarAdmin() {
-            // Admin liberado
-        }
+        function liberarAdmin() {}
 
         function logoutAdmin() {
             localStorage.removeItem('isAdmin');
@@ -733,10 +777,10 @@
             let games = getGames();
 
             if (editId) {
-                // Editando jogo existente
                 games = games.map(game => {
                     if (game.id == editId) {
                         return {
+                            ...game,
                             id: Number(editId),
                             name,
                             image,
@@ -755,7 +799,6 @@
                 alert("Jogo atualizado com sucesso!");
                 cancelarEdicao();
             } else {
-                // Publicando novo jogo
                 const newGame = { 
                     id: Date.now(), 
                     name, 
@@ -815,7 +858,7 @@
 
             document.getElementById('formTitle').innerText = "Editar Jogo";
             document.getElementById('submitBtn').innerText = "Salvar Alterações";
-            document.getElementById('panelTitle').innerText = "✏️️ Editar Jogo";
+            document.getElementById('panelTitle').innerText = "✏ Editar Jogo";
             document.getElementById('panelSub').innerText = "Altere os dados do jogo selecionado";
             document.getElementById('cancelEditContainer').style.display = "block";
 
@@ -830,6 +873,20 @@
             document.getElementById('panelTitle').innerText = "🔒 Painel Restrito";
             document.getElementById('panelSub').innerText = "Adicione novos jogos à vitrine";
             document.getElementById('cancelEditContainer').style.display = "none";
+        }
+
+        function compartilharJogo(id, nome) {
+            const linkCompartilhamento = window.location.origin + window.location.pathname + '?jogo=' + id;
+            if (navigator.share) {
+                navigator.share({
+                    title: nome,
+                    text: `Baixe o jogo ${nome} na PSP GAMER MOBILE 2!`,
+                    url: linkCompartilhamento,
+                }).catch(() => {});
+            } else {
+                navigator.clipboard.writeText(linkCompartilhamento);
+                alert("Link de compartilhamento copiado para a área de transferência:\n" + linkCompartilhamento);
+            }
         }
 
         function verDetalhesDoJogo(id) {
@@ -848,11 +905,15 @@
             }
 
             const textoBotaoDownload = game.btnText || "Baixar Agora (Download Direto)";
+            const statusBadge = game.status ? `<div class="price-badge">${game.status}</div>` : '';
 
             const detailContainer = document.getElementById('gameDetailContent');
             detailContainer.innerHTML = `
                 <div class="game-detail-card">
-                    <img src="${game.image}" class="detail-img" alt="${game.name}" onerror="this.src='https://via.placeholder.com/250x140?text=Erro+na+Imagem'">
+                    <div class="detail-img-container">
+                        <img src="${game.image}" class="detail-img" alt="${game.name}" onerror="this.src='https://via.placeholder.com/250x140?text=Erro+na+Imagem'">
+                        ${statusBadge}
+                    </div>
                     <div class="detail-info">
                         <h2>${game.name}</h2>
                         <div class="game-details" style="font-size: 0.85rem; margin-bottom: 15px; gap: 6px;">
@@ -862,8 +923,12 @@
                         </div>
                         <h4 style="font-size: 0.95rem; color: white; margin-bottom: 5px;">Informações do Jogo:</h4>
                         <p class="detail-desc">${game.description}</p>
+
+                        <div class="action-bar">
+                            <button class="share-btn" onclick="compartilharJogo(${game.id}, '${game.name.replace(/'/g, "\\'")}')">🔗 Compartilhar</button>
+                        </div>
                         
-                        <a href="${game.link}" target="_blank" class="download-btn" style="padding: 12px; font-size: 0.95rem; margin-top: 20px;">${textoBotaoDownload}</a>
+                        <a href="${game.link}" target="_blank" class="download-btn" style="padding: 12px; font-size: 0.95rem; margin-top: 15px;">${textoBotaoDownload}</a>
                         ${botoesAdminDetalhe}
                     </div>
                 </div>
