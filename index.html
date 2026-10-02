@@ -896,8 +896,13 @@
                     },
                     body: JSON.stringify({ games: gamesArray })
                 });
+                
+                if (!resposta.ok) {
+                    alert("Atenção: O jogo foi salvo localmente, mas houve um erro ao sincronizar com a nuvem global. Verifique sua chave da API do JSONBin.");
+                }
                 return resposta.ok;
             } catch (e) {
+                alert("Erro de conexão ao salvar na nuvem.");
                 return false;
             }
         }
@@ -1120,4 +1125,4 @@
         }
     </script>
 </body>
-            </html>
+</html>
