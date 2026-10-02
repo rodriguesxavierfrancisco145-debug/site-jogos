@@ -40,7 +40,6 @@
             margin: 0 auto;
         }
 
-        /* Topo / Header Moderno Neon */
         .top-bar {
             display: flex;
             align-items: center;
@@ -113,7 +112,6 @@
             transform: scale(1.05);
         }
 
-        /* Menu Dropdown dos Três Pontinhos */
         .dropdown-menu {
             display: none;
             position: absolute;
@@ -159,7 +157,6 @@
             padding-left: 18px;
         }
 
-        /* Modal Personalizado Animado */
         .custom-modal-overlay {
             display: none;
             position: fixed;
@@ -232,7 +229,6 @@
             box-shadow: 0 6px 20px rgba(255, 0, 127, 0.6);
         }
 
-        /* Categorias (Filtros redondos em rolagem horizontal com estilo Neo) */
         .categories {
             display: flex;
             gap: 10px;
@@ -273,7 +269,6 @@
             box-shadow: 0 0 15px rgba(255, 0, 127, 0.5);
         }
 
-        /* Abas de Navegação */
         .tab-content {
             display: none;
             animation: fadeInTab 0.3s ease;
@@ -286,7 +281,6 @@
             display: block;
         }
 
-        /* Formulário do Painel Admin Animado */
         .form-card {
             background: linear-gradient(145deg, #161622, #101017);
             padding: 22px;
@@ -363,14 +357,12 @@
             background: linear-gradient(135deg, #2bff9e, var(--primary));
         }
 
-        /* Grid de Jogos (2 colunas) */
         .games-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 14px;
         }
 
-        /* Animação suave para aparecimento dos cards de jogo */
         @keyframes fadeInGame {
             from {
                 opacity: 0;
@@ -382,7 +374,6 @@
             }
         }
 
-        /* Cartão de Jogo com Estilo Neon Animado */
         .game-card {
             background: linear-gradient(145deg, #15151f, #0f0f16);
             border-radius: 14px;
@@ -422,7 +413,6 @@
             transform: scale(1.1);
         }
 
-        /* Selo de Status/Preço Flutuante */
         .price-badge {
             position: absolute;
             top: 8px;
@@ -530,7 +520,6 @@
             border: 1px dashed rgba(255,255,255,0.08);
         }
 
-        /* Estilo da Página de Detalhes do Jogo Neon */
         .game-detail-card {
             background: linear-gradient(145deg, #161622, #101017);
             border-radius: 16px;
@@ -602,7 +591,6 @@
             border: 1px solid rgba(255,255,255,0.04);
         }
 
-        /* Barra de Ação (Apenas Compartilhar) */
         .action-bar {
             display: flex;
             align-items: center;
@@ -633,7 +621,6 @@
             box-shadow: 0 4px 15px rgba(255,0,127,0.5);
         }
 
-        /* Rodapé com mensagem */
         .admin-login-area {
             text-align: center;
             margin-top: 40px;
@@ -654,7 +641,6 @@
 </head>
 <body>
 
-    <!-- MODAL PERSONALIZADO ANIMADO -->
     <div id="customModalOverlay" class="custom-modal-overlay">
         <div class="custom-modal">
             <h3 id="modalTitle">Título</h3>
@@ -664,16 +650,13 @@
     </div>
 
     <div class="container">
-        <!-- TOPO NOVO ESTILO -->
         <div class="top-bar">
-            <!-- LOGO CLICÁVEL PARA ABRIR O PAINEL ADMIN -->
             <div class="logo" onclick="solicitarSenha()" title="Clique para abrir o Painel Admin">PSP GAMER MOBILE 2</div>
             <div class="search-container">
                 <input type="text" class="search-box" id="searchInput" placeholder="Buscar jogos..." oninput="renderGames()">
             </div>
             <div class="top-icons">
                 <span onclick="toggleMenu(event)" title="Menu">☰</span>
-                <!-- Menu Dropdown -->
                 <div id="dropdownMenu" class="dropdown-menu">
                     <div class="dropdown-item" onclick="abrirModalInfo('Suporte', 'Precisa de ajuda com algum jogo, link quebrado ou dúvida? Entre em contato com nossa equipe de suporte pelo WhatsApp do canal ou comunidade.')">Suporte</div>
                     <div class="dropdown-item" onclick="abrirModalInfo('Ajuda', '1. Escolha o jogo desejado.\n2. Clique nele para ver as informações completas.\n3. Clique em Baixar para obter o arquivo direto.')">Ajuda</div>
@@ -682,7 +665,6 @@
             </div>
         </div>
 
-        <!-- CATEGORIAS REDONDAS NOVAS -->
         <div class="categories">
             <button class="cat-btn active" onclick="filtrarCategoria('Todos', this)">Todos</button>
             <button class="cat-btn" onclick="filtrarCategoria('PSP', this)">PSP</button>
@@ -691,7 +673,6 @@
             <button class="cat-btn" onclick="filtrarCategoria('APK', this)">APK</button>
         </div>
 
-        <!-- ABA INÍCIO (PAINEL ADMIN) -->
         <div id="inicio" class="tab-content">
             <header style="margin-bottom: 15px;">
                 <h1 id="panelTitle" style="font-size: 1.8rem; color: var(--accent-pink); text-shadow: 0 0 10px rgba(255,0,127,0.4);">🔒 Painel Restrito</h1>
@@ -754,32 +735,23 @@
             </div>
         </div>
 
-        <!-- ABA JOGOS (VITRINE) -->
         <div id="jogos" class="tab-content active">
             <div class="games-grid" id="gamesGrid">
-                <p class="empty-msg">Carregando jogos da nuvem...</p>
+                <p class="empty-msg">Carregando jogos...</p>
             </div>
         </div>
 
-        <!-- ABA DETALHES DO JOGO -->
         <div id="detalhes" class="tab-content">
             <button class="back-btn" onclick="switchTab('jogos')">← Voltar</button>
-            <div id="gameDetailContent">
-                <!-- Informações detalhadas do jogo carregadas via JS -->
-            </div>
+            <div id="gameDetailContent"></div>
         </div>
 
-        <!-- Rodapé com mensagem de boas-vindas -->
         <div class="admin-login-area">
             <div class="admin-link">Bem vindos au PSP GAMER MOBILE 2 esperamos que vcs gostem dos jogos.</div>
         </div>
     </div>
 
     <script>
-        // Sistema de Nuvem Público com JSONBin.io (Grátis e Compartilhado para Todos)
-        const BIN_ID = "66f361cbe41b4d34e4337b58"; 
-        const API_KEY = "$2a$10$7R9fXvY6Wv3H1x2Y9x8Z2e7Z2e7Z2e7Z2e7Z2e7Z2e7Z2e7Z2e7Z2"; 
-
         let listaJogosCache = [];
         const gameForm = document.getElementById('gameForm');
         const gamesGrid = document.getElementById('gamesGrid');
@@ -787,10 +759,7 @@
         let categoriaAtual = 'Todos';
 
         document.addEventListener('DOMContentLoaded', () => {
-            carregarJogosDaNuvem();
-            if (localStorage.getItem('isAdmin') === 'true') {
-                liberarAdmin();
-            }
+            carregarJogosLocais();
 
             const urlParams = new URLSearchParams(window.location.search);
             const jogoIdUrl = urlParams.get('jogo');
@@ -831,7 +800,6 @@
             let senha = prompt("Digite a senha de administrador:");
             if (senha === SENHA_ADMIN) {
                 localStorage.setItem('isAdmin', 'true');
-                liberarAdmin();
                 switchTab('inicio');
                 renderGames();
                 alert("Painel liberado com sucesso!");
@@ -839,8 +807,6 @@
                 alert("Senha incorreta!");
             }
         }
-
-        function liberarAdmin() {}
 
         function logoutAdmin() {
             localStorage.removeItem('isAdmin');
@@ -864,50 +830,18 @@
             renderGames();
         }
 
-        async function carregarJogosDaNuvem() {
-            try {
-                let resposta = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
-                    headers: { 'X-Master-Key': API_KEY }
-                });
-                if (resposta.ok) {
-                    let dados = await resposta.json();
-                    listaJogosCache = dados.record.games || [];
-                    renderGames();
-                } else {
-                    gamesGrid.innerHTML = '<p class="empty-msg">Erro ao carregar jogos da nuvem.</p>';
-                }
-            } catch (e) {
-                let local = localStorage.getItem('global_shared_psp_games');
-                listaJogosCache = local ? JSON.parse(local) : [];
-                renderGames();
-            }
+        function carregarJogosLocais() {
+            let local = localStorage.getItem('global_shared_psp_games');
+            listaJogosCache = local ? JSON.parse(local) : [];
+            renderGames();
         }
 
-        async function salvarJogosNaNuvem(gamesArray) {
+        function salvarJogosLocais(gamesArray) {
             listaJogosCache = gamesArray;
             localStorage.setItem('global_shared_psp_games', JSON.stringify(gamesArray));
-            
-            try {
-                let resposta = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-Master-Key': API_KEY
-                    },
-                    body: JSON.stringify({ games: gamesArray })
-                });
-                
-                if (!resposta.ok) {
-                    alert("Atenção: O jogo foi salvo localmente, mas houve um erro ao sincronizar com a nuvem global. Verifique sua chave da API do JSONBin.");
-                }
-                return resposta.ok;
-            } catch (e) {
-                alert("Erro de conexão ao salvar na nuvem.");
-                return false;
-            }
         }
 
-        gameForm.addEventListener('submit', async function(e) {
+        gameForm.addEventListener('submit', function(e) {
             e.preventDefault();
 
             const editId = document.getElementById('editGameId').value;
@@ -942,8 +876,8 @@
                     }
                     return game;
                 });
-                await salvarJogosNaNuvem(games);
-                alert("Jogo atualizado com sucesso na nuvem para todos!");
+                salvarJogosLocais(games);
+                alert("Jogo atualizado com sucesso!");
                 cancelarEdicao();
             } else {
                 const newGame = { 
@@ -959,8 +893,8 @@
                     btnText
                 };
                 games.push(newGame);
-                await salvarJogosNaNuvem(games);
-                alert("Jogo publicado com sucesso na nuvem para todos!");
+                salvarJogosLocais(games);
+                alert("Jogo publicado com sucesso!");
             }
 
             gameForm.reset();
@@ -968,10 +902,10 @@
             switchTab('jogos');
         });
 
-        async function deleteGame(id) {
-            if (confirm("Tem certeza que deseja excluir este jogo da nuvem para todos?")) {
+        function deleteGame(id) {
+            if (confirm("Tem certeza que deseja excluir este jogo?")) {
                 let games = listaJogosCache.filter(game => game.id !== id);
-                await salvarJogosNaNuvem(games);
+                salvarJogosLocais(games);
                 renderGames();
                 switchTab('jogos');
             }
@@ -1082,7 +1016,7 @@
             });
 
             if (filtrados.length === 0) {
-                gamesGrid.innerHTML = '<p class="empty-msg">Nenhum jogo cadastrado na nuvem ainda.</p>';
+                gamesGrid.innerHTML = '<p class="empty-msg">Nenhum jogo cadastrado ainda. Clique no logotipo para abrir o painel e adicionar.</p>';
                 return;
             }
 
@@ -1125,4 +1059,4 @@
         }
     </script>
 </body>
-</html>
+    </html>
