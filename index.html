@@ -43,6 +43,41 @@
             margin: 0 auto;
         }
 
+        /* Menu de Navegação (Abas) */
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .nav-btn {
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            border: 1px solid #323238;
+            padding: 10px 25px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: 0.2s;
+            width: auto;
+        }
+
+        .nav-btn.active, .nav-btn:hover {
+            background-color: var(--primary);
+            border-color: var(--primary);
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
         .form-card {
             background-color: var(--card-bg);
             padding: 20px;
@@ -74,6 +109,15 @@
             background-color: #121214;
             color: white;
             font-size: 1rem;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 15px;
+        }
+
+        .form-row .input-group {
+            flex: 1;
         }
 
         button {
@@ -121,10 +165,19 @@
 
         .game-info h3 {
             font-size: 1.2rem;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+        }
+
+        .game-details {
+            font-size: 0.85rem;
+            color: #afafbc;
+            margin-bottom: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
         }
 
         .download-btn {
@@ -148,6 +201,7 @@
             margin-top: 8px;
             padding: 6px;
             font-size: 0.85rem;
+            width: 100%;
         }
 
         .delete-btn:hover {
@@ -165,41 +219,84 @@
 <body>
 
     <div class="container">
-        <header>
-            <h1>🎮 Meus Jogos</h1>
-            <p>Adicione e baixe seus jogos favoritos</p>
-        </header>
+        <!-- Menu de Abas -->
+        <nav>
+            <button class="nav-btn active" onclick="switchTab('inicio')">Início</button>
+            <button class="nav-btn" onclick="switchTab('jogos')">Jogos</button>
+        </nav>
 
-        <!-- Formulário para cadastrar o jogo -->
-        <div class="form-card">
-            <h2>Publicar Novo Jogo</h2>
-            <form id="gameForm">
-                <div class="input-group">
-                    <label for="gameName">Nome do Jogo:</label>
-                    <input type="text" id="gameName" required placeholder="Ex: GTA San Andreas">
-                </div>
-                <div class="input-group">
-                    <label for="gameImage">Link da Imagem (URL):</label>
-                    <input type="url" id="gameImage" required placeholder="Cole o link direto da imagem">
-                </div>
-                <div class="input-group">
-                    <label for="gameLink">Link de Download:</label>
-                    <input type="url" id="gameLink" required placeholder="Cole o link do MediaFire, Mega, etc.">
-                </div>
-                <button type="submit">Publicar Jogo</button>
-            </form>
+        <!-- ABA INÍCIO -->
+        <div id="inicio" class="tab-content active">
+            <header>
+                <h1>🎮 Meus Jogos</h1>
+                <p>Adicione e baixe seus jogos favoritos</p>
+            </header>
+
+            <!-- Formulário para cadastrar o jogo -->
+            <div class="form-card">
+                <h2>Publicar Novo Jogo</h2>
+                <form id="gameForm">
+                    <div class="input-group">
+                        <label for="gameName">Nome do Jogo:</label>
+                        <input type="text" id="gameName" required placeholder="Ex: GTA San Andreas">
+                    </div>
+                    <div class="input-group">
+                        <label for="gameImage">Link da Imagem (URL):</label>
+                        <input type="url" id="gameImage" required placeholder="Cole o link direto da imagem">
+                    </div>
+                    <div class="form-row">
+                        <div class="input-group">
+                            <label for="gameSize">Tamanho:</label>
+                            <input type="text" id="gameSize" required placeholder="Ex: 1.2 GB">
+                        </div>
+                        <div class="input-group">
+                            <label for="gameFormat">Formato:</label>
+                            <input type="text" id="gameFormat" required placeholder="Ex: ISO / APK">
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label for="gameStatus">Preço / Status:</label>
+                        <input type="text" id="gameStatus" required placeholder="Ex: Grátis">
+                    </div>
+                    <div class="input-group">
+                        <label for="gameLink">Link de Download:</label>
+                        <input type="url" id="gameLink" required placeholder="Cole o link do MediaFire, Mega, etc.">
+                    </div>
+                    <button type="submit">Publicar Jogo</button>
+                </form>
+            </div>
         </div>
 
-        <!-- Vitrine de Jogos -->
-        <h2>Jogos Disponíveis</h2>
-        <div class="games-grid" id="gamesGrid">
-            <!-- Os jogos cadastrados vão aparecer aqui automaticamente -->
+        <!-- ABA JOGOS -->
+        <div id="jogos" class="tab-content">
+            <header>
+                <h1>🕹️ Vitrine de Jogos</h1>
+                <p>Explore todos os jogos disponíveis para download</p>
+            </header>
+
+            <!-- Vitrine de Jogos -->
+            <div class="games-grid" id="gamesGrid">
+                <!-- Os jogos cadastrados vão aparecer aqui automaticamente -->
+            </div>
         </div>
     </div>
 
     <script>
         const gameForm = document.getElementById('gameForm');
         const gamesGrid = document.getElementById('gamesGrid');
+
+        // Função para alternar as abas
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            document.getElementById(tabId).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
 
         // Carregar jogos salvos ao abrir a página
         document.addEventListener('DOMContentLoaded', loadGames);
@@ -209,13 +306,19 @@
 
             const name = document.getElementById('gameName').value;
             const image = document.getElementById('gameImage').value;
+            const size = document.getElementById('gameSize').value;
+            const format = document.getElementById('gameFormat').value;
+            const status = document.getElementById('gameStatus').value;
             const link = document.getElementById('gameLink').value;
 
-            const newGame = { id: Date.now(), name, image, link };
+            const newGame = { id: Date.now(), name, image, size, format, status, link };
 
             saveGame(newGame);
             gameForm.reset();
             loadGames();
+
+            // Vai automaticamente para a aba de jogos após publicar
+            document.querySelector("button[onclick=\"switchTab('jogos')\"]").click();
         });
 
         function getGames() {
@@ -240,7 +343,7 @@
             gamesGrid.innerHTML = '';
 
             if (games.length === 0) {
-                gamesGrid.innerHTML = '<p class="empty-msg">Nenhum jogo cadastrado ainda. Adicione o primeiro acima!</p>';
+                gamesGrid.innerHTML = '<p class="empty-msg">Nenhum jogo cadastrado ainda. Vá na aba Início e adicione o primeiro!</p>';
                 return;
             }
 
@@ -253,6 +356,11 @@
                         <img src="${game.image}" alt="${game.name}" onerror="this.src='https://via.placeholder.com/250x160?text=Erro+na+Imagem'">
                         <div class="game-info">
                             <h3>${game.name}</h3>
+                            <div class="game-details">
+                                <span>📦 Tamanho: <strong>${game.size}</strong></span>
+                                <span>📁 Formato: <strong>${game.format}</strong></span>
+                                <span>💰 Status: <strong>${game.status}</strong></span>
+                            </div>
                             <a href="${game.link}" target="_blank" class="download-btn">Baixar Jogo</a>
                         </div>
                     </div>
