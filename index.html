@@ -6,15 +6,16 @@
     <title>PSP GAMER MOBILE 2</title>
     <style>
         :root {
-            --bg-color: #121214;
-            --card-bg: #1a1a1e;
-            --text-color: #e1e1e6;
-            --text-muted: #7c7c8a;
-            --primary: #00b37e;
-            --primary-hover: #00875f;
-            --accent-pink: #f72585;
-            --danger: #f75a68;
-            --warning: #f59e0b;
+            --bg-color: #0b0b0f;
+            --card-bg: #13131a;
+            --text-color: #f1f1f6;
+            --text-muted: #8e8e99;
+            --primary: #00ff88;
+            --primary-hover: #00cc6a;
+            --accent-pink: #ff007f;
+            --accent-cyan: #00f0ff;
+            --danger: #ff3366;
+            --warning: #ffaa00;
         }
 
         * {
@@ -28,6 +29,10 @@
             background-color: var(--bg-color);
             color: var(--text-color);
             padding: 15px;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(255, 0, 127, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(0, 240, 255, 0.08) 0%, transparent 40%);
+            background-attachment: fixed;
         }
 
         .container {
@@ -35,35 +40,50 @@
             margin: 0 auto;
         }
 
-        /* Topo / Header Moderno */
+        /* Topo / Header Moderno Neon */
         .top-bar {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             position: relative;
         }
 
         .logo {
             color: var(--accent-pink);
-            font-size: 1.2rem;
-            font-weight: bold;
+            font-size: 1.25rem;
+            font-weight: 900;
+            text-shadow: 0 0 10px rgba(255, 0, 127, 0.5);
+            letter-spacing: 0.5px;
+            animation: pulseLogo 3s infinite alternate;
+        }
+
+        @keyframes pulseLogo {
+            0% { text-shadow: 0 0 8px rgba(255, 0, 127, 0.4); }
+            100% { text-shadow: 0 0 16px rgba(255, 0, 127, 0.8), 0 0 20px rgba(0, 240, 255, 0.3); }
         }
 
         .search-container {
             flex: 1;
-            margin: 0 12px;
+            margin: 0 10px;
         }
 
         .search-box {
             width: 100%;
-            background-color: #202024;
-            border: none;
+            background-color: #1a1a24;
+            border: 1px solid rgba(0, 240, 255, 0.2);
             border-radius: 20px;
-            padding: 8px 15px;
+            padding: 9px 16px;
             color: white;
             font-size: 0.9rem;
             outline: none;
+            transition: all 0.3s ease;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .search-box:focus {
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 10px rgba(0, 240, 255, 0.4), inset 0 2px 4px rgba(0,0,0,0.5);
         }
 
         .top-icons {
@@ -76,19 +96,41 @@
             position: relative;
         }
 
+        .top-icons span {
+            background: #1a1a24;
+            padding: 8px;
+            border-radius: 50%;
+            border: 1px solid rgba(255,255,255,0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .top-icons span:hover {
+            border-color: var(--accent-pink);
+            transform: scale(1.05);
+        }
+
         /* Menu Dropdown dos Três Pontinhos */
         .dropdown-menu {
             display: none;
             position: absolute;
             right: 0;
-            top: 35px;
+            top: 45px;
             background-color: var(--card-bg);
-            border: 1px solid #323238;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
-            width: 150px;
+            border: 1px solid rgba(0, 240, 255, 0.25);
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.7), 0 0 15px rgba(0, 240, 255, 0.1);
+            width: 160px;
             z-index: 100;
             overflow: hidden;
+            animation: fadeInMenu 0.2s ease forwards;
+        }
+
+        @keyframes fadeInMenu {
+            from { opacity: 0; transform: translateY(-8px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .dropdown-menu.show {
@@ -96,13 +138,14 @@
         }
 
         .dropdown-item {
-            padding: 10px 15px;
+            padding: 12px 15px;
             font-size: 0.85rem;
             color: var(--text-color);
             cursor: pointer;
-            border-bottom: 1px solid #202024;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
             text-decoration: none;
             display: block;
+            transition: all 0.2s;
         }
 
         .dropdown-item:last-child {
@@ -110,17 +153,18 @@
         }
 
         .dropdown-item:hover {
-            background-color: #202024;
+            background-color: rgba(255, 0, 127, 0.15);
             color: var(--accent-pink);
+            padding-left: 18px;
         }
 
-        /* Categorias (Filtros redondos em rolagem horizontal) */
+        /* Categorias (Filtros redondos em rolagem horizontal com estilo Neo) */
         .categories {
             display: flex;
-            gap: 8px;
+            gap: 10px;
             overflow-x: auto;
-            padding-bottom: 10px;
-            margin-bottom: 15px;
+            padding-bottom: 12px;
+            margin-bottom: 20px;
             scrollbar-width: none;
         }
 
@@ -129,63 +173,89 @@
         }
 
         .cat-btn {
-            background-color: #202024;
-            color: white;
-            border: none;
-            padding: 8px 18px;
-            border-radius: 20px;
+            background: linear-gradient(135deg, #1a1a24, #121218);
+            color: var(--text-muted);
+            border: 1px solid rgba(255,255,255,0.06);
+            padding: 9px 20px;
+            border-radius: 25px;
             font-size: 0.9rem;
+            font-weight: 600;
             cursor: pointer;
             white-space: nowrap;
-            transition: 0.2s;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+
+        .cat-btn:hover {
+            color: white;
+            border-color: rgba(0, 240, 255, 0.4);
+            transform: translateY(-2px);
         }
 
         .cat-btn.active {
-            background-color: var(--accent-pink);
+            background: linear-gradient(135deg, var(--accent-pink), #b00055);
+            color: white;
+            border-color: var(--accent-pink);
+            box-shadow: 0 0 15px rgba(255, 0, 127, 0.5);
         }
 
         /* Abas de Navegação */
         .tab-content {
             display: none;
+            animation: fadeInTab 0.3s ease;
+        }
+        @keyframes fadeInTab {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         .tab-content.active {
             display: block;
         }
 
-        /* Formulário do Painel Admin */
+        /* Formulário do Painel Admin Animado */
         .form-card {
-            background-color: var(--card-bg);
-            padding: 20px;
-            border-radius: 12px;
+            background: linear-gradient(145deg, #161622, #101017);
+            padding: 22px;
+            border-radius: 16px;
             margin-bottom: 20px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.05);
+            border: 1px solid rgba(0, 240, 255, 0.15);
         }
 
         .form-card h2 {
-            margin-bottom: 15px;
+            margin-bottom: 18px;
             font-size: 1.3rem;
+            color: var(--accent-cyan);
+            text-shadow: 0 0 8px rgba(0, 240, 255, 0.3);
         }
 
         .input-group {
-            margin-bottom: 12px;
+            margin-bottom: 14px;
         }
 
         .input-group label {
             display: block;
-            margin-bottom: 4px;
+            margin-bottom: 5px;
             font-size: 0.85rem;
             color: var(--text-muted);
+            font-weight: 500;
         }
 
         .input-group input, .input-group select, .input-group textarea {
             width: 100%;
-            padding: 10px;
-            border-radius: 8px;
-            border: 1px solid #323238;
-            background-color: #121214;
+            padding: 11px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.08);
+            background-color: #0b0b0f;
             color: white;
             font-size: 0.9rem;
             outline: none;
+            transition: all 0.3s;
+        }
+
+        .input-group input:focus, .input-group select:focus, .input-group textarea:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 10px rgba(0, 255, 136, 0.25);
         }
 
         .form-row {
@@ -198,64 +268,87 @@
         }
 
         button {
-            background-color: var(--primary);
-            color: white;
+            background: linear-gradient(135deg, var(--primary), #00aa5b);
+            color: #0b0b0f;
             border: none;
-            padding: 10px 20px;
+            padding: 12px 20px;
             font-size: 1rem;
-            font-weight: bold;
-            border-radius: 8px;
+            font-weight: 800;
+            border-radius: 10px;
             cursor: pointer;
-            transition: background 0.2s;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             width: 100%;
+            box-shadow: 0 4px 15px rgba(0, 255, 136, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         button:hover {
-            background-color: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 255, 136, 0.5);
+            background: linear-gradient(135deg, #2bff9e, var(--primary));
         }
 
         /* Grid de Jogos (2 colunas) */
         .games-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 12px;
+            gap: 14px;
         }
 
+        /* Cartão de Jogo com Estilo Neon Animado */
         .game-card {
-            background-color: var(--card-bg);
-            border-radius: 12px;
+            background: linear-gradient(145deg, #15151f, #0f0f16);
+            border-radius: 14px;
             overflow: hidden;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.5);
             display: flex;
             flex-direction: column;
             justify-content: space-between;
             position: relative;
             cursor: pointer;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .game-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            border-color: rgba(0, 240, 255, 0.5);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.7), 0 0 15px rgba(0, 240, 255, 0.25);
         }
 
         .card-img-container {
             position: relative;
             width: 100%;
             height: 140px;
+            overflow: hidden;
         }
 
         .game-card img {
             width: 100%;
             height: 100%;
             object-fit: cover;
+            transition: transform 0.5s ease;
         }
 
-        /* Selo de Status/Preço Flutuante na Imagem */
+        .game-card:hover img {
+            transform: scale(1.1);
+        }
+
+        /* Selo de Status/Preço Flutuante */
         .price-badge {
             position: absolute;
             top: 8px;
             right: 8px;
-            background-color: rgba(0, 0, 0, 0.75);
-            padding: 4px 8px;
+            background: rgba(11, 11, 15, 0.85);
+            backdrop-filter: blur(5px);
+            padding: 4px 10px;
             border-radius: 12px;
             font-size: 0.75rem;
             font-weight: bold;
-            color: #10b981;
+            color: var(--primary);
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            box-shadow: 0 0 8px rgba(0, 255, 136, 0.2);
         }
 
         .game-info {
@@ -272,6 +365,7 @@
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            font-weight: 700;
         }
 
         .game-details {
@@ -283,7 +377,6 @@
             gap: 3px;
         }
 
-        /* Curtidas estilo o novo design */
         .likes-row {
             display: flex;
             gap: 12px;
@@ -295,31 +388,39 @@
         .download-btn {
             display: block;
             text-align: center;
-            background-color: var(--primary);
-            color: white;
+            background: linear-gradient(135deg, var(--accent-cyan), #0099ff);
+            color: #0b0b0f;
             text-decoration: none;
-            padding: 8px;
+            padding: 9px;
             border-radius: 20px;
             font-size: 0.8rem;
-            font-weight: bold;
+            font-weight: 800;
             margin-top: auto;
+            box-shadow: 0 4px 12px rgba(0, 240, 255, 0.3);
+            transition: all 0.3s;
         }
 
         .download-btn:hover {
-            background-color: var(--primary-hover);
+            background: linear-gradient(135deg, #33f3ff, var(--accent-cyan));
+            box-shadow: 0 6px 16px rgba(0, 240, 255, 0.5);
+            transform: translateY(-1px);
         }
 
         .delete-btn {
-            background-color: var(--danger);
+            background: linear-gradient(135deg, var(--danger), #cc0033);
+            color: white;
             margin-top: 8px;
-            padding: 6px;
+            padding: 7px;
             font-size: 0.75rem;
             width: 100%;
-            border-radius: 6px;
+            border-radius: 8px;
+            font-weight: bold;
+            box-shadow: 0 3px 10px rgba(255, 51, 102, 0.3);
         }
 
         .delete-btn:hover {
-            background-color: #d93848;
+            background: linear-gradient(135deg, #ff4d79, var(--danger));
+            box-shadow: 0 5px 15px rgba(255, 51, 102, 0.5);
         }
 
         .empty-msg {
@@ -327,74 +428,98 @@
             grid-column: 1 / -1;
             color: var(--text-muted);
             font-style: italic;
-            padding: 30px;
+            padding: 40px;
+            background: var(--card-bg);
+            border-radius: 12px;
+            border: 1px dashed rgba(255,255,255,0.08);
         }
 
-        /* Estilo da Página de Detalhes do Jogo */
+        /* Estilo da Página de Detalhes do Jogo Neon */
         .game-detail-card {
-            background-color: var(--card-bg);
-            border-radius: 12px;
+            background: linear-gradient(145deg, #161622, #101017);
+            border-radius: 16px;
             overflow: hidden;
             padding: 20px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            box-shadow: 0 10px 35px rgba(0,0,0,0.6);
+            border: 1px solid rgba(0, 240, 255, 0.2);
+            animation: scaleIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes scaleIn {
+            from { transform: scale(0.95); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
         }
 
         .back-btn {
-            background-color: #202024;
+            background: #1a1a24;
             color: var(--text-color);
-            border: none;
-            padding: 6px 14px;
-            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.08);
+            padding: 8px 16px;
+            border-radius: 10px;
             font-size: 0.85rem;
             cursor: pointer;
             margin-bottom: 15px;
             width: auto;
+            font-weight: bold;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+            transition: all 0.2s;
         }
         .back-btn:hover {
-            background-color: #323238;
+            background: #252533;
+            border-color: var(--accent-cyan);
+            color: var(--accent-cyan);
         }
 
         .detail-img {
             width: 100%;
-            height: 200px;
+            height: 210px;
             object-fit: cover;
-            border-radius: 10px;
+            border-radius: 12px;
             margin-bottom: 15px;
+            border: 1px solid rgba(255,255,255,0.06);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.4);
         }
 
         .detail-info h2 {
-            font-size: 1.4rem;
+            font-size: 1.5rem;
             margin-bottom: 10px;
             color: white;
+            text-shadow: 0 0 10px rgba(255,255,255,0.2);
         }
 
         .detail-desc {
             font-size: 0.9rem;
             color: var(--text-muted);
             margin: 15px 0;
-            line-height: 1.4;
+            line-height: 1.5;
             white-space: pre-wrap;
+            background: #0b0b0f;
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.04);
         }
 
-        /* Acesso restrito no rodapé */
+        /* Rodapé com acesso restrito */
         .admin-login-area {
             text-align: center;
             margin-top: 40px;
-            padding-top: 15px;
-            border-top: 1px solid #202024;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.06);
         }
 
         .admin-link {
             background: none;
             border: none;
             color: var(--text-muted);
-            font-size: 0.75rem;
+            font-size: 0.8rem;
             cursor: pointer;
             text-decoration: underline;
             width: auto;
+            transition: color 0.2s;
         }
         .admin-link:hover {
-            color: var(--primary);
+            color: var(--accent-pink);
+            text-shadow: 0 0 8px rgba(255, 0, 127, 0.4);
         }
     </style>
 </head>
@@ -431,7 +556,7 @@
         <!-- ABA INÍCIO (PAINEL ADMIN) -->
         <div id="inicio" class="tab-content">
             <header style="margin-bottom: 15px;">
-                <h1 style="font-size: 1.8rem;">🔒 Painel Restrito</h1>
+                <h1 style="font-size: 1.8rem; color: var(--accent-pink); text-shadow: 0 0 10px rgba(255,0,127,0.4);">🔒 Painel Restrito</h1>
                 <p style="font-size: 0.85rem; color: var(--text-muted);">Adicione novos jogos à vitrine</p>
             </header>
 
@@ -479,7 +604,7 @@
                     </div>
                     <button type="submit">Publicar Jogo</button>
                 </form>
-                <button onclick="logoutAdmin()" style="background-color: var(--danger); margin-top: 15px;">Sair do Painel Admin</button>
+                <button onclick="logoutAdmin()" style="background: linear-gradient(135deg, var(--danger), #cc0033); color: white; margin-top: 15px; box-shadow: 0 4px 15px rgba(255,51,102,0.4);">Sair do Painel Admin</button>
             </div>
         </div>
 
@@ -724,4 +849,4 @@
         }
     </script>
 </body>
-</html>
+    </html>
