@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+Nx.%<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
@@ -865,21 +865,30 @@
         }
 
         async function carregarJogosDaNuvem() {
+            let dadosLocais = localStorage.getItem('global_shared_psp_games');
+            if (dadosLocais) {
+                listaJogosCache = JSON.parse(dadosLocais);
+                renderGames();
+            }
+
             try {
                 let resposta = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
                     headers: { 'X-Master-Key': API_KEY }
                 });
                 if (resposta.ok) {
                     let dados = await resposta.json();
-                    listaJogosCache = dados.record.games || [];
-                    renderGames();
-                } else {
-                    gamesGrid.innerHTML = '<p class="empty-msg">Erro ao carregar jogos da nuvem.</p>';
+                    if (dados.record && dados.record.games) {
+                        listaJogosCache = dados.record.games;
+                        localStorage.setItem('global_shared_psp_games', JSON.stringify(listaJogosCache));
+                        renderGames();
+                    }
                 }
             } catch (e) {
-                let local = localStorage.getItem('global_shared_psp_games');
-                listaJogosCache = local ? JSON.parse(local) : [];
-                renderGames();
+                console.log("Modo offline / Falha na nuvem, usando dados locais.");
+            }
+
+            if (listaJogosCache.length === 0) {
+                gamesGrid.innerHTML = '<p class="empty-msg">Nenhum jogo cadastrado ainda. Abra o painel com a senha para adicionar.</p>';
             }
         }
 
@@ -888,7 +897,7 @@
             localStorage.setItem('global_shared_psp_games', JSON.stringify(gamesArray));
             
             try {
-                let resposta = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
+                await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
@@ -896,9 +905,8 @@
                     },
                     body: JSON.stringify({ games: gamesArray })
                 });
-                return resposta.ok;
             } catch (e) {
-                return false;
+                console.log("Erro ao salvar na nuvem, salvo localmente.");
             }
         }
 
@@ -1120,4 +1128,4 @@
         }
     </script>
 </body>
-</html>
+                    </html>
