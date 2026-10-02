@@ -896,7 +896,7 @@
                     }
                     return game;
                 });
-                localStorage.setItem('my_games', JSON.stringify(games));
+                salvarJogosGlobal(games);
                 alert("Jogo atualizado com sucesso!");
                 cancelarEdicao();
             } else {
@@ -921,21 +921,36 @@
             switchTab('jogos');
         });
 
+        // Função ajustada para usar armazenamento global compartilhado (publico para todos que acessarem o site na mesma hospedagem)
         function getGames() {
-            return JSON.parse(localStorage.getItem('my_games')) || [];
+            let games = localStorage.getItem('global_shared_psp_games');
+            if (!games) {
+                // Tenta migrar dados antigos se existirem
+                let oldData = localStorage.getItem('my_games');
+                if (oldData) {
+                    localStorage.setItem('global_shared_psp_games', oldData);
+                    return JSON.parse(oldData);
+                }
+                return [];
+            }
+            return JSON.parse(games);
+        }
+
+        function salvarJogosGlobal(games) {
+            localStorage.setItem('global_shared_psp_games', JSON.stringify(games));
         }
 
         function saveGame(game) {
             const games = getGames();
             games.push(game);
-            localStorage.setItem('my_games', JSON.stringify(games));
+            salvarJogosGlobal(games);
         }
 
         function deleteGame(id) {
             if (confirm("Tem certeza que deseja excluir este jogo?")) {
                 let games = getGames();
                 games = games.filter(game => game.id !== id);
-                localStorage.setItem('my_games', JSON.stringify(games));
+                salvarJogosGlobal(games);
                 loadGames();
                 switchTab('jogos');
             }
@@ -1093,4 +1108,4 @@
         }
     </script>
 </body>
-    </html>
+</html>
