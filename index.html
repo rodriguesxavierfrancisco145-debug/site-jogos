@@ -370,6 +370,18 @@
             gap: 14px;
         }
 
+        /* Animação suave para aparecimento dos cards de jogo */
+        @keyframes fadeInGame {
+            from {
+                opacity: 0;
+                transform: scale(0.9) translateY(15px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
         /* Cartão de Jogo com Estilo Neon Animado */
         .game-card {
             background: linear-gradient(145deg, #15151f, #0f0f16);
@@ -383,6 +395,7 @@
             cursor: pointer;
             border: 1px solid rgba(255, 255, 255, 0.04);
             transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: fadeInGame 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
         }
 
         .game-card:hover {
@@ -1040,9 +1053,11 @@
                 return;
             }
 
-            filtrados.forEach(game => {
+            filtrados.forEach((game, index) => {
                 const card = document.createElement('div');
                 card.className = 'game-card';
+                // Adiciona um pequeno atraso em cascata baseado no índice para ficar mais fluido na busca
+                card.style.animationDelay = `${index * 0.05}s`;
                 card.onclick = () => verDetalhesDoJogo(game.id);
 
                 let botoesAdminHtml = '';
@@ -1078,4 +1093,4 @@
         }
     </script>
 </body>
-</html>
+    </html>
