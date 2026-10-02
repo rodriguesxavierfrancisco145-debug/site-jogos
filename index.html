@@ -401,7 +401,7 @@
         .delete-btn {
             background: linear-gradient(135deg, var(--danger), #cc0033);
             color: white;
-            margin-top: 8px;
+            margin-top: 6px;
             padding: 7px;
             font-size: 0.75rem;
             width: 100%;
@@ -413,6 +413,23 @@
         .delete-btn:hover {
             background: linear-gradient(135deg, #ff4d79, var(--danger));
             box-shadow: 0 5px 15px rgba(255, 51, 102, 0.5);
+        }
+
+        .edit-btn {
+            background: linear-gradient(135deg, var(--warning), #cc8800);
+            color: #0b0b0f;
+            margin-top: 6px;
+            padding: 7px;
+            font-size: 0.75rem;
+            width: 100%;
+            border-radius: 8px;
+            font-weight: bold;
+            box-shadow: 0 3px 10px rgba(255, 170, 0, 0.3);
+        }
+
+        .edit-btn:hover {
+            background: linear-gradient(135deg, #ffbb33, var(--warning));
+            box-shadow: 0 5px 15px rgba(255, 170, 0, 0.5);
         }
 
         .empty-msg {
@@ -546,13 +563,14 @@
         <!-- ABA INÍCIO (PAINEL ADMIN) -->
         <div id="inicio" class="tab-content">
             <header style="margin-bottom: 15px;">
-                <h1 style="font-size: 1.8rem; color: var(--accent-pink); text-shadow: 0 0 10px rgba(255,0,127,0.4);">🔒 Painel Restrito</h1>
-                <p style="font-size: 0.85rem; color: var(--text-muted);">Adicione novos jogos à vitrine</p>
+                <h1 id="panelTitle" style="font-size: 1.8rem; color: var(--accent-pink); text-shadow: 0 0 10px rgba(255,0,127,0.4);">🔒 Painel Restrito</h1>
+                <p id="panelSub" style="font-size: 0.85rem; color: var(--text-muted);">Adicione novos jogos à vitrine</p>
             </header>
 
             <div class="form-card">
-                <h2>Publicar Novo Jogo</h2>
+                <h2 id="formTitle">Publicar Novo Jogo</h2>
                 <form id="gameForm">
+                    <input type="hidden" id="editGameId">
                     <div class="input-group">
                         <label for="gameName">Nome do Jogo:</label>
                         <input type="text" id="gameName" required placeholder="Ex: GTA San Andreas">
@@ -592,8 +610,15 @@
                         <label for="gameLink">Link de Download:</label>
                         <input type="url" id="gameLink" required placeholder="Cole o link do MediaFire, Mega, etc.">
                     </div>
-                    <button type="submit">Publicar Jogo</button>
+                    <div class="input-group">
+                        <label for="gameBtnText">Texto do Botão de Download:</label>
+                        <input type="text" id="gameBtnText" placeholder="Ex: Baixar Agora (Download Direto)">
+                    </div>
+                    <button type="submit" id="submitBtn">Publicar Jogo</button>
                 </form>
+                <div id="cancelEditContainer" style="display:none; margin-top: 10px;">
+                    <button onclick="cancelarEdicao()" style="background: linear-gradient(135deg, #555, #333); color: white;">Cancelar Edição</button>
+                </div>
                 <button onclick="logoutAdmin()" style="background: linear-gradient(135deg, var(--danger), #cc0033); color: white; margin-top: 15px; box-shadow: 0 4px 15px rgba(255,51,102,0.4);">Sair do Painel Admin</button>
             </div>
         </div>
@@ -644,11 +669,6 @@
             document.getElementById('dropdownMenu').classList.toggle('show');
         }
 
-        function abrirInfo(titulo, texto) {
-            alert(titulo + ":\n\n" + texto);
-            document.getElementById('dropdownMenu').classList.remove('show');
-        }
-
         // Função ajustada para abrir a notificação informativa do menu superior
         function abrirModalInfo(titulo, texto) {
             alert(titulo + "\n\n" + texto);
@@ -677,6 +697,7 @@
 
         function logoutAdmin() {
             localStorage.removeItem('isAdmin');
+            cancelarEdicao();
             switchTab('jogos');
             alert("Você saiu do modo administrador.");
         }
@@ -698,6 +719,7 @@
         gameForm.addEventListener('submit', function(e) {
             e.preventDefault();
 
+            const editId = document.getElementById('editGameId').value;
             const name = document.getElementById('gameName').value;
             const image = document.getElementById('gameImage').value;
             const category = document.getElementById('gameCategory').value || 'PSP';
@@ -706,20 +728,50 @@
             const status = document.getElementById('gameStatus').value;
             const description = document.getElementById('gameDescription').value || 'Nenhuma informação adicional informada.';
             const link = document.getElementById('gameLink').value;
+            const btnText = document.getElementById('gameBtnText').value.trim() || 'Baixar Agora (Download Direto)';
 
-            const newGame = { 
-                id: Date.now(), 
-                name, 
-                image, 
-                category, 
-                size, 
-                format, 
-                status, 
-                description,
-                link
-            };
+            let games = getGames();
 
-            saveGame(newGame);
+            if (editId) {
+                // Editando jogo existente
+                games = games.map(game => {
+                    if (game.id == editId) {
+                        return {
+                            id: Number(editId),
+                            name,
+                            image,
+                            category,
+                            size,
+                            format,
+                            status,
+                            description,
+                            link,
+                            btnText
+                        };
+                    }
+                    return game;
+                });
+                localStorage.setItem('my_games', JSON.stringify(games));
+                alert("Jogo atualizado com sucesso!");
+                cancelarEdicao();
+            } else {
+                // Publicando novo jogo
+                const newGame = { 
+                    id: Date.now(), 
+                    name, 
+                    image, 
+                    category, 
+                    size, 
+                    format, 
+                    status, 
+                    description,
+                    link,
+                    btnText
+                };
+                saveGame(newGame);
+                alert("Jogo publicado com sucesso!");
+            }
+
             gameForm.reset();
             loadGames();
             switchTab('jogos');
@@ -736,11 +788,48 @@
         }
 
         function deleteGame(id) {
-            let games = getGames();
-            games = games.filter(game => game.id !== id);
-            localStorage.setItem('my_games', JSON.stringify(games));
-            loadGames();
-            switchTab('jogos');
+            if (confirm("Tem certeza que deseja excluir este jogo?")) {
+                let games = getGames();
+                games = games.filter(game => game.id !== id);
+                localStorage.setItem('my_games', JSON.stringify(games));
+                loadGames();
+                switchTab('jogos');
+            }
+        }
+
+        function prepararEdicao(id) {
+            const games = getGames();
+            const game = games.find(g => g.id === id);
+            if (!game) return;
+
+            document.getElementById('editGameId').value = game.id;
+            document.getElementById('gameName').value = game.name;
+            document.getElementById('gameImage').value = game.image;
+            document.getElementById('gameCategory').value = game.category || 'PSP';
+            document.getElementById('gameSize').value = game.size;
+            document.getElementById('gameFormat').value = game.format;
+            document.getElementById('gameStatus').value = game.status;
+            document.getElementById('gameDescription').value = game.description;
+            document.getElementById('gameLink').value = game.link;
+            document.getElementById('gameBtnText').value = game.btnText || '';
+
+            document.getElementById('formTitle').innerText = "Editar Jogo";
+            document.getElementById('submitBtn').innerText = "Salvar Alterações";
+            document.getElementById('panelTitle').innerText = "✏️️ Editar Jogo";
+            document.getElementById('panelSub').innerText = "Altere os dados do jogo selecionado";
+            document.getElementById('cancelEditContainer').style.display = "block";
+
+            switchTab('inicio');
+        }
+
+        function cancelarEdicao() {
+            gameForm.reset();
+            document.getElementById('editGameId').value = "";
+            document.getElementById('formTitle').innerText = "Publicar Novo Jogo";
+            document.getElementById('submitBtn').innerText = "Publicar Jogo";
+            document.getElementById('panelTitle').innerText = "🔒 Painel Restrito";
+            document.getElementById('panelSub').innerText = "Adicione novos jogos à vitrine";
+            document.getElementById('cancelEditContainer').style.display = "none";
         }
 
         function verDetalhesDoJogo(id) {
@@ -748,10 +837,17 @@
             const game = games.find(g => g.id === id);
             if (!game) return;
 
-            let botaoExcluirDetalhe = '';
+            let botoesAdminDetalhe = '';
             if (localStorage.getItem('isAdmin') === 'true') {
-                botaoExcluirDetalhe = `<button class="delete-btn" onclick="deleteGame(${game.id})" style="margin-top: 15px;">Excluir Jogo do Site</button>`;
+                botoesAdminDetalhe = `
+                    <div style="display: flex; gap: 10px; margin-top: 15px;">
+                        <button class="edit-btn" onclick="prepararEdicao(${game.id})" style="margin-top:0;">Editar Jogo</button>
+                        <button class="delete-btn" onclick="deleteGame(${game.id})" style="margin-top:0;">Excluir Jogo</button>
+                    </div>
+                `;
             }
+
+            const textoBotaoDownload = game.btnText || "Baixar Agora (Download Direto)";
 
             const detailContainer = document.getElementById('gameDetailContent');
             detailContainer.innerHTML = `
@@ -767,8 +863,8 @@
                         <h4 style="font-size: 0.95rem; color: white; margin-bottom: 5px;">Informações do Jogo:</h4>
                         <p class="detail-desc">${game.description}</p>
                         
-                        <a href="${game.link}" target="_blank" class="download-btn" style="padding: 12px; font-size: 0.95rem; margin-top: 20px;">Baixar Agora (Download Direto)</a>
-                        ${botaoExcluirDetalhe}
+                        <a href="${game.link}" target="_blank" class="download-btn" style="padding: 12px; font-size: 0.95rem; margin-top: 20px;">${textoBotaoDownload}</a>
+                        ${botoesAdminDetalhe}
                     </div>
                 </div>
             `;
@@ -796,10 +892,11 @@
                 card.className = 'game-card';
                 card.onclick = () => verDetalhesDoJogo(game.id);
 
-                let botaoExcluirHtml = '';
+                let botoesAdminHtml = '';
                 if (localStorage.getItem('isAdmin') === 'true') {
-                    botaoExcluirHtml = `
+                    botoesAdminHtml = `
                         <div style="padding: 0 10px 10px 10px;" onclick="event.stopPropagation()">
+                            <button class="edit-btn" onclick="prepararEdicao(${game.id})">Editar</button>
                             <button class="delete-btn" onclick="deleteGame(${game.id})">Excluir</button>
                         </div>
                     `;
@@ -820,7 +917,7 @@
                             <span class="download-btn" style="display: block;">Ver Detalhes / Baixar</span>
                         </div>
                     </div>
-                    ${botaoExcluirHtml}
+                    ${botoesAdminHtml}
                 `;
 
                 gamesGrid.appendChild(card);
