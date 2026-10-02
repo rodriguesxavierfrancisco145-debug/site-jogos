@@ -58,6 +58,7 @@
             letter-spacing: 0.5px;
             animation: pulseLogo 3s infinite alternate;
             white-space: nowrap;
+            cursor: pointer;
         }
 
         @keyframes pulseLogo {
@@ -546,7 +547,7 @@
             box-shadow: 0 4px 15px rgba(255,0,127,0.5);
         }
 
-        /* Rodapé com mensagem e acesso restrito */
+        /* Rodapé com mensagem */
         .admin-login-area {
             text-align: center;
             margin-top: 40px;
@@ -559,13 +560,9 @@
             border: none;
             color: var(--text-muted);
             font-size: 0.85rem;
-            cursor: pointer;
+            cursor: default;
             width: 100%;
             line-height: 1.4;
-            transition: color 0.2s;
-        }
-        .admin-link:hover {
-            color: var(--accent-cyan);
         }
     </style>
 </head>
@@ -574,7 +571,8 @@
     <div class="container">
         <!-- TOPO NOVO ESTILO -->
         <div class="top-bar">
-            <div class="logo">PSP GAMER MOBILE 2</div>
+            <!-- LOGO CLICÁVEL PARA ABRIR O PAINEL ADMIN -->
+            <div class="logo" onclick="solicitarSenha()" title="Clique para abrir o Painel Admin">PSP GAMER MOBILE 2</div>
             <div class="search-container">
                 <input type="text" class="search-box" id="searchInput" placeholder="Buscar jogos..." oninput="loadGames()">
             </div>
@@ -676,9 +674,9 @@
             </div>
         </div>
 
-        <!-- Rodapé com mensagem de boas-vindas e acesso restrito -->
+        <!-- Rodapé com mensagem de boas-vindas -->
         <div class="admin-login-area">
-            <button class="admin-link" onclick="solicitarSenha()">Bem vindos au PSP GAMER MOBILE 2 esperamos que vcs gostem dos jogos.</button>
+            <div class="admin-link">Bem vindos au PSP GAMER MOBILE 2 esperamos que vcs gostem dos jogos.</div>
         </div>
     </div>
 
@@ -731,6 +729,7 @@
                 localStorage.setItem('isAdmin', 'true');
                 liberarAdmin();
                 switchTab('inicio');
+                loadGames();
                 alert("Painel liberado com sucesso!");
             } else if (senha !== null) {
                 alert("Senha incorreta!");
@@ -743,6 +742,7 @@
             localStorage.removeItem('isAdmin');
             cancelarEdicao();
             switchTab('jogos');
+            loadGames();
             alert("Você saiu do modo administrador.");
         }
 
@@ -990,4 +990,4 @@
         }
     </script>
 </body>
-</html>
+    </html>
