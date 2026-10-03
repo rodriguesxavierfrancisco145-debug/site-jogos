@@ -660,7 +660,7 @@
 </head>
 <body>
 
-    <div id="syncStatus">Sincronizando com o JSONBin...</div>
+    <div id="syncStatus">Sincronizando com o Servidor Node.js...</div>
 
     <div id="customModalOverlay" class="custom-modal-overlay">
         <div class="custom-modal">
@@ -768,7 +768,7 @@
 
         <div id="jogos" class="tab-content active">
             <div class="games-grid" id="gamesGrid">
-                <p class="empty-msg">Carregando jogos do JSONBin...</p>
+                <p class="empty-msg">Carregando jogos do servidor...</p>
             </div>
         </div>
 
@@ -784,65 +784,47 @@
 
     <script>
         let listaJogosCache = [];
-        let listaBannersCache = [
-          { "image": "https://i.ibb.co/Hf9GsdxW/unnamed-4.jpg", "title": "Bem-vindo ao PSP Gamer Mobile 2" },
-          { "image": "https://i.ibb.co/TxBqvzhs/unnamed-1.jpg", "title": "Novos Jogos Adicionados Semanalmente" },
-          { "image": "https://i.ibb.co/N6n6FHhs/unnamed-8.jpg", "title": "Baixe com Links Diretos e Seguros" },
-          { "image": "https://i.ibb.co/whzq0NxW/unnamed-5.jpg", "title": "Os melhores jogos so aqui" }
-        ];
+        let listaBannersCache = [];
 
         let indiceCarrosselAtual = 0;
         let intervaloCarrossel = null;
         const SENHA_ADMIN = "1234";
         let categoriaAtual = 'Todos';
 
-        const JSONBIN_CONFIG = {
-            binId: "68c14273et2000ffscj65744",
-            masterKey: "$2a$10$IiEJXJC7SzKZwe0fHMpSbu.vrgTI2VdWiSU3ZJXdotVepr1FMekoC"
-        };
+        // 🔗 COLOQUE AQUI O LINK DO SEU SERVIDOR NODE.JS (Ex: http://localhost:3000 ou sua URL de hospedagem)
+        const SERVER_URL = "http://localhost:3000";
 
-        async function carregarDadosDoBin() {
-            const status = document.getElementById('syncStatus');
+        async function carregarDadosDoServidor() {
             try {
-                const response = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_CONFIG.binId}/latest`, {
-                    headers: {
-                        'X-Master-Key': JSONBIN_CONFIG.masterKey,
-                        'Cache-Control': 'no-cache'
-                    }
+                const response = await fetch(`${SERVER_URL}/api/dados`, {
+                    headers: { 'Cache-Control': 'no-cache' }
                 });
-                if (!response.ok) throw new Error("Erro ao carregar dados do Bin");
+                if (!response.ok) throw new Error("Erro ao carregar dados do servidor");
                 const data = await response.json();
                 
-                if (data.record && data.record.jogos) {
-                    listaJogosCache = data.record.jogos;
-                }
-                if (data.record && data.record.banners) {
-                    listaBannersCache = data.record.banners;
-                }
+                if (data.jogos) listaJogosCache = data.jogos;
+                if (data.banners) listaBannersCache = data.banners;
                 
                 renderGames();
                 renderizarCarrossel();
             } catch (error) {
                 console.error("Erro:", error);
                 const gamesGrid = document.getElementById('gamesGrid');
-                if (gamesGrid) gamesGrid.innerHTML = '<p class="empty-msg">Erro ao carregar os jogos.</p>';
+                if (gamesGrid) gamesGrid.innerHTML = '<p class="empty-msg">Erro ao conectar com o servidor Node.js.</p>';
             }
         }
 
-        async function salvarDadosNoBin() {
+        async function salvarDadosNoServidor() {
             const status = document.getElementById('syncStatus');
             if(status) {
-                status.innerText = "🔄 Salvando no JSONBin...";
+                status.innerText = "🔄 Salvando no servidor...";
                 status.style.display = 'block';
             }
 
             try {
-                const response = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_CONFIG.binId}`, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-Master-Key': JSONBIN_CONFIG.masterKey
-                    },
+                const response = await fetch(`${SERVER_URL}/api/salvar`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         jogos: listaJogosCache,
                         banners: listaBannersCache
@@ -851,17 +833,17 @@
 
                 if (response.ok) {
                     if(status) {
-                        status.innerText = "✅ Salvo com sucesso!";
+                        status.innerText = "✅ Atualizado em tempo real!";
                         setTimeout(() => { status.style.display = 'none'; }, 3000);
                     }
                     return true;
                 } else {
-                    throw new Error("Falha ao atualizar Bin");
+                    throw new Error("Falha ao salvar no servidor");
                 }
             } catch (err) {
                 console.warn("Erro ao salvar:", err);
                 if(status) {
-                    status.innerText = "⚠️ Dados atualizados localmente!";
+                    status.innerText = "❌ Erro ao sincronizar com o servidor!";
                     setTimeout(() => { status.style.display = 'none'; }, 3000);
                 }
                 return false;
@@ -869,7 +851,10 @@
         }
 
         window.addEventListener('DOMContentLoaded', () => {
-            carregarDadosDoBin();
+            carregarDadosDoServidor();
+            // Atualiza os jogos automaticamente a cada 5 segundos para todo mundo ver na hora
+            setInterval(carregarDadosDoServidor, 5000);
+
             iniciarAutoplayCarrossel();
             switchTab('jogos');
 
@@ -891,7 +876,7 @@
             const track = document.getElementById('carouselTrack');
             const indicators = document.getElementById('carouselIndicators');
             const container = document.getElementById('carouselContainer');
-            if (!track || !indicators || !container) return;
+            if (!track || !indicators || !container || listaBannersCache.length === 0) return;
 
             track.innerHTML = '';
             indicators.innerHTML = '';
@@ -986,7 +971,7 @@
             listaBannersCache = novosBanners;
             indiceCarrosselAtual = 0;
             renderizarCarrossel();
-            await salvarDadosNoBin();
+            await salvarDadosNoServidor();
         }
 
         function toggleMenu(event) {
@@ -1077,7 +1062,7 @@
                 switchTab('jogos');
                 gameForm.reset();
 
-                await salvarDadosNoBin();
+                await salvarDadosNoServidor();
             });
         }
 
@@ -1086,7 +1071,7 @@
                 listaJogosCache = listaJogosCache.filter(game => game.id !== id);
                 renderGames();
                 switchTab('jogos');
-                await salvarDadosNoBin();
+                await salvarDadosNoServidor();
             }
         }
 
