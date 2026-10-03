@@ -1041,25 +1041,21 @@
         function inicializarDados() {
             try {
                 let localJogos = localStorage.getItem('global_shared_psp_games');
-                if (localJogos) {
-                    let parsed = JSON.parse(localJogos);
-                    if (parsed && Array.isArray(parsed) && parsed.length > 0) {
-                        listaJogosCache = parsed;
-                    }
-                } else {
+                if (!localJogos) {
                     localStorage.setItem('global_shared_psp_games', JSON.stringify(listaJogosCache));
+                } else {
+                    let parsed = JSON.parse(localJogos);
+                    listaJogosCache = parsed; 
                 }
             } catch(e) {}
 
             try {
                 let localBanners = localStorage.getItem('global_shared_psp_banners');
-                if (localBanners) {
-                    let parsedBanners = JSON.parse(localBanners);
-                    if (parsedBanners && Array.isArray(parsedBanners) && parsedBanners.length > 0) {
-                        listaBannersCache = parsedBanners;
-                    }
-                } else {
+                if (!localBanners) {
                     localStorage.setItem('global_shared_psp_banners', JSON.stringify(listaBannersCache));
+                } else {
+                    let parsedBanners = JSON.parse(localBanners);
+                    listaBannersCache = parsedBanners;
                 }
             } catch(e) {}
 
