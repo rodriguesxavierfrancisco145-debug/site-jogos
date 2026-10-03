@@ -1021,16 +1021,22 @@
             if (localJogos) {
                 try {
                     let parsed = JSON.parse(localJogos);
-                    if (parsed.length > 0) {
+                    if (parsed && parsed.length > 0) {
                         listaJogosCache = parsed;
                     }
                 } catch(e) {}
+            } else {
+                // Se não tiver salvo ainda, salva a lista padrão no localStorage para futuras edições
+                localStorage.setItem('global_shared_psp_games', JSON.stringify(listaJogosCache));
             }
 
             let localBanners = localStorage.getItem('global_shared_psp_banners');
             if (localBanners) {
                 try {
-                    listaBannersCache = JSON.parse(localBanners);
+                    let parsedBanners = JSON.parse(localBanners);
+                    if (parsedBanners && parsedBanners.length > 0) {
+                        listaBannersCache = parsedBanners;
+                    }
                 } catch(e) {}
             }
             renderGames();
@@ -1450,4 +1456,4 @@
         }
     </script>
 </body>
-                        </html>
+</html>
