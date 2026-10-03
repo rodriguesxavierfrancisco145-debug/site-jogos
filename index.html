@@ -783,7 +783,6 @@
     </div>
 
     <script>
-        // Lista padrão blindada com todos os 11 jogos + suporte a atualizações
         let listaJogosCache = [
           {
             "id": 1790937103530,
@@ -938,70 +937,82 @@
             path: "index.html"
         };
 
-        function mostrarStatusSync(texto, cor = "rgba(0, 255, 136, 0.9)") {
+        async function sincronizarComGitHubForcado(tentativas = 3) {
             const status = document.getElementById('syncStatus');
             if(status) {
-                status.innerText = texto;
-                status.style.background = cor;
+                status.innerText = "🔄 Forçando salvamento no GitHub...";
+                status.style.background = "rgba(0, 240, 255, 0.9)";
                 status.style.display = 'block';
-                setTimeout(() => { status.style.display = 'none'; }, 4000);
             }
-        }
 
-        async function sincronizarComGitHubForcado() {
-            mostrarStatusSync("Forçando salvamento no GitHub...");
-            try {
-                const url = `https://api.github.com/repos/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/contents/${GITHUB_CONFIG.path}`;
-                
-                const getResp = await fetch(url, {
-                    headers: { 'Authorization': `token ${GITHUB_CONFIG.token}` }
-                });
-                
-                if (!getResp.ok) {
-                    mostrarStatusSync("Erro ao conectar no GitHub!", "rgba(255, 51, 102, 0.9)");
-                    return false;
+            const url = `https://api.github.com/repos/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/contents/${GITHUB_CONFIG.path}`;
+
+            for (let tentativa = 1; tentativa <= tentativas; tentativa++) {
+                try {
+                    const getResp = await fetch(url, {
+                        headers: { 
+                            'Authorization': `token ${GITHUB_CONFIG.token}`,
+                            'Cache-Control': 'no-cache'
+                        }
+                    });
+                    
+                    if (!getResp.ok) {
+                        throw new Error(`Erro ao buscar arquivo (Status: ${getResp.status})`);
+                    }
+                    
+                    const fileData = await getResp.json();
+                    const sha = fileData.sha;
+
+                    let htmlAtual = document.documentElement.outerHTML;
+
+                    htmlAtual = htmlAtual.replace(
+                        /let listaJogosCache\s*=\s*\[[\s\S]*?\];/, 
+                        "let listaJogosCache = " + JSON.stringify(listaJogosCache, null, 2) + ";"
+                    );
+
+                    htmlAtual = htmlAtual.replace(
+                        /let listaBannersCache\s*=\s*\[[\s\S]*?\];/, 
+                        "let listaBannersCache = " + JSON.stringify(listaBannersCache, null, 2) + ";"
+                    );
+
+                    const contentBase64 = btoa(unescape(encodeURIComponent(htmlAtual)));
+
+                    const putResp = await fetch(url, {
+                        method: 'PUT',
+                        headers: {
+                            'Authorization': `token ${GITHUB_CONFIG.token}`,
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            message: `Atualização automática forçada - ${new Date().toLocaleString()}`,
+                            content: contentBase64,
+                            sha: sha
+                        })
+                    });
+
+                    if (putResp.ok) {
+                        if(status) {
+                            status.innerText = "✅ Salvo e sincronizado no GitHub com sucesso!";
+                            status.style.background = "rgba(0, 255, 136, 0.9)";
+                            setTimeout(() => { status.style.display = 'none'; }, 4000);
+                        }
+                        return true;
+                    } else {
+                        throw new Error(`Rejeitado pelo GitHub (Status: ${putResp.status})`);
+                    }
+
+                } catch (err) {
+                    console.warn(`Tentativa ${tentativa} falhou:`, err.message);
+                    if (tentativa === tentativas) {
+                        if(status) {
+                            status.innerText = "❌ Falha ao salvar no GitHub! Verifique sua conexão.";
+                            status.style.background = "rgba(255, 51, 102, 0.9)";
+                            setTimeout(() => { status.style.display = 'none'; }, 6000);
+                        }
+                        return false;
+                    }
+                    await new Promise(resolve => setTimeout(resolve, 2000));
                 }
-                
-                const fileData = await getResp.json();
-                const sha = fileData.sha;
-
-                let htmlAtual = document.documentElement.outerHTML;
-
-                htmlAtual = htmlAtual.replace(
-                    /let listaJogosCache\s*=\s*\[[\s\S]*?\];/, 
-                    "let listaJogosCache = " + JSON.stringify(listaJogosCache, null, 2) + ";"
-                );
-
-                htmlAtual = htmlAtual.replace(
-                    /let listaBannersCache\s*=\s*\[[\s\S]*?\];/, 
-                    "let listaBannersCache = " + JSON.stringify(listaBannersCache, null, 2) + ";"
-                );
-
-                const contentBase64 = btoa(unescape(encodeURIComponent(htmlAtual)));
-
-                const putResp = await fetch(url, {
-                    method: 'PUT',
-                    headers: {
-                        'Authorization': `token ${GITHUB_CONFIG.token}`,
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        message: 'Forçando atualização de jogos e banners no site',
-                        content: contentBase64,
-                        sha: sha
-                    })
-                });
-
-                if (putResp.ok) {
-                    mostrarStatusSync("Atualizado e salvo no GitHub com sucesso!");
-                    return true;
-                } else {
-                    mostrarStatusSync("Falha ao salvar no GitHub.", "rgba(255, 51, 102, 0.9)");
-                    return false;
-                }
-            } catch (err) {
-                mostrarStatusSync("Erro de rede ao sincronizar.", "rgba(255, 51, 102, 0.9)");
-                return false;
             }
         }
 
@@ -1215,7 +1226,6 @@
                 switchTab('jogos');
                 gameForm.reset();
 
-                // Força o salvamento direto no GitHub
                 await sincronizarComGitHubForcado();
             });
         }
