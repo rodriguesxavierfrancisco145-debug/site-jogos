@@ -854,7 +854,7 @@
     </div>
 
     <script>
-        // Array de Jogos Principal atualizado
+        // Array de Jogos Principal atualizado com todos os seus jogos
         let listaJogosCache = [
           {
             "id": 1790937103530,
@@ -990,6 +990,7 @@
           }
         ];
 
+        // Array de Banners do Carrossel atualizado
         let listaBannersCache = [
           {
             "image": "https://i.ibb.co/Hf9GsdxW/unnamed-4.jpg",
@@ -1014,7 +1015,6 @@
         const SENHA_ADMIN = "1234"; 
         let categoriaAtual = 'Todos';
 
-        // Inicialização Segura Independente
         window.addEventListener('DOMContentLoaded', () => {
             inicializarDados();
             renderGames();
@@ -1039,13 +1039,16 @@
         });
 
         function inicializarDados() {
+            // Força o cache principal a sobrescrever se a versão local estiver vazia ou desatualizada
             try {
                 let localJogos = localStorage.getItem('global_shared_psp_games');
                 if (!localJogos) {
                     localStorage.setItem('global_shared_psp_games', JSON.stringify(listaJogosCache));
                 } else {
                     let parsed = JSON.parse(localJogos);
-                    listaJogosCache = parsed; 
+                    if (parsed.length > 0) {
+                        listaJogosCache = parsed;
+                    }
                 }
             } catch(e) {}
 
@@ -1055,7 +1058,9 @@
                     localStorage.setItem('global_shared_psp_banners', JSON.stringify(listaBannersCache));
                 } else {
                     let parsedBanners = JSON.parse(localBanners);
-                    listaBannersCache = parsedBanners;
+                    if (parsedBanners.length > 0) {
+                        listaBannersCache = parsedBanners;
+                    }
                 }
             } catch(e) {}
 
@@ -1097,7 +1102,6 @@
             alert("Código do carrossel copiado! Cole-o substituindo a linha 'let listaBannersCache = [...]' no topo do script do seu arquivo HTML.");
         }
 
-        // Funções do Carrossel Seguras
         function renderizarCarrossel() {
             const track = document.getElementById('carouselTrack');
             const indicators = document.getElementById('carouselIndicators');
@@ -1519,4 +1523,4 @@
         }
     </script>
 </body>
-    </html>
+</html>
