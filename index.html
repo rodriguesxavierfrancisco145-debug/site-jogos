@@ -40,7 +40,6 @@
             margin: 0 auto;
         }
 
-        /* Topo / Header Moderno Neon */
         .top-bar {
             display: flex;
             align-items: center;
@@ -113,7 +112,6 @@
             transform: scale(1.05);
         }
 
-        /* Menu Dropdown dos Três Pontinhos */
         .dropdown-menu {
             display: none;
             position: absolute;
@@ -159,86 +157,6 @@
             padding-left: 18px;
         }
 
-        /* CARROSSEL DE DESTAQUES */
-        .carousel-container {
-            position: relative;
-            width: 100%;
-            height: 160px;
-            border-radius: 14px;
-            overflow: hidden;
-            margin-bottom: 20px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.6);
-            border: 1px solid rgba(0, 240, 255, 0.2);
-        }
-
-        .carousel-track {
-            display: flex;
-            width: 100%;
-            height: 100%;
-            transition: transform 0.5s ease-in-out;
-        }
-
-        .carousel-slide {
-            min-width: 100%;
-            height: 100%;
-            position: relative;
-            cursor: pointer;
-        }
-
-        .carousel-slide img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .carousel-caption {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: linear-gradient(to top, rgba(11,11,15,0.95), rgba(11,11,15,0.2));
-            padding: 12px 15px;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-        }
-
-        .carousel-caption h4 {
-            color: white;
-            font-size: 0.95rem;
-            font-weight: 700;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.8);
-        }
-
-        .carousel-caption span {
-            color: var(--accent-cyan);
-            font-size: 0.75rem;
-            font-weight: bold;
-        }
-
-        .carousel-dots {
-            position: absolute;
-            bottom: 8px;
-            right: 12px;
-            display: flex;
-            gap: 5px;
-        }
-
-        .dot {
-            width: 7px;
-            height: 7px;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.4);
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-
-        .dot.active {
-            background: var(--accent-pink);
-            box-shadow: 0 0 6px var(--accent-pink);
-        }
-
-        /* Modal Personalizado Animado */
         .custom-modal-overlay {
             display: none;
             position: fixed;
@@ -311,7 +229,6 @@
             box-shadow: 0 6px 20px rgba(255, 0, 127, 0.6);
         }
 
-        /* Categorias (Filtros redondos em rolagem horizontal com estilo Neo) */
         .categories {
             display: flex;
             gap: 10px;
@@ -352,7 +269,6 @@
             box-shadow: 0 0 15px rgba(255, 0, 127, 0.5);
         }
 
-        /* Abas de Navegação */
         .tab-content {
             display: none;
             animation: fadeInTab 0.3s ease;
@@ -365,7 +281,6 @@
             display: block;
         }
 
-        /* Formulário do Painel Admin Animado */
         .form-card {
             background: linear-gradient(145deg, #161622, #101017);
             padding: 22px;
@@ -442,7 +357,6 @@
             background: linear-gradient(135deg, #2bff9e, var(--primary));
         }
 
-        /* Grid de Jogos (2 colunas) */
         .games-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -727,7 +641,6 @@
 </head>
 <body>
 
-    <!-- MODAL PERSONALIZADO ANIMADO -->
     <div id="customModalOverlay" class="custom-modal-overlay">
         <div class="custom-modal">
             <h3 id="modalTitle">Título</h3>
@@ -737,16 +650,13 @@
     </div>
 
     <div class="container">
-        <!-- TOPO NOVO ESTILO -->
         <div class="top-bar">
-            <!-- LOGO CLICÁVEL PARA ABRIR O PAINEL ADMIN -->
             <div class="logo" onclick="solicitarSenha()" title="Clique para abrir o Painel Admin">PSP GAMER MOBILE 2</div>
             <div class="search-container">
                 <input type="text" class="search-box" id="searchInput" placeholder="Buscar jogos..." oninput="renderGames()">
             </div>
             <div class="top-icons">
                 <span onclick="toggleMenu(event)" title="Menu">☰</span>
-                <!-- Menu Dropdown -->
                 <div id="dropdownMenu" class="dropdown-menu">
                     <div class="dropdown-item" onclick="abrirModalInfo('Suporte', 'Precisa de ajuda com algum jogo, link quebrado ou dúvida? Entre em contato com nossa equipe de suporte pelo WhatsApp do canal ou comunidade.')">Suporte</div>
                     <div class="dropdown-item" onclick="abrirModalInfo('Ajuda', '1. Escolha o jogo desejado.\n2. Clique nele para ver as informações completas.\n3. Clique em Baixar para obter o arquivo direto.')">Ajuda</div>
@@ -755,17 +665,6 @@
             </div>
         </div>
 
-        <!-- CARROSSEL DE DESTAQUES -->
-        <div class="carousel-container" id="carouselContainer" style="display: none;">
-            <div class="carousel-track" id="carouselTrack">
-                <!-- Slides gerados dinamicamente via JS -->
-            </div>
-            <div class="carousel-dots" id="carouselDots">
-                <!-- Bolinhas indicadoras geradas via JS -->
-            </div>
-        </div>
-
-        <!-- CATEGORIAS REDONDAS NOVAS -->
         <div class="categories">
             <button class="cat-btn active" onclick="filtrarCategoria('Todos', this)">Todos</button>
             <button class="cat-btn" onclick="filtrarCategoria('PSP', this)">PSP</button>
@@ -774,7 +673,6 @@
             <button class="cat-btn" onclick="filtrarCategoria('APK', this)">APK</button>
         </div>
 
-        <!-- ABA INÍCIO (PAINEL ADMIN) -->
         <div id="inicio" class="tab-content">
             <header style="margin-bottom: 15px;">
                 <h1 id="panelTitle" style="font-size: 1.8rem; color: var(--accent-pink); text-shadow: 0 0 10px rgba(255,0,127,0.4);">🔒 Painel Restrito</h1>
@@ -837,55 +735,31 @@
             </div>
         </div>
 
-        <!-- ABA JOGOS (VITRINE) -->
         <div id="jogos" class="tab-content active">
             <div class="games-grid" id="gamesGrid">
-                <p class="empty-msg">Carregando jogos da nuvem...</p>
+                <p class="empty-msg">Carregando jogos...</p>
             </div>
         </div>
 
-        <!-- ABA DETALHES DO JOGO -->
         <div id="detalhes" class="tab-content">
             <button class="back-btn" onclick="switchTab('jogos')">← Voltar</button>
-            <div id="gameDetailContent">
-                <!-- Informações detalhadas do jogo carregadas via JS -->
-            </div>
+            <div id="gameDetailContent"></div>
         </div>
 
-        <!-- Rodapé com mensagem de boas-vindas -->
         <div class="admin-login-area">
             <div class="admin-link">Bem vindos au PSP GAMER MOBILE 2 esperamos que vcs gostem dos jogos.</div>
         </div>
     </div>
 
     <script>
-        const BIN_ID = "66f361cbe41b4d34e4337b58"; 
-        const API_KEY = "$2a$10$7R9fXvY6Wv3H1x2Y9x8Z2e7Z2e7Z2e7Z2e7Z2e7Z2e7Z2e7Z2e7Z2"; 
-
         let listaJogosCache = [];
         const gameForm = document.getElementById('gameForm');
         const gamesGrid = document.getElementById('gamesGrid');
         const SENHA_ADMIN = "1234"; 
         let categoriaAtual = 'Todos';
-        let currentSlideIndex = 0;
-        let carouselInterval = null;
 
         document.addEventListener('DOMContentLoaded', () => {
-            // Carrega instantaneamente do localStorage se houver dados salvos anteriormente
-            let localSalvo = localStorage.getItem('global_shared_psp_games');
-            if (localSalvo) {
-                try {
-                    listaJogosCache = JSON.parse(localSalvo);
-                    renderGames();
-                    renderCarousel();
-                } catch(e) {}
-            }
-
-            carregarJogosDaNuvem();
-
-            if (localStorage.getItem('isAdmin') === 'true') {
-                liberarAdmin();
-            }
+            carregarJogosLocais();
 
             const urlParams = new URLSearchParams(window.location.search);
             const jogoIdUrl = urlParams.get('jogo');
@@ -926,24 +800,19 @@
             let senha = prompt("Digite a senha de administrador:");
             if (senha === SENHA_ADMIN) {
                 localStorage.setItem('isAdmin', 'true');
-                liberarAdmin();
                 switchTab('inicio');
                 renderGames();
-                renderCarousel();
                 alert("Painel liberado com sucesso!");
             } else if (senha !== null) {
                 alert("Senha incorreta!");
             }
         }
 
-        function liberarAdmin() {}
-
         function logoutAdmin() {
             localStorage.removeItem('isAdmin');
             cancelarEdicao();
             switchTab('jogos');
             renderGames();
-            renderCarousel();
             alert("Você saiu do modo administrador.");
         }
 
@@ -961,50 +830,18 @@
             renderGames();
         }
 
-        async function carregarJogosDaNuvem() {
-            try {
-                let resposta = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
-                    headers: { 'X-Master-Key': API_KEY }
-                });
-                if (resposta.ok) {
-                    let dados = await resposta.json();
-                    listaJogosCache = dados.record.games || [];
-                    localStorage.setItem('global_shared_psp_games', JSON.stringify(listaJogosCache));
-                    renderGames();
-                    renderCarousel();
-                } else if (listaJogosCache.length === 0) {
-                    gamesGrid.innerHTML = '<p class="empty-msg">Erro ao carregar jogos da nuvem.</p>';
-                }
-            } catch (e) {
-                let local = localStorage.getItem('global_shared_psp_games');
-                listaJogosCache = local ? JSON.parse(local) : [];
-                renderGames();
-                renderCarousel();
-            }
+        function carregarJogosLocais() {
+            let local = localStorage.getItem('global_shared_psp_games');
+            listaJogosCache = local ? JSON.parse(local) : [];
+            renderGames();
         }
 
-        async function salvarJogosNaNuvem(gamesArray) {
+        function salvarJogosLocais(gamesArray) {
             listaJogosCache = gamesArray;
             localStorage.setItem('global_shared_psp_games', JSON.stringify(gamesArray));
-            renderGames(); 
-            renderCarousel();
-            
-            try {
-                let resposta = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-Master-Key': API_KEY
-                    },
-                    body: JSON.stringify({ games: gamesArray })
-                });
-                return resposta.ok;
-            } catch (e) {
-                return false;
-            }
         }
 
-        gameForm.addEventListener('submit', async function(e) {
+        gameForm.addEventListener('submit', function(e) {
             e.preventDefault();
 
             const editId = document.getElementById('editGameId').value;
@@ -1039,8 +876,8 @@
                     }
                     return game;
                 });
-                await salvarJogosNaNuvem(games);
-                alert("Jogo atualizado com sucesso na nuvem para todos!");
+                salvarJogosLocais(games);
+                alert("Jogo atualizado com sucesso!");
                 cancelarEdicao();
             } else {
                 const newGame = { 
@@ -1056,22 +893,20 @@
                     btnText
                 };
                 games.push(newGame);
-                await salvarJogosNaNuvem(games);
-                alert("Jogo publicado com sucesso na nuvem para todos!");
+                salvarJogosLocais(games);
+                alert("Jogo publicado com sucesso!");
             }
 
             gameForm.reset();
             renderGames();
-            renderCarousel();
             switchTab('jogos');
         });
 
-        async function deleteGame(id) {
-            if (confirm("Tem certeza que deseja excluir este jogo da nuvem para todos?")) {
+        function deleteGame(id) {
+            if (confirm("Tem certeza que deseja excluir este jogo?")) {
                 let games = listaJogosCache.filter(game => game.id !== id);
-                await salvarJogosNaNuvem(games);
+                salvarJogosLocais(games);
                 renderGames();
-                renderCarousel();
                 switchTab('jogos');
             }
         }
@@ -1170,64 +1005,6 @@
             switchTab('detalhes');
         }
 
-        // LÓGICA DO CARROSSEL
-        function renderCarousel() {
-            const carouselContainer = document.getElementById('carouselContainer');
-            const track = document.getElementById('carouselTrack');
-            const dotsContainer = document.getElementById('carouselDots');
-
-            if (!listaJogosCache || listaJogosCache.length === 0) {
-                carouselContainer.style.display = 'none';
-                return;
-            }
-
-            carouselContainer.style.display = 'block';
-            track.innerHTML = '';
-            dotsContainer.innerHTML = '';
-
-            // Pega até os últimos 5 jogos cadastrados para o carrossel de destaques
-            const destaques = listaJogosCache.slice(-5);
-
-            destaques.forEach((game, index) => {
-                const slide = document.createElement('div');
-                slide.className = 'carousel-slide';
-                slide.onclick = () => verDetalhesDoJogo(game.id);
-                slide.innerHTML = `
-                    <img src="${game.image}" alt="${game.name}" onerror="this.src='https://via.placeholder.com/500x160?text=Destaque'">
-                    <div class="carousel-caption">
-                        <span>🔥 DESTAQUE</span>
-                        <h4>${game.name}</h4>
-                    </div>
-                `;
-                track.appendChild(slide);
-
-                const dot = document.createElement('div');
-                dot.className = `dot ${index === 0 ? 'active' : ''}`;
-                dot.onclick = (e) => {
-                    e.stopPropagation();
-                    goToSlide(index);
-                };
-                dotsContainer.appendChild(dot);
-            });
-
-            if (carouselInterval) clearInterval(carouselInterval);
-            carouselInterval = setInterval(() => {
-                currentSlideIndex = (currentSlideIndex + 1) % destaques.length;
-                goToSlide(currentSlideIndex);
-            }, 3500);
-        }
-
-        function goToSlide(index) {
-            currentSlideIndex = index;
-            const track = document.getElementById('carouselTrack');
-            track.style.transform = `translateX(-${index * 100}%)`;
-
-            const dots = document.querySelectorAll('.carousel-dots .dot');
-            dots.forEach((dot, idx) => {
-                dot.classList.toggle('active', idx === index);
-            });
-        }
-
         function renderGames() {
             const termoBusca = document.getElementById('searchInput') ? document.getElementById('searchInput').value.toLowerCase() : '';
             gamesGrid.innerHTML = '';
@@ -1239,7 +1016,7 @@
             });
 
             if (filtrados.length === 0) {
-                gamesGrid.innerHTML = '<p class="empty-msg">Nenhum jogo cadastrado na nuvem ainda.</p>';
+                gamesGrid.innerHTML = '<p class="empty-msg">Nenhum jogo cadastrado ainda. Clique no logotipo para abrir o painel e adicionar.</p>';
                 return;
             }
 
