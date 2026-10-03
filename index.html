@@ -818,6 +818,14 @@
                 <div id="cancelEditContainer" style="display:none; margin-top: 10px;">
                     <button onclick="cancelarEdicao()" style="background: linear-gradient(135deg, #555, #333); color: white;">Cancelar Edição</button>
                 </div>
+
+                <div style="margin-top: 30px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px;">
+                    <h2>Exportar Código dos Jogos</h2>
+                    <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 10px;">Copie o código gerado abaixo e cole diretamente na linha `let listaJogosCache = [...]` do seu arquivo HTML para atualizar o código principal.</p>
+                    <textarea id="exportCodeBox" rows="4" readonly style="width:100%; background:#0b0b0f; color:#00ff88; font-family:monospace; font-size:0.8rem; padding:10px; border-radius:8px; border:1px solid rgba(255,255,255,0.1); margin-bottom: 10px;"></textarea>
+                    <button type="button" onclick="copiarCodigoJogos()" style="background: linear-gradient(135deg, var(--accent-cyan), #0099ff); color: #0b0b0f;">Copiar Código Atualizado</button>
+                </div>
+
                 <button onclick="logoutAdmin()" style="background: linear-gradient(135deg, var(--danger), #cc0033); color: white; margin-top: 15px; box-shadow: 0 4px 15px rgba(255,51,102,0.4);">Sair do Painel Admin</button>
             </div>
         </div>
@@ -839,7 +847,9 @@
     </div>
 
     <script>
+        // ADICIONE SEUS JOGOS FIXOS DIRETAMENTE AQUI NO ARRAY ABAIXO PARA APARECEREM DIRETO NO CÓDIGO
         let listaJogosCache = [];
+
         let listaBannersCache = [
             { image: "https://via.placeholder.com/500x180?text=Destaque+1+PSP", title: "Bem-vindo ao PSP Gamer Mobile 2" },
             { image: "https://via.placeholder.com/500x180?text=Destaque+2+PS2", title: "Novos Jogos Adicionados Semanalmente" },
@@ -876,7 +886,14 @@
 
         function carregarDadosLocais() {
             let localJogos = localStorage.getItem('global_shared_psp_games');
-            listaJogosCache = localJogos ? JSON.parse(localJogos) : [];
+            if (localJogos) {
+                try {
+                    let parsed = JSON.parse(localJogos);
+                    if (parsed.length > 0) {
+                        listaJogosCache = parsed;
+                    }
+                } catch(e) {}
+            }
 
             let localBanners = localStorage.getItem('global_shared_psp_banners');
             if (localBanners) {
@@ -886,11 +903,27 @@
             }
             renderGames();
             renderizarInputsAdminBanners();
+            atualizarBoxExportacao();
         }
 
         function salvarJogosLocais(gamesArray) {
             listaJogosCache = gamesArray;
             localStorage.setItem('global_shared_psp_games', JSON.stringify(gamesArray));
+            atualizarBoxExportacao();
+        }
+
+        function atualizarBoxExportacao() {
+            const box = document.getElementById('exportCodeBox');
+            if (box) {
+                box.value = "let listaJogosCache = " + JSON.stringify(listaJogosCache, null, 2) + ";";
+            }
+        }
+
+        function copiarCodigoJogos() {
+            const box = document.getElementById('exportCodeBox');
+            box.select();
+            navigator.clipboard.writeText(box.value);
+            alert("Código copiado! Cole-o substituindo a linha 'let listaJogosCache = [...]' no topo do script do seu arquivo HTML.");
         }
 
         // Funções do Carrossel
@@ -1028,6 +1061,7 @@
             if (localStorage.getItem('isAdmin') === 'true') {
                 switchTab('inicio');
                 renderizarInputsAdminBanners();
+                atualizarBoxExportacao();
                 return;
             }
             let senha = prompt("Digite a senha de administrador:");
@@ -1035,6 +1069,7 @@
                 localStorage.setItem('isAdmin', 'true');
                 switchTab('inicio');
                 renderizarInputsAdminBanners();
+                atualizarBoxExportacao();
                 renderGames();
                 alert("Painel liberado com sucesso!");
             } else if (senha !== null) {
@@ -1100,7 +1135,7 @@
                     return game;
                 });
                 salvarJogosLocais(games);
-                alert("Jogo atualizado com sucesso!");
+                alert("Jogo atualizado com sucesso! Lembre-se de copiar o código atualizado no painel para colar direto no seu arquivo HTML.");
                 cancelarEdicao();
             } else {
                 const newGame = { 
@@ -1117,7 +1152,7 @@
                 };
                 games.push(newGame);
                 salvarJogosLocais(games);
-                alert("Jogo publicado com sucesso!");
+                alert("Jogo publicado com sucesso! Lembre-se de copiar o código atualizado no painel para colar direto no seu arquivo HTML.");
             }
 
             gameForm.reset();
