@@ -157,7 +157,6 @@
             padding-left: 18px;
         }
 
-        /* Estilos do Carrossel */
         .carousel-container {
             position: relative;
             width: 100%;
@@ -300,11 +299,6 @@
             transition: all 0.2s;
         }
 
-        .custom-modal-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(255, 0, 127, 0.6);
-        }
-
         .categories {
             display: flex;
             gap: 10px;
@@ -328,7 +322,7 @@
             font-weight: 600;
             cursor: pointer;
             white-space: nowrap;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.3s;
             box-shadow: 0 4px 10px rgba(0,0,0,0.3);
         }
 
@@ -362,7 +356,7 @@
             padding: 22px;
             border-radius: 16px;
             margin-bottom: 20px;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.05);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.5);
             border: 1px solid rgba(0, 240, 255, 0.15);
         }
 
@@ -397,11 +391,6 @@
             transition: all 0.3s;
         }
 
-        .input-group input:focus, .input-group select:focus, .input-group textarea:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 10px rgba(0, 255, 136, 0.25);
-        }
-
         .form-row {
             display: flex;
             gap: 15px;
@@ -420,7 +409,7 @@
             font-weight: 800;
             border-radius: 10px;
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.3s;
             width: 100%;
             box-shadow: 0 4px 15px rgba(0, 255, 136, 0.3);
             text-transform: uppercase;
@@ -430,7 +419,6 @@
         button:hover {
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(0, 255, 136, 0.5);
-            background: linear-gradient(135deg, #2bff9e, var(--primary));
         }
 
         .games-grid {
@@ -440,14 +428,8 @@
         }
 
         @keyframes fadeInGame {
-            from {
-                opacity: 0;
-                transform: scale(0.9) translateY(15px);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1) translateY(0);
-            }
+            from { opacity: 0; transform: scale(0.9) translateY(15px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
         }
 
         .game-card {
@@ -461,8 +443,8 @@
             position: relative;
             cursor: pointer;
             border: 1px solid rgba(255, 255, 255, 0.04);
-            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-            animation: fadeInGame 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            transition: all 0.35s;
+            animation: fadeInGame 0.4s forwards;
         }
 
         .game-card:hover {
@@ -501,7 +483,6 @@
             font-weight: bold;
             color: var(--primary);
             border: 1px solid rgba(0, 255, 136, 0.3);
-            box-shadow: 0 0 8px rgba(0, 255, 136, 0.2);
         }
 
         .game-info {
@@ -542,13 +523,6 @@
             font-weight: 800;
             margin-top: auto;
             box-shadow: 0 4px 12px rgba(0, 240, 255, 0.3);
-            transition: all 0.3s;
-        }
-
-        .download-btn:hover {
-            background: linear-gradient(135deg, #33f3ff, var(--accent-cyan));
-            box-shadow: 0 6px 16px rgba(0, 240, 255, 0.5);
-            transform: translateY(-1px);
         }
 
         .delete-btn {
@@ -560,12 +534,6 @@
             width: 100%;
             border-radius: 8px;
             font-weight: bold;
-            box-shadow: 0 3px 10px rgba(255, 51, 102, 0.3);
-        }
-
-        .delete-btn:hover {
-            background: linear-gradient(135deg, #ff4d79, var(--danger));
-            box-shadow: 0 5px 15px rgba(255, 51, 102, 0.5);
         }
 
         .edit-btn {
@@ -577,12 +545,6 @@
             width: 100%;
             border-radius: 8px;
             font-weight: bold;
-            box-shadow: 0 3px 10px rgba(255, 170, 0, 0.3);
-        }
-
-        .edit-btn:hover {
-            background: linear-gradient(135deg, #ffbb33, var(--warning));
-            box-shadow: 0 5px 15px rgba(255, 170, 0, 0.5);
         }
 
         .empty-msg {
@@ -593,7 +555,6 @@
             padding: 40px;
             background: var(--card-bg);
             border-radius: 12px;
-            border: 1px dashed rgba(255,255,255,0.08);
         }
 
         .game-detail-card {
@@ -603,13 +564,6 @@
             padding: 20px;
             box-shadow: 0 10px 35px rgba(0,0,0,0.6);
             border: 1px solid rgba(0, 240, 255, 0.2);
-            animation: scaleIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            position: relative;
-        }
-
-        @keyframes scaleIn {
-            from { transform: scale(0.95); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
         }
 
         .back-btn {
@@ -623,13 +577,6 @@
             margin-bottom: 15px;
             width: auto;
             font-weight: bold;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-            transition: all 0.2s;
-        }
-        .back-btn:hover {
-            background: #252533;
-            border-color: var(--accent-cyan);
-            color: var(--accent-cyan);
         }
 
         .detail-img-container {
@@ -644,15 +591,6 @@
             height: 100%;
             object-fit: cover;
             border-radius: 12px;
-            border: 1px solid rgba(255,255,255,0.06);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.4);
-        }
-
-        .detail-info h2 {
-            font-size: 1.5rem;
-            margin-bottom: 10px;
-            color: white;
-            text-shadow: 0 0 10px rgba(255,255,255,0.2);
         }
 
         .detail-desc {
@@ -664,7 +602,6 @@
             background: #0b0b0f;
             padding: 12px;
             border-radius: 10px;
-            border: 1px solid rgba(255,255,255,0.04);
         }
 
         .action-bar {
@@ -675,7 +612,6 @@
             padding: 10px 15px;
             border-radius: 12px;
             margin-top: 15px;
-            border: 1px solid rgba(255,255,255,0.05);
         }
 
         .share-btn {
@@ -688,13 +624,6 @@
             font-weight: bold;
             cursor: pointer;
             width: auto;
-            box-shadow: 0 2px 10px rgba(255,0,127,0.3);
-            transition: all 0.2s;
-        }
-
-        .share-btn:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 15px rgba(255,0,127,0.5);
         }
 
         .admin-login-area {
@@ -709,13 +638,29 @@
             border: none;
             color: var(--text-muted);
             font-size: 0.85rem;
-            cursor: default;
-            width: 100%;
             line-height: 1.4;
+        }
+        
+        #syncStatus {
+            position: fixed;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 255, 136, 0.9);
+            color: #0b0b0f;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            z-index: 9999;
+            display: none;
         }
     </style>
 </head>
 <body>
+
+    <div id="syncStatus">Sincronizando com o GitHub...</div>
 
     <div id="customModalOverlay" class="custom-modal-overlay">
         <div class="custom-modal">
@@ -727,21 +672,20 @@
 
     <div class="container">
         <div class="top-bar">
-            <div class="logo" onclick="solicitarSenha()" title="Clique para abrir o Painel Admin">PSP GAMER MOBILE 2</div>
+            <div class="logo" onclick="solicitarSenha()" title="Clique para Painel Admin">PSP GAMER MOBILE 2</div>
             <div class="search-container">
                 <input type="text" class="search-box" id="searchInput" placeholder="Buscar jogos..." oninput="renderGames()">
             </div>
             <div class="top-icons">
                 <span onclick="toggleMenu(event)" title="Menu">☰</span>
                 <div id="dropdownMenu" class="dropdown-menu">
-                    <div class="dropdown-item" onclick="abrirModalInfo('Suporte', 'Precisa de ajuda com algum jogo, link quebrado ou dúvida? Entre em contato com nossa equipe de suporte pelo WhatsApp do canal ou comunidade.')">Suporte</div>
-                    <div class="dropdown-item" onclick="abrirModalInfo('Ajuda', '1. Escolha o jogo desejado.\n2. Clique nele para ver as informações completas.\n3. Clique em Baixar para obter o arquivo direto.')">Ajuda</div>
-                    <div class="dropdown-item" onclick="abrirModalInfo('Parceria', 'Tem interesse em divulgar seu canal, jogo ou site aqui na PSP GAMER MOBILE 2? Entre em contato para parcerias e anúncios!')">Parceria</div>
+                    <div class="dropdown-item" onclick="abrirModalInfo('Suporte', 'Precisa de ajuda com algum jogo ou link quebrado? Entre em contato pelo canal.')">Suporte</div>
+                    <div class="dropdown-item" onclick="abrirModalInfo('Ajuda', '1. Escolha o jogo.\n2. Clique para ver detalhes.\n3. Baixe direto.')">Ajuda</div>
+                    <div class="dropdown-item" onclick="abrirModalInfo('Parceria', 'Divulgue seu canal ou site conosco!')">Parceria</div>
                 </div>
             </div>
         </div>
 
-        <!-- Carrossel Animado de Destaques -->
         <div class="carousel-container" id="carouselContainer">
             <div class="carousel-track" id="carouselTrack"></div>
             <div class="carousel-indicators" id="carouselIndicators"></div>
@@ -757,30 +701,25 @@
 
         <div id="inicio" class="tab-content">
             <header style="margin-bottom: 15px;">
-                <h1 id="panelTitle" style="font-size: 1.8rem; color: var(--accent-pink); text-shadow: 0 0 10px rgba(255,0,127,0.4);">🔒 Painel Restrito</h1>
-                <p id="panelSub" style="font-size: 0.85rem; color: var(--text-muted);">Adicione novos jogos e gerencie o carrossel</p>
+                <h1 id="panelTitle" style="font-size: 1.8rem; color: var(--accent-pink);">🔒 Painel Restrito</h1>
+                <p id="panelSub" style="font-size: 0.85rem; color: var(--text-muted);">Adicione jogos e altere o carrossel</p>
             </header>
 
             <div class="form-card">
                 <h2>Gerenciar Banners do Carrossel (Máx. 4)</h2>
                 <div id="carouselFormList" style="margin-bottom: 15px;"></div>
-                
-                <div style="margin-bottom: 15px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px; display: none;">
-                    <textarea id="exportCarouselCodeBox" rows="3" readonly style="width:100%; background:#0b0b0f; color:var(--accent-cyan); font-family:monospace; font-size:0.8rem; padding:10px; border-radius:8px; border:1px solid rgba(255,255,255,0.1); margin-bottom: 8px;"></textarea>
-                </div>
-
-                <button type="button" onclick="salvarBannersCarrossel()" style="background: linear-gradient(135deg, var(--accent-cyan), #0099ff); color: #0b0b0f; margin-bottom: 25px;">Salvar Alterações do Carrossel</button>
+                <button type="button" onclick="salvarBannersCarrossel()" style="background: linear-gradient(135deg, var(--accent-cyan), #0099ff); color: #0b0b0f; margin-bottom: 25px;">Salvar Banners no GitHub</button>
 
                 <h2 id="formTitle">Publicar Novo Jogo</h2>
                 <form id="gameForm">
                     <input type="hidden" id="editGameId">
                     <div class="input-group">
                         <label for="gameName">Nome do Jogo:</label>
-                        <input type="text" id="gameName" required placeholder="Ex: GTA San Andreas">
+                        <input type="text" id="gameName" required placeholder="Ex: God of War">
                     </div>
                     <div class="input-group">
                         <label for="gameImage">Link da Imagem (URL):</label>
-                        <input type="url" id="gameImage" required placeholder="Cole o link direto da imagem">
+                        <input type="url" id="gameImage" required placeholder="Link direto da imagem">
                     </div>
                     <div class="input-group">
                         <label for="gameCategory">Categoria:</label>
@@ -802,39 +741,34 @@
                         </div>
                     </div>
                     <div class="input-group">
-                        <label for="gameStatus">Preço / Status:</label>
+                        <label for="gameStatus">Status:</label>
                         <input type="text" id="gameStatus" required placeholder="Ex: Grátis">
                     </div>
                     <div class="input-group">
-                        <label for="gameDescription">Informações / Descrição do Jogo:</label>
-                        <textarea id="gameDescription" rows="3" placeholder="Digite os detalhes, requisitos ou instruções de instalação..."></textarea>
+                        <label for="gameDescription">Descrição:</label>
+                        <textarea id="gameDescription" rows="3" placeholder="Detalhes do jogo..."></textarea>
                     </div>
                     <div class="input-group">
                         <label for="gameLink">Link de Download:</label>
-                        <input type="url" id="gameLink" required placeholder="Cole o link do MediaFire, Mega, etc.">
+                        <input type="url" id="gameLink" required placeholder="Link de download direto">
                     </div>
                     <div class="input-group">
-                        <label for="gameBtnText">Texto do Botão de Download:</label>
-                        <input type="text" id="gameBtnText" placeholder="Ex: Baixar Agora (Download Direto)">
+                        <label for="gameBtnText">Texto do Botão:</label>
+                        <input type="text" id="gameBtnText" placeholder="Ex: Baixar Agora">
                     </div>
                     <button type="submit" id="submitBtn">Publicar Jogo</button>
                 </form>
                 <div id="cancelEditContainer" style="display:none; margin-top: 10px;">
-                    <button onclick="cancelarEdicao()" style="background: linear-gradient(135deg, #555, #333); color: white;">Cancelar Edição</button>
+                    <button onclick="cancelarEdicao()" style="background: #555; color: white;">Cancelar Edição</button>
                 </div>
 
-                <div style="margin-top: 30px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px; display: none;">
-                    <textarea id="exportCodeBox" rows="4" readonly style="width:100%; background:#0b0b0f; color:#00ff88; font-family:monospace; font-size:0.8rem; padding:10px; border-radius:8px; border:1px solid rgba(255,255,255,0.1); margin-bottom: 10px;"></textarea>
-                </div>
-
-                <button onclick="logoutAdmin()" style="background: linear-gradient(135deg, var(--danger), #cc0033); color: white; margin-top: 15px; box-shadow: 0 4px 15px rgba(255,51,102,0.4);">Sair do Painel Admin</button>
+                <button onclick="logoutAdmin()" style="background: var(--danger); color: white; margin-top: 25px;">Sair do Painel Admin</button>
             </div>
         </div>
 
-        <!-- ABA DE JOGOS ATIVA POR PADRÃO -->
         <div id="jogos" class="tab-content active">
             <div class="games-grid" id="gamesGrid">
-                <p class="empty-msg">Carregando jogos...</p>
+                <p class="empty-msg">Carregando jogos do GitHub...</p>
             </div>
         </div>
 
@@ -844,12 +778,12 @@
         </div>
 
         <div class="admin-login-area">
-            <div class="admin-link">Bem vindos au PSP GAMER MOBILE 2 esperamos que vcs gostem dos jogos.</div>
+            <div class="admin-link">Bem-vindo ao PSP GAMER MOBILE 2. Divirta-se!</div>
         </div>
     </div>
 
     <script>
-        // Array de Jogos Principal
+        // Lista padrão blindada com todos os 11 jogos + suporte a atualizações
         let listaJogosCache = [
           {
             "id": 1790937103530,
@@ -985,32 +919,18 @@
           }
         ];
 
-        // Array de Banners do Carrossel
         let listaBannersCache = [
-          {
-            "image": "https://i.ibb.co/Hf9GsdxW/unnamed-4.jpg",
-            "title": "Bem-vindo ao PSP Gamer Mobile 2"
-          },
-          {
-            "image": "https://i.ibb.co/TxBqvzhs/unnamed-1.jpg",
-            "title": "Novos Jogos Adicionados Semanalmente"
-          },
-          {
-            "image": "https://i.ibb.co/N6n6FHhs/unnamed-8.jpg",
-            "title": "Baixe com Links Diretos e Seguros"
-          },
-          {
-            "image": "https://i.ibb.co/whzq0NxW/unnamed-5.jpg",
-            "title": "Os melhores jogos so aqui"
-          }
+          { "image": "https://i.ibb.co/Hf9GsdxW/unnamed-4.jpg", "title": "Bem-vindo ao PSP Gamer Mobile 2" },
+          { "image": "https://i.ibb.co/TxBqvzhs/unnamed-1.jpg", "title": "Novos Jogos Adicionados Semanalmente" },
+          { "image": "https://i.ibb.co/N6n6FHhs/unnamed-8.jpg", "title": "Baixe com Links Diretos e Seguros" },
+          { "image": "https://i.ibb.co/whzq0NxW/unnamed-5.jpg", "title": "Os melhores jogos so aqui" }
         ];
 
         let indiceCarrosselAtual = 0;
         let intervaloCarrossel = null;
-        const SENHA_ADMIN = "1234"; 
+        const SENHA_ADMIN = "1234";
         let categoriaAtual = 'Todos';
 
-        // CONFIGURAÇÃO DA API DO GITHUB ATUALIZADA
         const GITHUB_CONFIG = {
             token: "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",
             owner: "Rodriguesxavierfrancisco145",
@@ -1018,7 +938,18 @@
             path: "index.html"
         };
 
-        async function sincronizarComGitHub() {
+        function mostrarStatusSync(texto, cor = "rgba(0, 255, 136, 0.9)") {
+            const status = document.getElementById('syncStatus');
+            if(status) {
+                status.innerText = texto;
+                status.style.background = cor;
+                status.style.display = 'block';
+                setTimeout(() => { status.style.display = 'none'; }, 4000);
+            }
+        }
+
+        async function sincronizarComGitHubForcado() {
+            mostrarStatusSync("Forçando salvamento no GitHub...");
             try {
                 const url = `https://api.github.com/repos/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/contents/${GITHUB_CONFIG.path}`;
                 
@@ -1027,8 +958,8 @@
                 });
                 
                 if (!getResp.ok) {
-                    console.error("Erro ao buscar dados do GitHub. Verifique as credenciais.");
-                    return;
+                    mostrarStatusSync("Erro ao conectar no GitHub!", "rgba(255, 51, 102, 0.9)");
+                    return false;
                 }
                 
                 const fileData = await getResp.json();
@@ -1055,24 +986,26 @@
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
-                        message: 'Atualização automática do site via Painel Admin',
+                        message: 'Forçando atualização de jogos e banners no site',
                         content: contentBase64,
                         sha: sha
                     })
                 });
 
                 if (putResp.ok) {
-                    console.log("Site atualizado com sucesso no GitHub!");
+                    mostrarStatusSync("Atualizado e salvo no GitHub com sucesso!");
+                    return true;
                 } else {
-                    console.error("Falha ao salvar no GitHub.");
+                    mostrarStatusSync("Falha ao salvar no GitHub.", "rgba(255, 51, 102, 0.9)");
+                    return false;
                 }
             } catch (err) {
-                console.error("Erro na sincronização:", err);
+                mostrarStatusSync("Erro de rede ao sincronizar.", "rgba(255, 51, 102, 0.9)");
+                return false;
             }
         }
 
         window.addEventListener('DOMContentLoaded', () => {
-            inicializarDados();
             renderGames();
             renderizarCarrossel();
             iniciarAutoplayCarrossel();
@@ -1081,9 +1014,7 @@
             const urlParams = new URLSearchParams(window.location.search);
             const jogoIdUrl = urlParams.get('jogo');
             if (jogoIdUrl) {
-                setTimeout(() => {
-                    verDetalhesDoJogo(Number(jogoIdUrl));
-                }, 300);
+                setTimeout(() => { verDetalhesDoJogo(Number(jogoIdUrl)); }, 300);
             }
 
             window.addEventListener('click', function(e) {
@@ -1094,56 +1025,6 @@
             });
         });
 
-        function inicializarDados() {
-            try {
-                let localJogos = localStorage.getItem('global_shared_psp_games');
-                if (!localJogos) {
-                    localStorage.setItem('global_shared_psp_games', JSON.stringify(listaJogosCache));
-                } else {
-                    let parsed = JSON.parse(localJogos);
-                    if (parsed.length > 0) {
-                        listaJogosCache = parsed;
-                    }
-                }
-            } catch(e) {}
-
-            try {
-                let localBanners = localStorage.getItem('global_shared_psp_banners');
-                if (!localBanners) {
-                    localStorage.setItem('global_shared_psp_banners', JSON.stringify(listaBannersCache));
-                } else {
-                    let parsedBanners = JSON.parse(localBanners);
-                    if (parsedBanners.length > 0) {
-                        listaBannersCache = parsedBanners;
-                    }
-                }
-            } catch(e) {}
-
-            atualizarBoxExportacao();
-            atualizarBoxExportacaoCarrossel();
-        }
-
-        function salvarJogosLocais(gamesArray) {
-            listaJogosCache = gamesArray;
-            localStorage.setItem('global_shared_psp_games', JSON.stringify(gamesArray));
-            atualizarBoxExportacao();
-            sincronizarComGitHub();
-        }
-
-        function atualizarBoxExportacao() {
-            const box = document.getElementById('exportCodeBox');
-            if (box) {
-                box.value = "let listaJogosCache = " + JSON.stringify(listaJogosCache, null, 2) + ";";
-            }
-        }
-
-        function atualizarBoxExportacaoCarrossel() {
-            const box = document.getElementById('exportCarouselCodeBox');
-            if (box) {
-                box.value = "let listaBannersCache = " + JSON.stringify(listaBannersCache, null, 2) + ";";
-            }
-        }
-
         function renderizarCarrossel() {
             const track = document.getElementById('carouselTrack');
             const indicators = document.getElementById('carouselIndicators');
@@ -1152,13 +1033,6 @@
 
             track.innerHTML = '';
             indicators.innerHTML = '';
-
-            if (!listaBannersCache || listaBannersCache.length === 0) {
-                container.style.display = 'none';
-                return;
-            } else {
-                container.style.display = 'block';
-            }
 
             listaBannersCache.forEach((banner, index) => {
                 const slide = document.createElement('div');
@@ -1184,16 +1058,12 @@
 
             track.style.transform = `translateX(-${indiceCarrosselAtual * 100}%)`;
             indicators.forEach((ind, i) => {
-                if (i === indiceCarrosselAtual) {
-                    ind.classList.add('active');
-                } else {
-                    ind.classList.remove('active');
-                }
+                ind.classList.toggle('active', i === indiceCarrosselAtual);
             });
         }
 
         function proximoSlide() {
-            if (!listaBannersCache || listaBannersCache.length === 0) return;
+            if (!listaBannersCache.length) return;
             indiceCarrosselAtual = (indiceCarrosselAtual + 1) % listaBannersCache.length;
             atualizarPosicaoCarrossel();
         }
@@ -1225,18 +1095,17 @@
                 div.innerHTML = `
                     <p style="font-size: 0.8rem; color: var(--accent-cyan); margin-bottom: 6px; font-weight: bold;">Banner ${i + 1}</p>
                     <div style="margin-bottom: 8px;">
-                        <input type="url" id="bannerImg_${i}" value="${banner.image}" oninput="atualizarPreviewBannersDinamico()" placeholder="Link direto da imagem do banner ${i + 1}">
+                        <input type="url" id="bannerImg_${i}" value="${banner.image}" placeholder="Link da imagem">
                     </div>
                     <div>
-                        <input type="text" id="bannerTitle_${i}" value="${banner.title}" oninput="atualizarPreviewBannersDinamico()" placeholder="Título / Legenda do banner ${i + 1}">
+                        <input type="text" id="bannerTitle_${i}" value="${banner.title}" placeholder="Título do banner">
                     </div>
                 `;
                 container.appendChild(div);
             }
-            atualizarBoxExportacaoCarrossel();
         }
 
-        function atualizarPreviewBannersDinamico() {
+        async function salvarBannersCarrossel() {
             let novosBanners = [];
             for (let i = 0; i < 4; i++) {
                 const imgInput = document.getElementById(`bannerImg_${i}`);
@@ -1244,39 +1113,18 @@
                 if (imgInput && imgInput.value.trim()) {
                     novosBanners.push({ 
                         image: imgInput.value.trim(), 
-                        title: (titleInput && titleInput.value.trim()) ? titleInput.value.trim() : 'Destaque PSP Gamer' 
-                    });
-                }
-            }
-            if (novosBanners.length > 0) {
-                listaBannersCache = novosBanners;
-                atualizarBoxExportacaoCarrossel();
-            }
-        }
-
-        function salvarBannersCarrossel() {
-            let novosBanners = [];
-            for (let i = 0; i < 4; i++) {
-                const imgInput = document.getElementById(`bannerImg_${i}`);
-                const titleInput = document.getElementById(`bannerTitle_${i}`);
-                if (imgInput && imgInput.value.trim()) {
-                    novosBanners.push({ 
-                        image: imgInput.value.trim(), 
-                        title: (titleInput && titleInput.value.trim()) ? titleInput.value.trim() : 'Destaque PSP Gamer' 
+                        title: (titleInput && titleInput.value.trim()) ? titleInput.value.trim() : 'Destaque' 
                     });
                 }
             }
             if (novosBanners.length === 0) {
-                alert("Adicione pelo menos 1 banner válido com imagem!");
+                alert("Adicione pelo menos 1 banner válido!");
                 return;
             }
             listaBannersCache = novosBanners;
-            localStorage.setItem('global_shared_psp_banners', JSON.stringify(novosBanners));
-            atualizarBoxExportacaoCarrossel();
             indiceCarrosselAtual = 0;
             renderizarCarrossel();
-            sincronizarComGitHub();
-            alert("Carrossel atualizado e enviado para o GitHub com sucesso!");
+            await sincronizarComGitHubForcado();
         }
 
         function toggleMenu(event) {
@@ -1299,8 +1147,6 @@
             if (localStorage.getItem('isAdmin') === 'true') {
                 switchTab('inicio');
                 renderizarInputsAdminBanners();
-                atualizarBoxExportacao();
-                atualizarBoxExportacaoCarrossel();
                 return;
             }
             let senha = prompt("Digite a senha de administrador:");
@@ -1308,10 +1154,8 @@
                 localStorage.setItem('isAdmin', 'true');
                 switchTab('inicio');
                 renderizarInputsAdminBanners();
-                atualizarBoxExportacao();
-                atualizarBoxExportacaoCarrossel();
                 renderGames();
-                alert("Painel liberado com sucesso!");
+                alert("Painel liberado!");
             } else if (senha !== null) {
                 alert("Senha incorreta!");
             }
@@ -1322,13 +1166,11 @@
             cancelarEdicao();
             switchTab('jogos');
             renderGames();
-            alert("Você saiu do modo administrador.");
+            alert("Saiu do painel admin.");
         }
 
         function switchTab(tabId) {
-            document.querySelectorAll('.tab-content').forEach(tab => {
-                tab.classList.remove('active');
-            });
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
             const target = document.getElementById(tabId);
             if(target) target.classList.add('active');
         }
@@ -1342,7 +1184,7 @@
 
         const gameForm = document.getElementById('gameForm');
         if(gameForm) {
-            gameForm.addEventListener('submit', function(e) {
+            gameForm.addEventListener('submit', async function(e) {
                 e.preventDefault();
 
                 const editId = document.getElementById('editGameId').value;
@@ -1352,65 +1194,38 @@
                 const size = document.getElementById('gameSize').value;
                 const format = document.getElementById('gameFormat').value;
                 const status = document.getElementById('gameStatus').value;
-                const description = document.getElementById('gameDescription').value || 'Nenhuma informação adicional informada.';
+                const description = document.getElementById('gameDescription').value || 'Sem descrição.';
                 const link = document.getElementById('gameLink').value;
                 const btnText = document.getElementById('gameBtnText').value.trim() || 'Baixar Agora (Download Direto)';
 
-                let games = [...listaJogosCache];
-
                 if (editId) {
-                    games = games.map(game => {
+                    listaJogosCache = listaJogosCache.map(game => {
                         if (game.id == editId) {
-                            return {
-                                ...game,
-                                id: Number(editId),
-                                name,
-                                image,
-                                category,
-                                size,
-                                format,
-                                status,
-                                description,
-                                link,
-                                btnText
-                            };
+                            return { ...game, name, image, category, size, format, status, description, link, btnText };
                         }
                         return game;
                     });
-                    salvarJogosLocais(games);
-                    alert("Jogo atualizado e enviado para o GitHub com sucesso!");
                     cancelarEdicao();
                 } else {
-                    const newGame = { 
-                        id: Date.now(), 
-                        name, 
-                        image, 
-                        category, 
-                        size, 
-                        format, 
-                        status, 
-                        description,
-                        link,
-                        btnText
-                    };
-                    games.push(newGame);
-                    salvarJogosLocais(games);
-                    alert("Jogo publicado e enviado para o GitHub com sucesso!");
+                    const newGame = { id: Date.now(), name, image, category, size, format, status, description, link, btnText };
+                    listaJogosCache.push(newGame);
                 }
 
-                gameForm.reset();
                 renderGames();
                 switchTab('jogos');
+                gameForm.reset();
+
+                // Força o salvamento direto no GitHub
+                await sincronizarComGitHubForcado();
             });
         }
 
-        function deleteGame(id) {
+        async function deleteGame(id) {
             if (confirm("Tem certeza que deseja excluir este jogo?")) {
-                let games = listaJogosCache.filter(game => game.id !== id);
-                salvarJogosLocais(games);
+                listaJogosCache = listaJogosCache.filter(game => game.id !== id);
                 renderGames();
                 switchTab('jogos');
-                alert("Jogo excluído e alteração enviada para o GitHub!");
+                await sincronizarComGitHubForcado();
             }
         }
 
@@ -1431,8 +1246,6 @@
 
             document.getElementById('formTitle').innerText = "Editar Jogo";
             document.getElementById('submitBtn').innerText = "Salvar Alterações";
-            document.getElementById('panelTitle').innerText = "✏ Editar Jogo";
-            document.getElementById('panelSub').innerText = "Altere os dados do jogo selecionado";
             document.getElementById('cancelEditContainer').style.display = "block";
 
             switchTab('inicio');
@@ -1444,22 +1257,16 @@
             document.getElementById('editGameId').value = "";
             document.getElementById('formTitle').innerText = "Publicar Novo Jogo";
             document.getElementById('submitBtn').innerText = "Publicar Jogo";
-            document.getElementById('panelTitle').innerText = "🔒 Painel Restrito";
-            document.getElementById('panelSub').innerText = "Adicione novos jogos e gerencie o carrossel";
             document.getElementById('cancelEditContainer').style.display = "none";
         }
 
         function compartilharJogo(id, nome) {
             const linkCompartilhamento = window.location.origin + window.location.pathname + '?jogo=' + id;
             if (navigator.share) {
-                navigator.share({
-                    title: nome,
-                    text: `Baixe o jogo ${nome} na PSP GAMER MOBILE 2!`,
-                    url: linkCompartilhamento,
-                }).catch(() => {});
+                navigator.share({ title: nome, text: `Baixe ${nome} na PSP GAMER MOBILE 2!`, url: linkCompartilhamento }).catch(() => {});
             } else {
                 navigator.clipboard.writeText(linkCompartilhamento);
-                alert("Link de compartilhamento copiado para a área de transferência:\n" + linkCompartilhamento);
+                alert("Link copiado: " + linkCompartilhamento);
             }
         }
 
@@ -1477,15 +1284,11 @@
                 `;
             }
 
-            const textoBotaoDownload = game.btnText || "Baixar Agora (Download Direto)";
-            const statusBadge = game.status ? `<div class="price-badge">${game.status}</div>` : '';
-
-            const detailContainer = document.getElementById('gameDetailContent');
-            detailContainer.innerHTML = `
+            document.getElementById('gameDetailContent').innerHTML = `
                 <div class="game-detail-card">
                     <div class="detail-img-container">
                         <img src="${game.image}" class="detail-img" alt="${game.name}" onerror="this.src='https://i.ibb.co/4nhr0dZz/unnamed.jpg'">
-                        ${statusBadge}
+                        <div class="price-badge">${game.status}</div>
                     </div>
                     <div class="detail-info">
                         <h2>${game.name}</h2>
@@ -1494,14 +1297,14 @@
                             <span>📁 Formato: <strong>${game.format}</strong></span>
                             <span>📂 Categoria: <strong>${game.category}</strong></span>
                         </div>
-                        <h4 style="font-size: 0.95rem; color: white; margin-bottom: 5px;">Informações do Jogo:</h4>
+                        <h4 style="font-size: 0.95rem; color: white; margin-bottom: 5px;">Informações:</h4>
                         <p class="detail-desc">${game.description}</p>
 
                         <div class="action-bar">
                             <button class="share-btn" onclick="compartilharJogo(${game.id}, '${game.name.replace(/'/g, "\\'")}')">🔗 Compartilhar</button>
                         </div>
                         
-                        <a href="${game.link}" target="_blank" class="download-btn" style="padding: 12px; font-size: 0.95rem; margin-top: 15px;">${textoBotaoDownload}</a>
+                        <a href="${game.link}" target="_blank" class="download-btn" style="padding: 12px; font-size: 0.95rem; margin-top: 15px;">${game.btnText}</a>
                         ${botoesAdminDetalhe}
                     </div>
                 </div>
@@ -1524,7 +1327,7 @@
             });
 
             if (filtrados.length === 0) {
-                gamesGrid.innerHTML = '<p class="empty-msg">Nenhum jogo encontrado nesta categoria.</p>';
+                gamesGrid.innerHTML = '<p class="empty-msg">Nenhum jogo encontrado.</p>';
                 return;
             }
 
@@ -1561,7 +1364,6 @@
                     </div>
                     ${botoesAdminHtml}
                 `;
-
                 gamesGrid.appendChild(card);
             });
         }
