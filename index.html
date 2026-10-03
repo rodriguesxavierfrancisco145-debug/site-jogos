@@ -167,6 +167,7 @@
             margin-bottom: 20px;
             box-shadow: 0 8px 25px rgba(0,0,0,0.6), 0 0 15px rgba(0, 240, 255, 0.15);
             border: 1px solid rgba(0, 240, 255, 0.25);
+            background: #13131a;
         }
 
         .carousel-track {
@@ -742,9 +743,7 @@
 
         <!-- Carrossel Animado de Destaques -->
         <div class="carousel-container" id="carouselContainer">
-            <div class="carousel-track" id="carouselTrack">
-                <!-- Inserido dinamicamente via JS -->
-            </div>
+            <div class="carousel-track" id="carouselTrack"></div>
             <div class="carousel-indicators" id="carouselIndicators"></div>
         </div>
 
@@ -830,7 +829,7 @@
             </div>
         </div>
 
-        <!-- ABA DE JOGOS COM A CLASSE "active" PARA ABRIR DIRETO -->
+        <!-- ABA DE JOGOS ATIVA POR PADRÃO -->
         <div id="jogos" class="tab-content active">
             <div class="games-grid" id="gamesGrid">
                 <p class="empty-msg">Carregando jogos...</p>
@@ -848,6 +847,7 @@
     </div>
 
     <script>
+        // Array de Jogos Principal
         let listaJogosCache = [
           {
             "id": 1790937103530,
@@ -856,8 +856,8 @@
             "category": "PSP",
             "size": "1.20GB",
             "format": "ISO",
-            "status": "Grátis ",
-            "description": "Luta ,Ação e aventura ",
+            "status": "Grátis",
+            "description": "Luta, Ação e aventura",
             "link": "https://archive.org/download/god-of-war-chains-of-olympus-usa/God%20of%20War%20-%20Chains%20of%20Olympus%20%28USA%29.zip",
             "btnText": "Baixar Agora (Download Direto)"
           },
@@ -868,8 +868,8 @@
             "category": "PSP",
             "size": "1.75GB",
             "format": "ISO",
-            "status": "Grátis ",
-            "description": "Luta, Ação ",
+            "status": "Grátis",
+            "description": "Luta, Ação",
             "link": "https://archive.org/download/god-of-war-ghost-of-sparta-usa-en-fr-es/God%20of%20War%20-%20Ghost%20of%20Sparta%20%28USA%29%20%28En%2CFr%2C%2CEs%29.iso",
             "btnText": "Baixar Agora (Download Direto)"
           },
@@ -880,8 +880,8 @@
             "category": "PSP",
             "size": "1.26GB",
             "format": "ISO",
-            "status": "Grátis ",
-            "description": "Luta, Ação ",
+            "status": "Grátis",
+            "description": "Luta, Ação",
             "link": "https://archive.org/download/GrandTheftAutoLibertyCityStoriesUSAEnFrDeEsItv3.00/Grand%20Theft%20Auto%20-%20Liberty%20City%20Stories%20%28USA%29%20%28En%2CFr%2CDe%2CEs%2CIt%29%20%28v3.00%29.iso",
             "btnText": "Baixar Agora (Download Direto)"
           },
@@ -892,7 +892,7 @@
             "category": "PSP",
             "size": "1.70GB",
             "format": "ISO",
-            "status": "Grátis ",
+            "status": "Grátis",
             "description": "Aventura e Ação RPG",
             "link": "https://archive.org/download/grand-theft-auto-vice-city-stories-usa/Grand%20Theft%20Auto%20-%20Vice%20City%20Stories%20%28USA%29.iso",
             "btnText": "Baixar Agora (Download Direto)"
@@ -904,7 +904,7 @@
             "category": "PSP",
             "size": "1.21GB",
             "format": "ZIP",
-            "status": "Grátis ",
+            "status": "Grátis",
             "description": "Luta",
             "link": "https://archive.org/download/naruto-shippuden-ultimate-ninja-heroes-3-usa_202601/Naruto%20Shippuden%20-%20Ultimate%20Ninja%20Heroes%203%20%28USA%29.zip",
             "btnText": "Baixar Agora (Download Direto)"
@@ -916,8 +916,8 @@
             "category": "PSP",
             "size": "424.89MB",
             "format": "ZIP",
-            "status": "Grátis ",
-            "description": "Luta ",
+            "status": "Grátis",
+            "description": "Luta",
             "link": "https://archive.org/download/bleach-heat-the-soul-7/Bleach%20-%20Heat%20the%20Soul%207%20%28Asia%29.zip",
             "btnText": "Baixar Agora (Download Direto)"
           },
@@ -928,8 +928,8 @@
             "category": "PSP",
             "size": "502.20MB",
             "format": "ZIP",
-            "status": "Grátis ",
-            "description": "Luta ",
+            "status": "Grátis",
+            "description": "Luta",
             "link": "https://archive.org/download/playstation-portable-rom-def-jam-fight-for-ny-the-takeover/Def%20Jam%20-%20Fight%20for%20NY%20-%20The%20Takeover%20%28USA%29%20%28v1.01%29.zip",
             "btnText": "Baixar Agora (Download Direto)"
           },
@@ -940,8 +940,8 @@
             "category": "PSP",
             "size": "1.43GB",
             "format": "ZIP",
-            "status": "Grátis ",
-            "description": "Luta ",
+            "status": "Grátis",
+            "description": "Luta",
             "link": "https://archive.org/download/ufc-2010-undisputed-usa/UFC%202010%20Undisputed%20%28USA%29.zip",
             "btnText": "Baixar Agora (Download Direto)"
           },
@@ -952,7 +952,7 @@
             "category": "APK",
             "size": "2.62GB",
             "format": "APK",
-            "status": "Grátis ",
+            "status": "Grátis",
             "description": "RPG",
             "link": "https://archive.org/download/gta-sa-5play/gta-sa-2.11.277-mod-menu-5play.apk",
             "btnText": "Baixar Agora (Download Direto)"
@@ -964,83 +964,86 @@
             "category": "PSP",
             "size": "1.75GB",
             "format": "ISO",
-            "status": "Grátis ",
-            "description": "Luta ",
+            "status": "Grátis",
+            "description": "Luta",
             "link": "https://archive.org/download/tekken-dark-resurrection-usa-psp_202603_ver2/a-tekken.iso",
             "btnText": "Baixar Agora (Download Direto)"
           },
           {
             "id": 1790963815728,
-            "name": "Red Dead Redemption ",
+            "name": "Red Dead Redemption",
             "image": "https://i.ibb.co/JjnRPKMK/58b6e9bc7801b5a60410a7f75ec6b890.jpg",
             "category": "APK",
             "size": "2.89GB",
             "format": "APK",
-            "status": "Grátis ",
-            "description": "RPG mundo aberto ",
+            "status": "Grátis",
+            "description": "RPG mundo aberto",
             "link": "https://files.an1.co/red-dead-redemption-mods_1.58.63226194-an1.com.apk",
             "btnText": "Baixar Agora (Download Direto)"
           }
         ];
 
         let listaBannersCache = [
-            { image: "https://via.placeholder.com/500x180?text=Destaque+1+PSP", title: "Bem-vindo ao PSP Gamer Mobile 2" },
-            { image: "https://via.placeholder.com/500x180?text=Destaque+2+PS2", title: "Novos Jogos Adicionados Semanalmente" },
-            { image: "https://via.placeholder.com/500x180?text=Destaque+3+PC", title: "Baixe com Links Diretos e Seguros" },
-            { image: "https://via.placeholder.com/500x180?text=Destaque+4+APK", title: "Entre na nossa Comunidade WhatsApp" }
+            { image: "https://i.ibb.co/4nhr0dZz/unnamed.jpg", title: "Bem-vindo ao PSP Gamer Mobile 2" },
+            { image: "https://i.ibb.co/TxBqvzhs/unnamed-1.jpg", title: "Novos Jogos Adicionados Semanalmente" },
+            { image: "https://i.ibb.co/Cp1mQ9zx/unnamed-2.jpg", title: "Baixe com Links Diretos e Seguros" },
+            { image: "https://i.ibb.co/sJjVVbZc/unnamed-3.jpg", title: "Entre na nossa Comunidade WhatsApp" }
         ];
+
         let indiceCarrosselAtual = 0;
         let intervaloCarrossel = null;
-
-        const gameForm = document.getElementById('gameForm');
-        const gamesGrid = document.getElementById('gamesGrid');
         const SENHA_ADMIN = "1234"; 
         let categoriaAtual = 'Todos';
 
-        document.addEventListener('DOMContentLoaded', () => {
-            carregarDadosLocais();
+        // Inicialização Segura Independente
+        window.addEventListener('DOMContentLoaded', () => {
+            inicializarDados();
+            renderGames();
             renderizarCarrossel();
             iniciarAutoplayCarrossel();
-            switchTab('jogos'); // Garante que abre direto na aba de jogos
+            switchTab('jogos');
 
             const urlParams = new URLSearchParams(window.location.search);
             const jogoIdUrl = urlParams.get('jogo');
             if (jogoIdUrl) {
                 setTimeout(() => {
                     verDetalhesDoJogo(Number(jogoIdUrl));
-                }, 400);
+                }, 300);
             }
 
             window.addEventListener('click', function(e) {
                 if (!e.target.closest('.top-icons')) {
-                    document.getElementById('dropdownMenu').classList.remove('show');
+                    const menu = document.getElementById('dropdownMenu');
+                    if(menu) menu.classList.remove('show');
                 }
             });
         });
 
-        function carregarDadosLocais() {
-            let localJogos = localStorage.getItem('global_shared_psp_games');
-            if (localJogos) {
-                try {
+        function inicializarDados() {
+            try {
+                let localJogos = localStorage.getItem('global_shared_psp_games');
+                if (localJogos) {
                     let parsed = JSON.parse(localJogos);
-                    if (parsed && parsed.length > 0) {
+                    if (parsed && Array.isArray(parsed) && parsed.length > 0) {
                         listaJogosCache = parsed;
                     }
-                } catch(e) {}
-            }
-            localStorage.setItem('global_shared_psp_games', JSON.stringify(listaJogosCache));
+                } else {
+                    localStorage.setItem('global_shared_psp_games', JSON.stringify(listaJogosCache));
+                }
+            } catch(e) {}
 
-            let localBanners = localStorage.getItem('global_shared_psp_banners');
-            if (localBanners) {
-                try {
+            try {
+                let localBanners = localStorage.getItem('global_shared_psp_banners');
+                if (localBanners) {
                     let parsedBanners = JSON.parse(localBanners);
-                    if (parsedBanners && parsedBanners.length > 0) {
+                    if (parsedBanners && Array.isArray(parsedBanners) && parsedBanners.length > 0) {
                         listaBannersCache = parsedBanners;
                     }
-                } catch(e) {}
-            }
-            renderGames();
-            renderizarInputsAdminBanners();
+                } else {
+                    localStorage.setItem('global_shared_psp_banners', JSON.stringify(listaBannersCache));
+                }
+            } catch(e) {}
+
             atualizarBoxExportacao();
         }
 
@@ -1064,27 +1067,28 @@
             alert("Código copiado! Cole-o substituindo a linha 'let listaJogosCache = [...]' no topo do script do seu arquivo HTML.");
         }
 
-        // Funções do Carrossel
+        // Funções do Carrossel Seguras
         function renderizarCarrossel() {
             const track = document.getElementById('carouselTrack');
             const indicators = document.getElementById('carouselIndicators');
-            if (!track || !indicators) return;
+            const container = document.getElementById('carouselContainer');
+            if (!track || !indicators || !container) return;
 
             track.innerHTML = '';
             indicators.innerHTML = '';
 
             if (!listaBannersCache || listaBannersCache.length === 0) {
-                document.getElementById('carouselContainer').style.display = 'none';
+                container.style.display = 'none';
                 return;
             } else {
-                document.getElementById('carouselContainer').style.display = 'block';
+                container.style.display = 'block';
             }
 
             listaBannersCache.forEach((banner, index) => {
                 const slide = document.createElement('div');
                 slide.className = 'carousel-slide';
                 slide.innerHTML = `
-                    <img src="${banner.image}" alt="${banner.title}" onerror="this.src='https://via.placeholder.com/500x180?text=Erro+na+Imagem'">
+                    <img src="${banner.image}" alt="${banner.title}" onerror="this.src='https://i.ibb.co/4nhr0dZz/unnamed.jpg'">
                     <div class="carousel-caption">${banner.title}</div>
                 `;
                 track.appendChild(slide);
@@ -1100,7 +1104,7 @@
         function atualizarPosicaoCarrossel() {
             const track = document.getElementById('carouselTrack');
             const indicators = document.querySelectorAll('.indicator');
-            if (!track) return;
+            if (!track || listaBannersCache.length === 0) return;
 
             track.style.transform = `translateX(-${indiceCarrosselAtual * 100}%)`;
             indicators.forEach((ind, i) => {
@@ -1113,7 +1117,7 @@
         }
 
         function proximoSlide() {
-            if (listaBannersCache.length === 0) return;
+            if (!listaBannersCache || listaBannersCache.length === 0) return;
             indiceCarrosselAtual = (indiceCarrosselAtual + 1) % listaBannersCache.length;
             atualizarPosicaoCarrossel();
         }
@@ -1121,16 +1125,12 @@
         function irParaSlide(index) {
             indiceCarrosselAtual = index;
             atualizarPosicaoCarrossel();
-            reiniciarAutoplayCarrossel();
+            iniciarAutoplayCarrossel();
         }
 
         function iniciarAutoplayCarrossel() {
             if (intervaloCarrossel) clearInterval(intervaloCarrossel);
             intervaloCarrossel = setInterval(proximoSlide, 4500);
-        }
-
-        function reiniciarAutoplayCarrossel() {
-            iniciarAutoplayCarrossel();
         }
 
         function renderizarInputsAdminBanners() {
@@ -1162,10 +1162,13 @@
         function salvarBannersCarrossel() {
             let novosBanners = [];
             for (let i = 0; i < 4; i++) {
-                const imgVal = document.getElementById(`bannerImg_${i}`).value.trim();
-                const titleVal = document.getElementById(`bannerTitle_${i}`).value.trim();
-                if (imgVal) {
-                    novosBanners.push({ image: imgVal, title: titleVal || 'Destaque PSP Gamer' });
+                const imgInput = document.getElementById(`bannerImg_${i}`);
+                const titleInput = document.getElementById(`bannerTitle_${i}`);
+                if (imgInput && imgInput.value.trim()) {
+                    novosBanners.push({ 
+                        image: imgInput.value.trim(), 
+                        title: (titleInput && titleInput.value.trim()) ? titleInput.value.trim() : 'Destaque PSP Gamer' 
+                    });
                 }
             }
             if (novosBanners.length === 0) {
@@ -1227,76 +1230,80 @@
             document.querySelectorAll('.tab-content').forEach(tab => {
                 tab.classList.remove('active');
             });
-            document.getElementById(tabId).classList.add('active');
+            const target = document.getElementById(tabId);
+            if(target) target.classList.add('active');
         }
 
         function filtrarCategoria(cat, btn) {
             categoriaAtual = cat;
             document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
+            if(btn) btn.classList.add('active');
             renderGames();
         }
 
-        gameForm.addEventListener('submit', function(e) {
-            e.preventDefault();
+        const gameForm = document.getElementById('gameForm');
+        if(gameForm) {
+            gameForm.addEventListener('submit', function(e) {
+                e.preventDefault();
 
-            const editId = document.getElementById('editGameId').value;
-            const name = document.getElementById('gameName').value;
-            const image = document.getElementById('gameImage').value;
-            const category = document.getElementById('gameCategory').value || 'PSP';
-            const size = document.getElementById('gameSize').value;
-            const format = document.getElementById('gameFormat').value;
-            const status = document.getElementById('gameStatus').value;
-            const description = document.getElementById('gameDescription').value || 'Nenhuma informação adicional informada.';
-            const link = document.getElementById('gameLink').value;
-            const btnText = document.getElementById('gameBtnText').value.trim() || 'Baixar Agora (Download Direto)';
+                const editId = document.getElementById('editGameId').value;
+                const name = document.getElementById('gameName').value;
+                const image = document.getElementById('gameImage').value;
+                const category = document.getElementById('gameCategory').value || 'PSP';
+                const size = document.getElementById('gameSize').value;
+                const format = document.getElementById('gameFormat').value;
+                const status = document.getElementById('gameStatus').value;
+                const description = document.getElementById('gameDescription').value || 'Nenhuma informação adicional informada.';
+                const link = document.getElementById('gameLink').value;
+                const btnText = document.getElementById('gameBtnText').value.trim() || 'Baixar Agora (Download Direto)';
 
-            let games = [...listaJogosCache];
+                let games = [...listaJogosCache];
 
-            if (editId) {
-                games = games.map(game => {
-                    if (game.id == editId) {
-                        return {
-                            ...game,
-                            id: Number(editId),
-                            name,
-                            image,
-                            category,
-                            size,
-                            format,
-                            status,
-                            description,
-                            link,
-                            btnText
-                        };
-                    }
-                    return game;
-                });
-                salvarJogosLocais(games);
-                alert("Jogo atualizado com sucesso! Lembre-se de copiar o código atualizado no painel para colar direto no seu arquivo HTML.");
-                cancelarEdicao();
-            } else {
-                const newGame = { 
-                    id: Date.now(), 
-                    name, 
-                    image, 
-                    category, 
-                    size, 
-                    format, 
-                    status, 
-                    description,
-                    link,
-                    btnText
-                };
-                games.push(newGame);
-                salvarJogosLocais(games);
-                alert("Jogo publicado com sucesso! Lembre-se de copiar o código atualizado no painel para colar direto no seu arquivo HTML.");
-            }
+                if (editId) {
+                    games = games.map(game => {
+                        if (game.id == editId) {
+                            return {
+                                ...game,
+                                id: Number(editId),
+                                name,
+                                image,
+                                category,
+                                size,
+                                format,
+                                status,
+                                description,
+                                link,
+                                btnText
+                            };
+                        }
+                        return game;
+                    });
+                    salvarJogosLocais(games);
+                    alert("Jogo atualizado com sucesso!");
+                    cancelarEdicao();
+                } else {
+                    const newGame = { 
+                        id: Date.now(), 
+                        name, 
+                        image, 
+                        category, 
+                        size, 
+                        format, 
+                        status, 
+                        description,
+                        link,
+                        btnText
+                    };
+                    games.push(newGame);
+                    salvarJogosLocais(games);
+                    alert("Jogo publicado com sucesso!");
+                }
 
-            gameForm.reset();
-            renderGames();
-            switchTab('jogos');
-        });
+                gameForm.reset();
+                renderGames();
+                switchTab('jogos');
+            });
+        }
 
         function deleteGame(id) {
             if (confirm("Tem certeza que deseja excluir este jogo?")) {
@@ -1333,7 +1340,7 @@
         }
 
         function cancelarEdicao() {
-            gameForm.reset();
+            if(gameForm) gameForm.reset();
             document.getElementById('editGameId').value = "";
             document.getElementById('formTitle').innerText = "Publicar Novo Jogo";
             document.getElementById('submitBtn').innerText = "Publicar Jogo";
@@ -1377,7 +1384,7 @@
             detailContainer.innerHTML = `
                 <div class="game-detail-card">
                     <div class="detail-img-container">
-                        <img src="${game.image}" class="detail-img" alt="${game.name}" onerror="this.src='https://via.placeholder.com/250x140?text=Erro+na+Imagem'">
+                        <img src="${game.image}" class="detail-img" alt="${game.name}" onerror="this.src='https://i.ibb.co/4nhr0dZz/unnamed.jpg'">
                         ${statusBadge}
                     </div>
                     <div class="detail-info">
@@ -1403,7 +1410,11 @@
         }
 
         function renderGames() {
-            const termoBusca = document.getElementById('searchInput') ? document.getElementById('searchInput'].value.toLowerCase() : '';
+            const gamesGrid = document.getElementById('gamesGrid');
+            const searchInput = document.getElementById('searchInput');
+            if (!gamesGrid) return;
+
+            const termoBusca = searchInput ? searchInput.value.toLowerCase() : '';
             gamesGrid.innerHTML = '';
 
             let filtrados = listaJogosCache.filter(game => {
@@ -1413,14 +1424,14 @@
             });
 
             if (filtrados.length === 0) {
-                gamesGrid.innerHTML = '<p class="empty-msg">Nenhum jogo cadastrado ainda. Clique no logotipo para abrir o painel e adicionar.</p>';
+                gamesGrid.innerHTML = '<p class="empty-msg">Nenhum jogo encontrado nesta categoria.</p>';
                 return;
             }
 
             filtrados.forEach((game, index) => {
                 const card = document.createElement('div');
                 card.className = 'game-card';
-                card.style.animationDelay = `${index * 0.05}s`;
+                card.style.animationDelay = `${index * 0.03}s`;
                 card.onclick = () => verDetalhesDoJogo(game.id);
 
                 let botoesAdminHtml = '';
@@ -1436,7 +1447,7 @@
                 card.innerHTML = `
                     <div>
                         <div class="card-img-container">
-                            <img src="${game.image}" alt="${game.name}" onerror="this.src='https://via.placeholder.com/250x140?text=Erro+na+Imagem'">
+                            <img src="${game.image}" alt="${game.name}" onerror="this.src='https://i.ibb.co/4nhr0dZz/unnamed.jpg'">
                             <div class="price-badge">${game.status}</div>
                         </div>
                         <div class="game-info">
