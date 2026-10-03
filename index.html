@@ -798,7 +798,7 @@
 
         const JSONBIN_CONFIG = {
             binId: "68c14273et2000ffscj65744",
-            masterKey: "$2a$10$T80j/yH0v7o1p8E3bWk8u.6d5sK1j5H3jX6k5L7m8N9p0Q1r2S3t4" // Substitui pela tua Master Key se precisares de escrita via API, ou usamos PUT direto se for permitido
+            masterKey: "$2a$10$IiEJXJC7SzKZwe0fHMpSbu.vrgTI2VdWiSU3ZJXdotVepr1FMekoC"
         };
 
         async function carregarDadosDoBin() {
@@ -806,6 +806,7 @@
             try {
                 const response = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_CONFIG.binId}/latest`, {
                     headers: {
+                        'X-Master-Key': JSONBIN_CONFIG.masterKey,
                         'Cache-Control': 'no-cache'
                     }
                 });
@@ -840,7 +841,7 @@
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
-                        'X-Master-Key': '$2a$10$...' // Se necessário inserir a chave mestre do jsonbin.io
+                        'X-Master-Key': JSONBIN_CONFIG.masterKey
                     },
                     body: JSON.stringify({
                         jogos: listaJogosCache,
