@@ -847,8 +847,140 @@
     </div>
 
     <script>
-        // ADICIONE SEUS JOGOS FIXOS DIRETAMENTE AQUI NO ARRAY ABAIXO PARA APARECEREM DIRETO NO CÓDIGO
-        let listaJogosCache = [];
+        let listaJogosCache = [
+          {
+            "id": 1790937103530,
+            "name": "God of War: Chains of Olympus",
+            "image": "https://i.ibb.co/4nhr0dZz/unnamed.jpg",
+            "category": "PSP",
+            "size": "1.20GB",
+            "format": "ISO",
+            "status": "Grátis ",
+            "description": "Luta ,Ação e aventura ",
+            "link": "https://www.google.com/url?q=https%3A%2F%2Farchive.org%2Fdownload%2Fgod-of-war-chains-of-olympus-usa%2FGod%2520of%2520War%2520-%2520Chains%2520of%2520Olympus%2520%2528USA%2529.zip&sa=D&sntz=1&usg=AOvVaw120DNfbthgquekeBM9CFOK",
+            "btnText": "Baixar Agora (Download Direto)"
+          },
+          {
+            "id": 1790954010898,
+            "name": "God of War: Ghost of Sparta",
+            "image": "https://i.ibb.co/TxBqvzhs/unnamed-1.jpg",
+            "category": "PSP",
+            "size": "1.75GB",
+            "format": "ISO",
+            "status": "Grátis ",
+            "description": "Luta, Ação ",
+            "link": "https://www.google.com/url?q=https%3A%2F%2Farchive.org%2Fdownload%2Fgod-of-war-ghost-of-sparta-usa-en-fr-es%2FGod%2520of%2520War%2520-%2520Ghost%2520of%2520Sparta%2520%2528USA%2529%2520%2528En%252CFr%252CEs%2529.iso&sa=D&sntz=1&usg=AOvVaw2Xdl4cNDHQsyGXVg_UCMl7",
+            "btnText": "Baixar Agora (Download Direto)"
+          },
+          {
+            "id": 1790954322384,
+            "name": "Grand Theft Auto: Liberty City Stories",
+            "image": "https://i.ibb.co/Cp1mQ9zx/unnamed-2.jpg",
+            "category": "PSP",
+            "size": "1.26GB",
+            "format": "ISO",
+            "status": "Grátis ",
+            "description": "Luta, Ação ",
+            "link": "https://www.google.com/url?q=https%3A%2F%2Farchive.org%2Fdownload%2FGrandTheftAutoLibertyCityStoriesUSAEnFrDeEsItv3.00%2FGrand%2520Theft%2520Auto%2520-%2520Liberty%2520City%2520Stories%2520%2528USA%2529%2520%2528En%252CFr%252CDe%252CEs%252CIt%2529%2520%2528v3.00%2529.iso&sa=D&sntz=1&usg=AOvVaw1EQS6WQFyz7Ttu7DV0-lz3",
+            "btnText": "Baixar Agora (Download Direto)"
+          },
+          {
+            "id": 1790954983808,
+            "name": "Grand Theft Auto: Vice City Stories",
+            "image": "https://i.ibb.co/sJjVVbZc/unnamed-3.jpg",
+            "category": "PSP",
+            "size": "1.70GB",
+            "format": "ISO",
+            "status": "Grátis ",
+            "description": "Aventura e Ação RPG",
+            "link": "https://www.google.com/url?q=https%3A%2F%2Farchive.org%2Fdownload%2Fgrand-theft-auto-vice-city-stories-usa%2FGrand%2520Theft%2520Auto%2520-%2520Vice%2520City%2520Stories%2520%2528USA%2529.iso&sa=D&sntz=1&usg=AOvVaw3KkcT2LJZeMmSp-EloEKpA",
+            "btnText": "Baixar Agora (Download Direto)"
+          },
+          {
+            "id": 1790956761561,
+            "name": "Naruto: Ultimate Ninja 3",
+            "image": "https://i.ibb.co/xVC8GL6/unnamed-4.jpg",
+            "category": "PSP",
+            "size": "1.21GB",
+            "format": "ZIP",
+            "status": "Grátis ",
+            "description": "Luta",
+            "link": "https://www.google.com/url?q=https%3A%2F%2Farchive.org%2Fdownload%2Fnaruto-shippuden-ultimate-ninja-heroes-3-usa_202601%2FNaruto%2520Shippuden%2520-%2520Ultimate%2520Ninja%2520Heroes%25203%2520%2528USA%2529.zip&sa=D&sntz=1&usg=AOvVaw1j8ZFCYhYNpdf7498_Iyqm",
+            "btnText": "Baixar Agora (Download Direto)"
+          },
+          {
+            "id": 1790956999349,
+            "name": "Bleach: Heat the Soul 7",
+            "image": "https://i.ibb.co/DfRP19jH/unnamed-5.jpg",
+            "category": "PSP",
+            "size": "424.89MB",
+            "format": "ZIP",
+            "status": "Grátis ",
+            "description": "Luta ",
+            "link": "https://www.google.com/url?q=https%3A%2F%2Farchive.org%2Fdownload%2Fbleach-heat-the-soul-7%2FBleach%2520-%2520Heat%2520the%2520Soul%25207%2520%2528Asia%2529.zip&sa=D&sntz=1&usg=AOvVaw3cCI-_vMIEmOCql9WY2O-c",
+            "btnText": "Baixar Agora (Download Direto)"
+          },
+          {
+            "id": 1790961002839,
+            "name": "Def jam: Fight for NY-The Takeover",
+            "image": "https://i.ibb.co/yBFQHRxp/unnamed-6.jpg",
+            "category": "PSP",
+            "size": "502.20MB",
+            "format": "ZIP",
+            "status": "Grátis ",
+            "description": "Luta ",
+            "link": "https://www.google.com/url?q=https%3A%2F%2Farchive.org%2Fdownload%2Fplaystation-portable-rom-def-jam-fight-for-ny-the-takeover%2FDef%2520Jam%2520-%2520Fight%2520for%2520NY%2520-%2520The%2520Takeover%2520%2528USA%2529%2520%2528v1.01%2529.zip&sa=D&sntz=1&usg=AOvVaw3uvQu8ISUAIQ_brua3GLQv",
+            "btnText": "Baixar Agora (Download Direto)"
+          },
+          {
+            "id": 1790961425208,
+            "name": "UFC: Undisputed 2010",
+            "image": "https://i.ibb.co/vxTRHhHp/unnamed-7.jpg",
+            "category": "PSP",
+            "size": "1.43GB",
+            "format": "ZIP",
+            "status": "Grátis ",
+            "description": "Luta ",
+            "link": "https://www.google.com/url?q=https%3A%2F%2Farchive.org%2Fdownload%2Fufc-2010-undisputed-usa%2FUFC%25202010%2520Undisputed%2520%2528USA%2529.zip&sa=D&sntz=1&usg=AOvVaw0u_RWJhJLq559qKiwIKp09",
+            "btnText": "Baixar Agora (Download Direto)"
+          },
+          {
+            "id": 1790963121413,
+            "name": "Grand Theft: Auto Sanandreas",
+            "image": "https://i.ibb.co/Rp9gRCt1/unnamed-8.jpg",
+            "category": "APK",
+            "size": "2.62GB",
+            "format": "APK",
+            "status": "Grátis ",
+            "description": "RPG",
+            "link": "https://www.google.com/url?q=https%3A%2F%2Farchive.org%2Fdownload%2Fgta-sa-5play%2Fgta-sa-2.11.277-mod-menu-5play.apk&sa=D&sntz=1&usg=AOvVaw0U9NCQuiwuG3WtRTFxEBzK",
+            "btnText": "Baixar Agora (Download Direto)"
+          },
+          {
+            "id": 1790963352828,
+            "name": "Tekken: Dark Resurrection",
+            "image": "https://i.ibb.co/hFZ6wpMd/unnamed-9.jpg",
+            "category": "PSP",
+            "size": "1.75GB",
+            "format": "ISO",
+            "status": "Grátis ",
+            "description": "Luta ",
+            "link": "https://www.google.com/url?q=https%3A%2F%2Farchive.org%2Fdownload%2Ftekken-dark-resurrection-usa-psp_202603_ver2%2Fa-tekken.iso&sa=D&sntz=1&usg=AOvVaw1jxZ173RKj5QE1ec9P4cKB",
+            "btnText": "Baixar Agora (Download Direto)"
+          },
+          {
+            "id": 1790963815728,
+            "name": "Red Dead Redemption ",
+            "image": "https://i.ibb.co/JjnRPKMK/58b6e9bc7801b5a60410a7f75ec6b890.jpg",
+            "category": "APK",
+            "size": "2.89GB",
+            "format": "APK",
+            "status": "Grátis ",
+            "description": "RPG mundo aberto ",
+            "link": "https://files.an1.co/red-dead-redemption-mods_1.58.63226194-an1.com.apk",
+            "btnText": "Baixar Agora (Download Direto)"
+          }
+        ];
 
         let listaBannersCache = [
             { image: "https://via.placeholder.com/500x180?text=Destaque+1+PSP", title: "Bem-vindo ao PSP Gamer Mobile 2" },
@@ -1265,7 +1397,7 @@
         }
 
         function renderGames() {
-            const termoBusca = document.getElementById('searchInput') ? document.getElementById('searchInput').value.toLowerCase() : '';
+            const termoBusca = document.getElementById('searchInput') ? document.getElementById('searchInput'].value.toLowerCase() : '';
             gamesGrid.innerHTML = '';
 
             let filtrados = listaJogosCache.filter(game => {
@@ -1318,4 +1450,4 @@
         }
     </script>
 </body>
-</html>
+                        </html>
