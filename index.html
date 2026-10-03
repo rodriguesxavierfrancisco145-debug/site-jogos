@@ -157,6 +157,81 @@
             padding-left: 18px;
         }
 
+        /* Estilos do Carrossel */
+        .carousel-container {
+            position: relative;
+            width: 100%;
+            height: 180px;
+            border-radius: 16px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.6), 0 0 15px rgba(0, 240, 255, 0.15);
+            border: 1px solid rgba(0, 240, 255, 0.25);
+        }
+
+        .carousel-track {
+            display: flex;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .carousel-slide {
+            min-width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        .carousel-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(0.9);
+            transition: transform 0.6s ease;
+        }
+
+        .carousel-slide:hover img {
+            transform: scale(1.03);
+        }
+
+        .carousel-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(11, 11, 15, 0.95), rgba(11, 11, 15, 0.2));
+            padding: 12px 15px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: white;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+        }
+
+        .carousel-indicators {
+            position: absolute;
+            bottom: 10px;
+            right: 15px;
+            display: flex;
+            gap: 6px;
+            z-index: 10;
+        }
+
+        .indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.4);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .indicator.active {
+            background: var(--accent-pink);
+            width: 22px;
+            border-radius: 4px;
+            box-shadow: 0 0 8px var(--accent-pink);
+        }
+
         .custom-modal-overlay {
             display: none;
             position: fixed;
@@ -665,6 +740,14 @@
             </div>
         </div>
 
+        <!-- Carrossel Animado de Destaques -->
+        <div class="carousel-container" id="carouselContainer">
+            <div class="carousel-track" id="carouselTrack">
+                <!-- Inserido dinamicamente via JS -->
+            </div>
+            <div class="carousel-indicators" id="carouselIndicators"></div>
+        </div>
+
         <div class="categories">
             <button class="cat-btn active" onclick="filtrarCategoria('Todos', this)">Todos</button>
             <button class="cat-btn" onclick="filtrarCategoria('PSP', this)">PSP</button>
@@ -676,10 +759,14 @@
         <div id="inicio" class="tab-content">
             <header style="margin-bottom: 15px;">
                 <h1 id="panelTitle" style="font-size: 1.8rem; color: var(--accent-pink); text-shadow: 0 0 10px rgba(255,0,127,0.4);">🔒 Painel Restrito</h1>
-                <p id="panelSub" style="font-size: 0.85rem; color: var(--text-muted);">Adicione novos jogos à vitrine</p>
+                <p id="panelSub" style="font-size: 0.85rem; color: var(--text-muted);">Adicione novos jogos e gerencie o carrossel</p>
             </header>
 
             <div class="form-card">
+                <h2>Gerenciar Banners do Carrossel (Máx. 4)</h2>
+                <div id="carouselFormList" style="margin-bottom: 15px;"></div>
+                <button type="button" onclick="salvarBannersCarrossel()" style="background: linear-gradient(135deg, var(--accent-cyan), #0099ff); color: #0b0b0f; margin-bottom: 25px;">Salvar Alterações do Carrossel</button>
+
                 <h2 id="formTitle">Publicar Novo Jogo</h2>
                 <form id="gameForm">
                     <input type="hidden" id="editGameId">
@@ -753,13 +840,24 @@
 
     <script>
         let listaJogosCache = [];
+        let listaBannersCache = [
+            { image: "https://via.placeholder.com/500x180?text=Destaque+1+PSP", title: "Bem-vindo ao PSP Gamer Mobile 2" },
+            { image: "https://via.placeholder.com/500x180?text=Destaque+2+PS2", title: "Novos Jogos Adicionados Semanalmente" },
+            { image: "https://via.placeholder.com/500x180?text=Destaque+3+PC", title: "Baixe com Links Diretos e Seguros" },
+            { image: "https://via.placeholder.com/500x180?text=Destaque+4+APK", title: "Entre na nossa Comunidade WhatsApp" }
+        ];
+        let indiceCarrosselAtual = 0;
+        let intervaloCarrossel = null;
+
         const gameForm = document.getElementById('gameForm');
         const gamesGrid = document.getElementById('gamesGrid');
         const SENHA_ADMIN = "1234"; 
         let categoriaAtual = 'Todos';
 
         document.addEventListener('DOMContentLoaded', () => {
-            carregarJogosLocais();
+            carregarDadosLocais();
+            renderizarCarrossel();
+            iniciarAutoplayCarrossel();
 
             const urlParams = new URLSearchParams(window.location.search);
             const jogoIdUrl = urlParams.get('jogo');
@@ -775,6 +873,140 @@
                 }
             });
         });
+
+        function carregarDadosLocais() {
+            let localJogos = localStorage.getItem('global_shared_psp_games');
+            listaJogosCache = localJogos ? JSON.parse(localJogos) : [];
+
+            let localBanners = localStorage.getItem('global_shared_psp_banners');
+            if (localBanners) {
+                try {
+                    listaBannersCache = JSON.parse(localBanners);
+                } catch(e) {}
+            }
+            renderGames();
+            renderizarInputsAdminBanners();
+        }
+
+        function salvarJogosLocais(gamesArray) {
+            listaJogosCache = gamesArray;
+            localStorage.setItem('global_shared_psp_games', JSON.stringify(gamesArray));
+        }
+
+        // Funções do Carrossel
+        function renderizarCarrossel() {
+            const track = document.getElementById('carouselTrack');
+            const indicators = document.getElementById('carouselIndicators');
+            if (!track || !indicators) return;
+
+            track.innerHTML = '';
+            indicators.innerHTML = '';
+
+            if (!listaBannersCache || listaBannersCache.length === 0) {
+                document.getElementById('carouselContainer').style.display = 'none';
+                return;
+            } else {
+                document.getElementById('carouselContainer').style.display = 'block';
+            }
+
+            listaBannersCache.forEach((banner, index) => {
+                const slide = document.createElement('div');
+                slide.className = 'carousel-slide';
+                slide.innerHTML = `
+                    <img src="${banner.image}" alt="${banner.title}" onerror="this.src='https://via.placeholder.com/500x180?text=Erro+na+Imagem'">
+                    <div class="carousel-caption">${banner.title}</div>
+                `;
+                track.appendChild(slide);
+
+                const ind = document.createElement('div');
+                ind.className = `indicator ${index === 0 ? 'active' : ''}`;
+                ind.onclick = () => irParaSlide(index);
+                indicators.appendChild(ind);
+            });
+            atualizarPosicaoCarrossel();
+        }
+
+        function atualizarPosicaoCarrossel() {
+            const track = document.getElementById('carouselTrack');
+            const indicators = document.querySelectorAll('.indicator');
+            if (!track) return;
+
+            track.style.transform = `translateX(-${indiceCarrosselAtual * 100}%)`;
+            indicators.forEach((ind, i) => {
+                if (i === indiceCarrosselAtual) {
+                    ind.classList.add('active');
+                } else {
+                    ind.classList.remove('active');
+                }
+            });
+        }
+
+        function proximoSlide() {
+            if (listaBannersCache.length === 0) return;
+            indiceCarrosselAtual = (indiceCarrosselAtual + 1) % listaBannersCache.length;
+            atualizarPosicaoCarrossel();
+        }
+
+        function irParaSlide(index) {
+            indiceCarrosselAtual = index;
+            atualizarPosicaoCarrossel();
+            reiniciarAutoplayCarrossel();
+        }
+
+        function iniciarAutoplayCarrossel() {
+            if (intervaloCarrossel) clearInterval(intervaloCarrossel);
+            intervaloCarrossel = setInterval(proximoSlide, 4500);
+        }
+
+        function reiniciarAutoplayCarrossel() {
+            iniciarAutoplayCarrossel();
+        }
+
+        function renderizarInputsAdminBanners() {
+            const container = document.getElementById('carouselFormList');
+            if (!container) return;
+            container.innerHTML = '';
+
+            for (let i = 0; i < 4; i++) {
+                const banner = listaBannersCache[i] || { image: '', title: '' };
+                const div = document.createElement('div');
+                div.style.marginBottom = "12px";
+                div.style.padding = "10px";
+                div.style.background = "#0b0b0f";
+                div.style.borderRadius = "10px";
+                div.style.border = "1px solid rgba(255,255,255,0.06)";
+                div.innerHTML = `
+                    <p style="font-size: 0.8rem; color: var(--accent-cyan); margin-bottom: 6px; font-weight: bold;">Banner ${i + 1}</p>
+                    <div style="margin-bottom: 8px;">
+                        <input type="url" id="bannerImg_${i}" value="${banner.image}" placeholder="Link direto da imagem do banner ${i + 1}">
+                    </div>
+                    <div>
+                        <input type="text" id="bannerTitle_${i}" value="${banner.title}" placeholder="Título / Legenda do banner ${i + 1}">
+                    </div>
+                `;
+                container.appendChild(div);
+            }
+        }
+
+        function salvarBannersCarrossel() {
+            let novosBanners = [];
+            for (let i = 0; i < 4; i++) {
+                const imgVal = document.getElementById(`bannerImg_${i}`).value.trim();
+                const titleVal = document.getElementById(`bannerTitle_${i}`).value.trim();
+                if (imgVal) {
+                    novosBanners.push({ image: imgVal, title: titleVal || 'Destaque PSP Gamer' });
+                }
+            }
+            if (novosBanners.length === 0) {
+                alert("Adicione pelo menos 1 banner válido com imagem!");
+                return;
+            }
+            listaBannersCache = novosBanners;
+            localStorage.setItem('global_shared_psp_banners', JSON.stringify(novosBanners));
+            indiceCarrosselAtual = 0;
+            renderizarCarrossel();
+            alert("Carrossel atualizado com sucesso!");
+        }
 
         function toggleMenu(event) {
             event.stopPropagation();
@@ -795,12 +1027,14 @@
         function solicitarSenha() {
             if (localStorage.getItem('isAdmin') === 'true') {
                 switchTab('inicio');
+                renderizarInputsAdminBanners();
                 return;
             }
             let senha = prompt("Digite a senha de administrador:");
             if (senha === SENHA_ADMIN) {
                 localStorage.setItem('isAdmin', 'true');
                 switchTab('inicio');
+                renderizarInputsAdminBanners();
                 renderGames();
                 alert("Painel liberado com sucesso!");
             } else if (senha !== null) {
@@ -828,17 +1062,6 @@
             document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
             renderGames();
-        }
-
-        function carregarJogosLocais() {
-            let local = localStorage.getItem('global_shared_psp_games');
-            listaJogosCache = local ? JSON.parse(local) : [];
-            renderGames();
-        }
-
-        function salvarJogosLocais(gamesArray) {
-            listaJogosCache = gamesArray;
-            localStorage.setItem('global_shared_psp_games', JSON.stringify(gamesArray));
         }
 
         gameForm.addEventListener('submit', function(e) {
@@ -933,6 +1156,7 @@
             document.getElementById('cancelEditContainer').style.display = "block";
 
             switchTab('inicio');
+            renderizarInputsAdminBanners();
         }
 
         function cancelarEdicao() {
@@ -941,7 +1165,7 @@
             document.getElementById('formTitle').innerText = "Publicar Novo Jogo";
             document.getElementById('submitBtn').innerText = "Publicar Jogo";
             document.getElementById('panelTitle').innerText = "🔒 Painel Restrito";
-            document.getElementById('panelSub').innerText = "Adicione novos jogos à vitrine";
+            document.getElementById('panelSub').innerText = "Adicione novos jogos e gerencie o carrossel";
             document.getElementById('cancelEditContainer').style.display = "none";
         }
 
