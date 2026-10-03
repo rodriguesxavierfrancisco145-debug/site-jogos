@@ -948,6 +948,29 @@
             }
         }
 
+        async function verificarAtualizacoesGitHub() {
+            try {
+                const url = `https://api.github.com/repos/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/commits?path=${GITHUB_CONFIG.path}&per_page=1`;
+                const resp = await fetch(url);
+                if (resp.ok) {
+                    const commits = await resp.json();
+                    if (commits && commits.length > 0) {
+                        const ultimoCommitSha = commits[0].sha;
+                        const shaSalvo = localStorage.getItem('ultimoCommitSha');
+                        
+                        if (shaSalvo && shaSalvo !== ultimoCommitSha) {
+                            localStorage.setItem('ultimoCommitSha', ultimoCommitSha);
+                            window.location.reload(true);
+                            return;
+                        }
+                        localStorage.setItem('ultimoCommitSha', ultimoCommitSha);
+                    }
+                }
+            } catch(e) {
+                // Ignora falhas de rede na verificação em segundo plano para não atrapalhar o usuário
+            }
+        }
+
         async function sincronizarComGitHubForcado() {
             mostrarStatusSync("Forçando salvamento no GitHub...");
             try {
@@ -993,6 +1016,10 @@
                 });
 
                 if (putResp.ok) {
+                    const respData = await putResp.json();
+                    if(respData.commit && respData.commit.sha) {
+                        localStorage.setItem('ultimoCommitSha', respData.commit.sha);
+                    }
                     mostrarStatusSync("Atualizado e salvo no GitHub com sucesso!");
                     return true;
                 } else {
@@ -1006,6 +1033,7 @@
         }
 
         window.addEventListener('DOMContentLoaded', () => {
+            verificarAtualizacoesGitHub();
             renderGames();
             renderizarCarrossel();
             iniciarAutoplayCarrossel();
