@@ -830,6 +830,7 @@
             </div>
         </div>
 
+        <!-- ABA DE JOGOS COM A CLASSE "active" PARA ABRIR DIRETO -->
         <div id="jogos" class="tab-content active">
             <div class="games-grid" id="gamesGrid">
                 <p class="empty-msg">Carregando jogos...</p>
@@ -1000,6 +1001,7 @@
             carregarDadosLocais();
             renderizarCarrossel();
             iniciarAutoplayCarrossel();
+            switchTab('jogos'); // Garante que abre direto na aba de jogos
 
             const urlParams = new URLSearchParams(window.location.search);
             const jogoIdUrl = urlParams.get('jogo');
@@ -1026,7 +1028,6 @@
                     }
                 } catch(e) {}
             }
-            // Sempre garante salvamento inicial sincronizado
             localStorage.setItem('global_shared_psp_games', JSON.stringify(listaJogosCache));
 
             let localBanners = localStorage.getItem('global_shared_psp_banners');
@@ -1455,4 +1456,4 @@
         }
     </script>
 </body>
-                            </html>
+</html>
