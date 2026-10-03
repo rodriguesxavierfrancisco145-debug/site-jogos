@@ -764,6 +764,13 @@
             <div class="form-card">
                 <h2>Gerenciar Banners do Carrossel (Máx. 4)</h2>
                 <div id="carouselFormList" style="margin-bottom: 15px;"></div>
+                
+                <div style="margin-bottom: 15px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px;">
+                    <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 8px;">Exportar Código do Carrossel:</p>
+                    <textarea id="exportCarouselCodeBox" rows="3" readonly style="width:100%; background:#0b0b0f; color:var(--accent-cyan); font-family:monospace; font-size:0.8rem; padding:10px; border-radius:8px; border:1px solid rgba(255,255,255,0.1); margin-bottom: 8px;"></textarea>
+                    <button type="button" onclick="copiarCodigoCarrossel()" style="background: linear-gradient(135deg, #00f0ff, #0077ff); color: #0b0b0f; margin-bottom: 10px;">Copiar Código do Carrossel</button>
+                </div>
+
                 <button type="button" onclick="salvarBannersCarrossel()" style="background: linear-gradient(135deg, var(--accent-cyan), #0099ff); color: #0b0b0f; margin-bottom: 25px;">Salvar Alterações do Carrossel</button>
 
                 <h2 id="formTitle">Publicar Novo Jogo</h2>
@@ -1045,6 +1052,7 @@
             } catch(e) {}
 
             atualizarBoxExportacao();
+            atualizarBoxExportacaoCarrossel();
         }
 
         function salvarJogosLocais(gamesArray) {
@@ -1060,11 +1068,25 @@
             }
         }
 
+        function atualizarBoxExportacaoCarrossel() {
+            const box = document.getElementById('exportCarouselCodeBox');
+            if (box) {
+                box.value = "let listaBannersCache = " + JSON.stringify(listaBannersCache, null, 2) + ";";
+            }
+        }
+
         function copiarCodigoJogos() {
             const box = document.getElementById('exportCodeBox');
             box.select();
             navigator.clipboard.writeText(box.value);
-            alert("Código copiado! Cole-o substituindo a linha 'let listaJogosCache = [...]' no topo do script do seu arquivo HTML.");
+            alert("Código de jogos copiado! Cole-o substituindo a linha 'let listaJogosCache = [...]' no topo do script do seu arquivo HTML.");
+        }
+
+        function copiarCodigoCarrossel() {
+            const box = document.getElementById('exportCarouselCodeBox');
+            box.select();
+            navigator.clipboard.writeText(box.value);
+            alert("Código do carrossel copiado! Cole-o substituindo a linha 'let listaBannersCache = [...]' no topo do script do seu arquivo HTML.");
         }
 
         // Funções do Carrossel Seguras
@@ -1149,13 +1171,32 @@
                 div.innerHTML = `
                     <p style="font-size: 0.8rem; color: var(--accent-cyan); margin-bottom: 6px; font-weight: bold;">Banner ${i + 1}</p>
                     <div style="margin-bottom: 8px;">
-                        <input type="url" id="bannerImg_${i}" value="${banner.image}" placeholder="Link direto da imagem do banner ${i + 1}">
+                        <input type="url" id="bannerImg_${i}" value="${banner.image}" oninput="atualizarPreviewBannersDinamico()" placeholder="Link direto da imagem do banner ${i + 1}">
                     </div>
                     <div>
-                        <input type="text" id="bannerTitle_${i}" value="${banner.title}" placeholder="Título / Legenda do banner ${i + 1}">
+                        <input type="text" id="bannerTitle_${i}" value="${banner.title}" oninput="atualizarPreviewBannersDinamico()" placeholder="Título / Legenda do banner ${i + 1}">
                     </div>
                 `;
                 container.appendChild(div);
+            }
+            atualizarBoxExportacaoCarrossel();
+        }
+
+        function atualizarPreviewBannersDinamico() {
+            let novosBanners = [];
+            for (let i = 0; i < 4; i++) {
+                const imgInput = document.getElementById(`bannerImg_${i}`);
+                const titleInput = document.getElementById(`bannerTitle_${i}`);
+                if (imgInput && imgInput.value.trim()) {
+                    novosBanners.push({ 
+                        image: imgInput.value.trim(), 
+                        title: (titleInput && titleInput.value.trim()) ? titleInput.value.trim() : 'Destaque PSP Gamer' 
+                    });
+                }
+            }
+            if (novosBanners.length > 0) {
+                listaBannersCache = novosBanners;
+                atualizarBoxExportacaoCarrossel();
             }
         }
 
@@ -1177,6 +1218,7 @@
             }
             listaBannersCache = novosBanners;
             localStorage.setItem('global_shared_psp_banners', JSON.stringify(novosBanners));
+            atualizarBoxExportacaoCarrossel();
             indiceCarrosselAtual = 0;
             renderizarCarrossel();
             alert("Carrossel atualizado com sucesso!");
@@ -1203,6 +1245,7 @@
                 switchTab('inicio');
                 renderizarInputsAdminBanners();
                 atualizarBoxExportacao();
+                atualizarBoxExportacaoCarrossel();
                 return;
             }
             let senha = prompt("Digite a senha de administrador:");
@@ -1211,6 +1254,7 @@
                 switchTab('inicio');
                 renderizarInputsAdminBanners();
                 atualizarBoxExportacao();
+                atualizarBoxExportacaoCarrossel();
                 renderGames();
                 alert("Painel liberado com sucesso!");
             } else if (senha !== null) {
