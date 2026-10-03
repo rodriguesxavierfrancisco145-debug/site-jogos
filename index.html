@@ -765,10 +765,8 @@
                 <h2>Gerenciar Banners do Carrossel (Máx. 4)</h2>
                 <div id="carouselFormList" style="margin-bottom: 15px;"></div>
                 
-                <div style="margin-bottom: 15px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px;">
-                    <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 8px;">Exportar Código do Carrossel:</p>
+                <div style="margin-bottom: 15px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px; display: none;">
                     <textarea id="exportCarouselCodeBox" rows="3" readonly style="width:100%; background:#0b0b0f; color:var(--accent-cyan); font-family:monospace; font-size:0.8rem; padding:10px; border-radius:8px; border:1px solid rgba(255,255,255,0.1); margin-bottom: 8px;"></textarea>
-                    <button type="button" onclick="copiarCodigoCarrossel()" style="background: linear-gradient(135deg, #00f0ff, #0077ff); color: #0b0b0f; margin-bottom: 10px;">Copiar Código do Carrossel</button>
                 </div>
 
                 <button type="button" onclick="salvarBannersCarrossel()" style="background: linear-gradient(135deg, var(--accent-cyan), #0099ff); color: #0b0b0f; margin-bottom: 25px;">Salvar Alterações do Carrossel</button>
@@ -825,11 +823,8 @@
                     <button onclick="cancelarEdicao()" style="background: linear-gradient(135deg, #555, #333); color: white;">Cancelar Edição</button>
                 </div>
 
-                <div style="margin-top: 30px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px;">
-                    <h2>Exportar Código dos Jogos</h2>
-                    <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 10px;">Copie o código gerado abaixo e cole diretamente na linha `let listaJogosCache = [...]` do seu arquivo HTML para atualizar o código principal.</p>
+                <div style="margin-top: 30px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px; display: none;">
                     <textarea id="exportCodeBox" rows="4" readonly style="width:100%; background:#0b0b0f; color:#00ff88; font-family:monospace; font-size:0.8rem; padding:10px; border-radius:8px; border:1px solid rgba(255,255,255,0.1); margin-bottom: 10px;"></textarea>
-                    <button type="button" onclick="copiarCodigoJogos()" style="background: linear-gradient(135deg, var(--accent-cyan), #0099ff); color: #0b0b0f;">Copiar Código Atualizado</button>
                 </div>
 
                 <button onclick="logoutAdmin()" style="background: linear-gradient(135deg, var(--danger), #cc0033); color: white; margin-top: 15px; box-shadow: 0 4px 15px rgba(255,51,102,0.4);">Sair do Painel Admin</button>
@@ -854,7 +849,7 @@
     </div>
 
     <script>
-        // Array de Jogos Principal atualizado com todos os seus jogos
+        // Array de Jogos Principal
         let listaJogosCache = [
           {
             "id": 1790937103530,
@@ -990,7 +985,7 @@
           }
         ];
 
-        // Array de Banners do Carrossel atualizado
+        // Array de Banners do Carrossel
         let listaBannersCache = [
           {
             "image": "https://i.ibb.co/Hf9GsdxW/unnamed-4.jpg",
@@ -1014,6 +1009,67 @@
         let intervaloCarrossel = null;
         const SENHA_ADMIN = "1234"; 
         let categoriaAtual = 'Todos';
+
+        // CONFIGURAÇÃO DA API DO GITHUB ATUALIZADA
+        const GITHUB_CONFIG = {
+            token: "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",
+            owner: "Rodriguesxavierfrancisco145",
+            repo: "site-jogos",
+            path: "index.html"
+        };
+
+        async function sincronizarComGitHub() {
+            try {
+                const url = `https://api.github.com/repos/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/contents/${GITHUB_CONFIG.path}`;
+                
+                const getResp = await fetch(url, {
+                    headers: { 'Authorization': `token ${GITHUB_CONFIG.token}` }
+                });
+                
+                if (!getResp.ok) {
+                    console.error("Erro ao buscar dados do GitHub. Verifique as credenciais.");
+                    return;
+                }
+                
+                const fileData = await getResp.json();
+                const sha = fileData.sha;
+
+                let htmlAtual = document.documentElement.outerHTML;
+
+                htmlAtual = htmlAtual.replace(
+                    /let listaJogosCache\s*=\s*\[[\s\S]*?\];/, 
+                    "let listaJogosCache = " + JSON.stringify(listaJogosCache, null, 2) + ";"
+                );
+
+                htmlAtual = htmlAtual.replace(
+                    /let listaBannersCache\s*=\s*\[[\s\S]*?\];/, 
+                    "let listaBannersCache = " + JSON.stringify(listaBannersCache, null, 2) + ";"
+                );
+
+                const contentBase64 = btoa(unescape(encodeURIComponent(htmlAtual)));
+
+                const putResp = await fetch(url, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `token ${GITHUB_CONFIG.token}`,
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        message: 'Atualização automática do site via Painel Admin',
+                        content: contentBase64,
+                        sha: sha
+                    })
+                });
+
+                if (putResp.ok) {
+                    console.log("Site atualizado com sucesso no GitHub!");
+                } else {
+                    console.error("Falha ao salvar no GitHub.");
+                }
+            } catch (err) {
+                console.error("Erro na sincronização:", err);
+            }
+        }
 
         window.addEventListener('DOMContentLoaded', () => {
             inicializarDados();
@@ -1039,7 +1095,6 @@
         });
 
         function inicializarDados() {
-            // Força o cache principal a sobrescrever se a versão local estiver vazia ou desatualizada
             try {
                 let localJogos = localStorage.getItem('global_shared_psp_games');
                 if (!localJogos) {
@@ -1072,6 +1127,7 @@
             listaJogosCache = gamesArray;
             localStorage.setItem('global_shared_psp_games', JSON.stringify(gamesArray));
             atualizarBoxExportacao();
+            sincronizarComGitHub();
         }
 
         function atualizarBoxExportacao() {
@@ -1086,20 +1142,6 @@
             if (box) {
                 box.value = "let listaBannersCache = " + JSON.stringify(listaBannersCache, null, 2) + ";";
             }
-        }
-
-        function copiarCodigoJogos() {
-            const box = document.getElementById('exportCodeBox');
-            box.select();
-            navigator.clipboard.writeText(box.value);
-            alert("Código de jogos copiado! Cole-o substituindo a linha 'let listaJogosCache = [...]' no topo do script do seu arquivo HTML.");
-        }
-
-        function copiarCodigoCarrossel() {
-            const box = document.getElementById('exportCarouselCodeBox');
-            box.select();
-            navigator.clipboard.writeText(box.value);
-            alert("Código do carrossel copiado! Cole-o substituindo a linha 'let listaBannersCache = [...]' no topo do script do seu arquivo HTML.");
         }
 
         function renderizarCarrossel() {
@@ -1233,7 +1275,8 @@
             atualizarBoxExportacaoCarrossel();
             indiceCarrosselAtual = 0;
             renderizarCarrossel();
-            alert("Carrossel atualizado com sucesso!");
+            sincronizarComGitHub();
+            alert("Carrossel atualizado e enviado para o GitHub com sucesso!");
         }
 
         function toggleMenu(event) {
@@ -1335,7 +1378,7 @@
                         return game;
                     });
                     salvarJogosLocais(games);
-                    alert("Jogo atualizado com sucesso!");
+                    alert("Jogo atualizado e enviado para o GitHub com sucesso!");
                     cancelarEdicao();
                 } else {
                     const newGame = { 
@@ -1352,7 +1395,7 @@
                     };
                     games.push(newGame);
                     salvarJogosLocais(games);
-                    alert("Jogo publicado com sucesso!");
+                    alert("Jogo publicado e enviado para o GitHub com sucesso!");
                 }
 
                 gameForm.reset();
@@ -1367,6 +1410,7 @@
                 salvarJogosLocais(games);
                 renderGames();
                 switchTab('jogos');
+                alert("Jogo excluído e alteração enviada para o GitHub!");
             }
         }
 
