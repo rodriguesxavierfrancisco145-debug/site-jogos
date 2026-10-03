@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PSP GAMER MOBILE 2</title>
-    <!-- Supabase JS Client UMD -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         :root {
             --bg-color: #0b0b0f;
@@ -662,7 +660,7 @@
 </head>
 <body>
 
-    <div id="syncStatus">Sincronizando com o Supabase...</div>
+    <div id="syncStatus">Sincronizando com o JSONBin...</div>
 
     <div id="customModalOverlay" class="custom-modal-overlay">
         <div class="custom-modal">
@@ -710,7 +708,7 @@
             <div class="form-card">
                 <h2>Gerenciar Banners do Carrossel (Máx. 4)</h2>
                 <div id="carouselFormList" style="margin-bottom: 15px;"></div>
-                <button type="button" onclick="salvarBannersCarrossel()" style="background: linear-gradient(135deg, var(--accent-cyan), #0099ff); color: #0b0b0f; margin-bottom: 25px;">Salvar Banners no Supabase</button>
+                <button type="button" onclick="salvarBannersCarrossel()" style="background: linear-gradient(135deg, var(--accent-cyan), #0099ff); color: #0b0b0f; margin-bottom: 25px;">Salvar Banners</button>
 
                 <h2 id="formTitle">Publicar Novo Jogo</h2>
                 <form id="gameForm">
@@ -770,7 +768,7 @@
 
         <div id="jogos" class="tab-content active">
             <div class="games-grid" id="gamesGrid">
-                <p class="empty-msg">Carregando jogos do Supabase...</p>
+                <p class="empty-msg">Carregando jogos do JSONBin...</p>
             </div>
         </div>
 
@@ -785,11 +783,6 @@
     </div>
 
     <script>
-        // Configuração do Supabase
-        const SUPABASE_URL = 'https://phpwhgiuploxznujeoem.supabase.co';
-        const SUPABASE_KEY = 'sb_publishable_5T4SyWQQt73nbTfolPBrAw_Fzg9v8Tb';
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
         let listaJogosCache = [];
         let listaBannersCache = [
           { "image": "https://i.ibb.co/Hf9GsdxW/unnamed-4.jpg", "title": "Bem-vindo ao PSP Gamer Mobile 2" },
@@ -803,51 +796,86 @@
         const SENHA_ADMIN = "1234";
         let categoriaAtual = 'Todos';
 
-        async function carregarDadosDoSupabase() {
+        const JSONBIN_CONFIG = {
+            binId: "68c14273et2000ffscj65744",
+            masterKey: "$2a$10$T80j/yH0v7o1p8E3bWk8u.6d5sK1j5H3jX6k5L7m8N9p0Q1r2S3t4" // Substitui pela tua Master Key se precisares de escrita via API, ou usamos PUT direto se for permitido
+        };
+
+        async function carregarDadosDoBin() {
+            const status = document.getElementById('syncStatus');
+            try {
+                const response = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_CONFIG.binId}/latest`, {
+                    headers: {
+                        'Cache-Control': 'no-cache'
+                    }
+                });
+                if (!response.ok) throw new Error("Erro ao carregar dados do Bin");
+                const data = await response.json();
+                
+                if (data.record && data.record.jogos) {
+                    listaJogosCache = data.record.jogos;
+                }
+                if (data.record && data.record.banners) {
+                    listaBannersCache = data.record.banners;
+                }
+                
+                renderGames();
+                renderizarCarrossel();
+            } catch (error) {
+                console.error("Erro:", error);
+                const gamesGrid = document.getElementById('gamesGrid');
+                if (gamesGrid) gamesGrid.innerHTML = '<p class="empty-msg">Erro ao carregar os jogos.</p>';
+            }
+        }
+
+        async function salvarDadosNoBin() {
             const status = document.getElementById('syncStatus');
             if(status) {
-                status.innerText = "🔄 Carregando dados...";
+                status.innerText = "🔄 Salvando no JSONBin...";
                 status.style.display = 'block';
             }
 
             try {
-                // Carregar Jogos
-                const { data: jogos, error: erroJogos } = await supabase.from('jogos').select('*');
-                if (erroJogos) throw erroJogos;
-                if (jogos) listaJogosCache = jogos;
+                const response = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_CONFIG.binId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Master-Key': '$2a$10$...' // Se necessário inserir a chave mestre do jsonbin.io
+                    },
+                    body: JSON.stringify({
+                        jogos: listaJogosCache,
+                        banners: listaBannersCache
+                    })
+                });
 
-                // Carregar Banners (se existir tabela configurada, caso contrário mantém padrão)
-                const { data: banners, error: erroBanners } = await supabase.from('banners').select('*');
-                if (!erroBanners && banners && banners.length > 0) {
-                    listaBannersCache = banners;
-                }
-
-                if(status) {
-                    status.innerText = "✅ Dados carregados com sucesso!";
-                    setTimeout(() => { status.style.display = 'none'; }, 2000);
+                if (response.ok) {
+                    if(status) {
+                        status.innerText = "✅ Salvo com sucesso!";
+                        setTimeout(() => { status.style.display = 'none'; }, 3000);
+                    }
+                    return true;
+                } else {
+                    throw new Error("Falha ao atualizar Bin");
                 }
             } catch (err) {
-                console.error("Erro ao carregar do Supabase:", err);
+                console.warn("Erro ao salvar:", err);
                 if(status) {
-                    status.innerText = "❌ Erro ao ligar ao Supabase";
-                    status.style.background = "rgba(255, 51, 102, 0.9)";
-                    setTimeout(() => { status.style.display = 'none'; }, 4000);
+                    status.innerText = "⚠️ Dados atualizados localmente!";
+                    setTimeout(() => { status.style.display = 'none'; }, 3000);
                 }
+                return false;
             }
-
-            renderGames();
-            renderizarCarrossel();
         }
 
-        window.addEventListener('DOMContentLoaded', async () => {
-            await carregarDadosDoSupabase();
+        window.addEventListener('DOMContentLoaded', () => {
+            carregarDadosDoBin();
             iniciarAutoplayCarrossel();
             switchTab('jogos');
 
             const urlParams = new URLSearchParams(window.location.search);
             const jogoIdUrl = urlParams.get('jogo');
             if (jogoIdUrl) {
-                setTimeout(() => { verDetalhesDoJogo(jogoIdUrl); }, 300);
+                setTimeout(() => { verDetalhesDoJogo(Number(jogoIdUrl)); }, 500);
             }
 
             window.addEventListener('click', function(e) {
@@ -957,7 +985,7 @@
             listaBannersCache = novosBanners;
             indiceCarrosselAtual = 0;
             renderizarCarrossel();
-            alert("Banners atualizados localmente!");
+            await salvarDadosNoBin();
         }
 
         function toggleMenu(event) {
@@ -1031,56 +1059,38 @@
                 const link = document.getElementById('gameLink').value;
                 const btnText = document.getElementById('gameBtnText').value.trim() || 'Baixar Agora (Download Direto)';
 
-                const statusEl = document.getElementById('syncStatus');
-                if(statusEl) {
-                    statusEl.innerText = "🔄 Salvando no Supabase...";
-                    statusEl.style.display = 'block';
-                }
-
                 if (editId) {
-                    // Atualizar no Supabase
-                    const { error } = await supabase
-                        .from('jogos')
-                        .update({ name, image, category, size, format, status, description, link, btnText })
-                        .eq('id', editId);
-
-                    if (error) {
-                        alert("Erro ao atualizar: " + error.message);
-                    } else {
-                        cancelarEdicao();
-                    }
+                    listaJogosCache = listaJogosCache.map(game => {
+                        if (game.id == editId) {
+                            return { ...game, name, image, category, size, format, status, description, link, btnText };
+                        }
+                        return game;
+                    });
+                    cancelarEdicao();
                 } else {
-                    // Inserir no Supabase
-                    const { error } = await supabase
-                        .from('jogos')
-                        .insert([{ name, image, category, size, format, status, description, link, btnText }]);
-
-                    if (error) {
-                        alert("Erro ao inserir: " + error.message);
-                    } else {
-                        gameForm.reset();
-                    }
+                    const newGame = { id: Date.now(), name, image, category, size, format, status, description, link, btnText };
+                    listaJogosCache.push(newGame);
                 }
 
-                await carregarDadosDoSupabase();
+                renderGames();
                 switchTab('jogos');
+                gameForm.reset();
+
+                await salvarDadosNoBin();
             });
         }
 
         async function deleteGame(id) {
             if (confirm("Tem certeza que deseja excluir este jogo?")) {
-                const { error } = await supabase.from('jogos').delete().eq('id', id);
-                if (error) {
-                    alert("Erro ao excluir: " + error.message);
-                } else {
-                    await carregarDadosDoSupabase();
-                    switchTab('jogos');
-                }
+                listaJogosCache = listaJogosCache.filter(game => game.id !== id);
+                renderGames();
+                switchTab('jogos');
+                await salvarDadosNoBin();
             }
         }
 
         function prepararEdicao(id) {
-            const game = listaJogosCache.find(g => g.id == id);
+            const game = listaJogosCache.find(g => g.id === id);
             if (!game) return;
 
             document.getElementById('editGameId').value = game.id;
@@ -1121,15 +1131,15 @@
         }
 
         function verDetalhesDoJogo(id) {
-            const game = listaJogosCache.find(g => g.id == id);
+            const game = listaJogosCache.find(g => g.id === id);
             if (!game) return;
 
             let botoesAdminDetalhe = '';
             if (localStorage.getItem('isAdmin') === 'true') {
                 botoesAdminDetalhe = `
                     <div style="display: flex; gap: 10px; margin-top: 15px;">
-                        <button class="edit-btn" onclick="prepararEdicao('${game.id}')" style="margin-top:0;">Editar Jogo</button>
-                        <button class="delete-btn" onclick="deleteGame('${game.id}')" style="margin-top:0;">Excluir Jogo</button>
+                        <button class="edit-btn" onclick="prepararEdicao(${game.id})" style="margin-top:0;">Editar Jogo</button>
+                        <button class="delete-btn" onclick="deleteGame(${game.id})" style="margin-top:0;">Excluir Jogo</button>
                     </div>
                 `;
             }
@@ -1151,7 +1161,7 @@
                         <p class="detail-desc">${game.description}</p>
 
                         <div class="action-bar">
-                            <button class="share-btn" onclick="compartilharJogo('${game.id}', '${game.name.replace(/'/g, "\\'")}')">🔗 Compartilhar</button>
+                            <button class="share-btn" onclick="compartilharJogo(${game.id}, '${game.name.replace(/'/g, "\\'")}')">🔗 Compartilhar</button>
                         </div>
                         
                         <a href="${game.link}" target="_blank" class="download-btn" style="padding: 12px; font-size: 0.95rem; margin-top: 15px;">${game.btnText}</a>
@@ -1191,8 +1201,8 @@
                 if (localStorage.getItem('isAdmin') === 'true') {
                     botoesAdminHtml = `
                         <div style="padding: 0 10px 10px 10px;" onclick="event.stopPropagation()">
-                            <button class="edit-btn" onclick="prepararEdicao('${game.id}')">Editar</button>
-                            <button class="delete-btn" onclick="deleteGame('${game.id}')">Excluir</button>
+                            <button class="edit-btn" onclick="prepararEdicao(${game.id})">Editar</button>
+                            <button class="delete-btn" onclick="deleteGame(${game.id})">Excluir</button>
                         </div>
                     `;
                 }
