@@ -660,7 +660,7 @@
 </head>
 <body>
 
-    <div id="syncStatus">Sincronizando com o Servidor Node.js...</div>
+    <div id="syncStatus">Sincronizando com o GitHub...</div>
 
     <div id="customModalOverlay" class="custom-modal-overlay">
         <div class="custom-modal">
@@ -708,7 +708,7 @@
             <div class="form-card">
                 <h2>Gerenciar Banners do Carrossel (Máx. 4)</h2>
                 <div id="carouselFormList" style="margin-bottom: 15px;"></div>
-                <button type="button" onclick="salvarBannersCarrossel()" style="background: linear-gradient(135deg, var(--accent-cyan), #0099ff); color: #0b0b0f; margin-bottom: 25px;">Salvar Banners</button>
+                <button type="button" onclick="salvarBannersCarrossel()" style="background: linear-gradient(135deg, var(--accent-cyan), #0099ff); color: #0b0b0f; margin-bottom: 25px;">Salvar Banners no GitHub</button>
 
                 <h2 id="formTitle">Publicar Novo Jogo</h2>
                 <form id="gameForm">
@@ -768,7 +768,7 @@
 
         <div id="jogos" class="tab-content active">
             <div class="games-grid" id="gamesGrid">
-                <p class="empty-msg">Carregando jogos do servidor...</p>
+                <p class="empty-msg">Carregando jogos do GitHub...</p>
             </div>
         </div>
 
@@ -783,85 +783,238 @@
     </div>
 
     <script>
-        let listaJogosCache = [];
-        let listaBannersCache = [];
+        // Lista padrão blindada com todos os 11 jogos + suporte a atualizações
+        let listaJogosCache = [
+          {
+            "id": 1790937103530,
+            "name": "God of War: Chains of Olympus",
+            "image": "https://i.ibb.co/4nhr0dZz/unnamed.jpg",
+            "category": "PSP",
+            "size": "1.20GB",
+            "format": "ISO",
+            "status": "Grátis",
+            "description": "Luta, Ação e aventura",
+            "link": "https://archive.org/download/god-of-war-chains-of-olympus-usa/God%20of%20War%20-%20Chains%20of%20Olympus%20%28USA%29.zip",
+            "btnText": "Baixar Agora (Download Direto)"
+          },
+          {
+            "id": 1790954010898,
+            "name": "God of War: Ghost of Sparta",
+            "image": "https://i.ibb.co/TxBqvzhs/unnamed-1.jpg",
+            "category": "PSP",
+            "size": "1.75GB",
+            "format": "ISO",
+            "status": "Grátis",
+            "description": "Luta, Ação",
+            "link": "https://archive.org/download/god-of-war-ghost-of-sparta-usa-en-fr-es/God%20of%20War%20-%20Ghost%20of%20Sparta%20%28USA%29%20%28En%2CFr%2C%2CEs%29.iso",
+            "btnText": "Baixar Agora (Download Direto)"
+          },
+          {
+            "id": 1790954322384,
+            "name": "Grand Theft Auto: Liberty City Stories",
+            "image": "https://i.ibb.co/Cp1mQ9zx/unnamed-2.jpg",
+            "category": "PSP",
+            "size": "1.26GB",
+            "format": "ISO",
+            "status": "Grátis",
+            "description": "Luta, Ação",
+            "link": "https://archive.org/download/GrandTheftAutoLibertyCityStoriesUSAEnFrDeEsItv3.00/Grand%20Theft%20Auto%20-%20Liberty%20City%20Stories%20%28USA%29%20%28En%2CFr%2CDe%2CEs%2CIt%29%20%28v3.00%29.iso",
+            "btnText": "Baixar Agora (Download Direto)"
+          },
+          {
+            "id": 1790954983808,
+            "name": "Grand Theft Auto: Vice City Stories",
+            "image": "https://i.ibb.co/sJjVVbZc/unnamed-3.jpg",
+            "category": "PSP",
+            "size": "1.70GB",
+            "format": "ISO",
+            "status": "Grátis",
+            "description": "Aventura e Ação RPG",
+            "link": "https://archive.org/download/grand-theft-auto-vice-city-stories-usa/Grand%20Theft%20Auto%20-%20Vice%20City%20Stories%20%28USA%29.iso",
+            "btnText": "Baixar Agora (Download Direto)"
+          },
+          {
+            "id": 1790956761561,
+            "name": "Naruto: Ultimate Ninja 3",
+            "image": "https://i.ibb.co/xVC8GL6/unnamed-4.jpg",
+            "category": "PSP",
+            "size": "1.21GB",
+            "format": "ZIP",
+            "status": "Grátis",
+            "description": "Luta",
+            "link": "https://archive.org/download/naruto-shippuden-ultimate-ninja-heroes-3-usa_202601/Naruto%20Shippuden%20-%20Ultimate%20Ninja%20Heroes%203%20%28USA%29.zip",
+            "btnText": "Baixar Agora (Download Direto)"
+          },
+          {
+            "id": 1790956999349,
+            "name": "Bleach: Heat the Soul 7",
+            "image": "https://i.ibb.co/DfRP19jH/unnamed-5.jpg",
+            "category": "PSP",
+            "size": "424.89MB",
+            "format": "ZIP",
+            "status": "Grátis",
+            "description": "Luta",
+            "link": "https://archive.org/download/bleach-heat-the-soul-7/Bleach%20-%20Heat%20the%20Soul%207%20%28Asia%29.zip",
+            "btnText": "Baixar Agora (Download Direto)"
+          },
+          {
+            "id": 1790961002839,
+            "name": "Def jam: Fight for NY-The Takeover",
+            "image": "https://i.ibb.co/yBFQHRxp/unnamed-6.jpg",
+            "category": "PSP",
+            "size": "502.20MB",
+            "format": "ZIP",
+            "status": "Grátis",
+            "description": "Luta",
+            "link": "https://archive.org/download/playstation-portable-rom-def-jam-fight-for-ny-the-takeover/Def%20Jam%20-%20Fight%20for%20NY%20-%20The%20Takeover%20%28USA%29%20%28v1.01%29.zip",
+            "btnText": "Baixar Agora (Download Direto)"
+          },
+          {
+            "id": 1790961425208,
+            "name": "UFC: Undisputed 2010",
+            "image": "https://i.ibb.co/vxTRHhHp/unnamed-7.jpg",
+            "category": "PSP",
+            "size": "1.43GB",
+            "format": "ZIP",
+            "status": "Grátis",
+            "description": "Luta",
+            "link": "https://archive.org/download/ufc-2010-undisputed-usa/UFC%202010%20Undisputed%20%28USA%29.zip",
+            "btnText": "Baixar Agora (Download Direto)"
+          },
+          {
+            "id": 1790963121413,
+            "name": "Grand Theft: Auto Sanandreas",
+            "image": "https://i.ibb.co/Rp9gRCt1/unnamed-8.jpg",
+            "category": "APK",
+            "size": "2.62GB",
+            "format": "APK",
+            "status": "Grátis",
+            "description": "RPG",
+            "link": "https://archive.org/download/gta-sa-5play/gta-sa-2.11.277-mod-menu-5play.apk",
+            "btnText": "Baixar Agora (Download Direto)"
+          },
+          {
+            "id": 1790963352828,
+            "name": "Tekken: Dark Resurrection",
+            "image": "https://i.ibb.co/hFZ6wpMd/unnamed-9.jpg",
+            "category": "PSP",
+            "size": "1.75GB",
+            "format": "ISO",
+            "status": "Grátis",
+            "description": "Luta",
+            "link": "https://archive.org/download/tekken-dark-resurrection-usa-psp_202603_ver2/a-tekken.iso",
+            "btnText": "Baixar Agora (Download Direto)"
+          },
+          {
+            "id": 1790963815728,
+            "name": "Red Dead Redemption",
+            "image": "https://i.ibb.co/JjnRPKMK/58b6e9bc7801b5a60410a7f75ec6b890.jpg",
+            "category": "APK",
+            "size": "2.89GB",
+            "format": "APK",
+            "status": "Grátis",
+            "description": "RPG mundo aberto",
+            "link": "https://files.an1.co/red-dead-redemption-mods_1.58.63226194-an1.com.apk",
+            "btnText": "Baixar Agora (Download Direto)"
+          }
+        ];
+
+        let listaBannersCache = [
+          { "image": "https://i.ibb.co/Hf9GsdxW/unnamed-4.jpg", "title": "Bem-vindo ao PSP Gamer Mobile 2" },
+          { "image": "https://i.ibb.co/TxBqvzhs/unnamed-1.jpg", "title": "Novos Jogos Adicionados Semanalmente" },
+          { "image": "https://i.ibb.co/N6n6FHhs/unnamed-8.jpg", "title": "Baixe com Links Diretos e Seguros" },
+          { "image": "https://i.ibb.co/whzq0NxW/unnamed-5.jpg", "title": "Os melhores jogos so aqui" }
+        ];
 
         let indiceCarrosselAtual = 0;
         let intervaloCarrossel = null;
         const SENHA_ADMIN = "1234";
         let categoriaAtual = 'Todos';
 
-        // 🔗 COLOQUE AQUI O LINK DO SEU SERVIDOR NODE.JS (Ex: http://localhost:3000 ou sua URL de hospedagem)
-        const SERVER_URL = "http://localhost:3000";
+        const GITHUB_CONFIG = {
+            token: "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",
+            owner: "Rodriguesxavierfrancisco145",
+            repo: "site-jogos",
+            path: "index.html"
+        };
 
-        async function carregarDadosDoServidor() {
-            try {
-                const response = await fetch(`${SERVER_URL}/api/dados`, {
-                    headers: { 'Cache-Control': 'no-cache' }
-                });
-                if (!response.ok) throw new Error("Erro ao carregar dados do servidor");
-                const data = await response.json();
-                
-                if (data.jogos) listaJogosCache = data.jogos;
-                if (data.banners) listaBannersCache = data.banners;
-                
-                renderGames();
-                renderizarCarrossel();
-            } catch (error) {
-                console.error("Erro:", error);
-                const gamesGrid = document.getElementById('gamesGrid');
-                if (gamesGrid) gamesGrid.innerHTML = '<p class="empty-msg">Erro ao conectar com o servidor Node.js.</p>';
+        function mostrarStatusSync(texto, cor = "rgba(0, 255, 136, 0.9)") {
+            const status = document.getElementById('syncStatus');
+            if(status) {
+                status.innerText = texto;
+                status.style.background = cor;
+                status.style.display = 'block';
+                setTimeout(() => { status.style.display = 'none'; }, 4000);
             }
         }
 
-        async function salvarDadosNoServidor() {
-            const status = document.getElementById('syncStatus');
-            if(status) {
-                status.innerText = "🔄 Salvando no servidor...";
-                status.style.display = 'block';
-            }
-
+        async function sincronizarComGitHubForcado() {
+            mostrarStatusSync("Forçando salvamento no GitHub...");
             try {
-                const response = await fetch(`${SERVER_URL}/api/salvar`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                const url = `https://api.github.com/repos/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/contents/${GITHUB_CONFIG.path}`;
+                
+                const getResp = await fetch(url, {
+                    headers: { 'Authorization': `token ${GITHUB_CONFIG.token}` }
+                });
+                
+                if (!getResp.ok) {
+                    mostrarStatusSync("Erro ao conectar no GitHub!", "rgba(255, 51, 102, 0.9)");
+                    return false;
+                }
+                
+                const fileData = await getResp.json();
+                const sha = fileData.sha;
+
+                let htmlAtual = document.documentElement.outerHTML;
+
+                htmlAtual = htmlAtual.replace(
+                    /let listaJogosCache\s*=\s*\[[\s\S]*?\];/, 
+                    "let listaJogosCache = " + JSON.stringify(listaJogosCache, null, 2) + ";"
+                );
+
+                htmlAtual = htmlAtual.replace(
+                    /let listaBannersCache\s*=\s*\[[\s\S]*?\];/, 
+                    "let listaBannersCache = " + JSON.stringify(listaBannersCache, null, 2) + ";"
+                );
+
+                const contentBase64 = btoa(unescape(encodeURIComponent(htmlAtual)));
+
+                const putResp = await fetch(url, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `token ${GITHUB_CONFIG.token}`,
+                        'Content-Type': 'application/json',
+                    },
                     body: JSON.stringify({
-                        jogos: listaJogosCache,
-                        banners: listaBannersCache
+                        message: 'Forçando atualização de jogos e banners no site',
+                        content: contentBase64,
+                        sha: sha
                     })
                 });
 
-                if (response.ok) {
-                    if(status) {
-                        status.innerText = "✅ Atualizado em tempo real!";
-                        setTimeout(() => { status.style.display = 'none'; }, 3000);
-                    }
+                if (putResp.ok) {
+                    mostrarStatusSync("Atualizado e salvo no GitHub com sucesso!");
                     return true;
                 } else {
-                    throw new Error("Falha ao salvar no servidor");
+                    mostrarStatusSync("Falha ao salvar no GitHub.", "rgba(255, 51, 102, 0.9)");
+                    return false;
                 }
             } catch (err) {
-                console.warn("Erro ao salvar:", err);
-                if(status) {
-                    status.innerText = "❌ Erro ao sincronizar com o servidor!";
-                    setTimeout(() => { status.style.display = 'none'; }, 3000);
-                }
+                mostrarStatusSync("Erro de rede ao sincronizar.", "rgba(255, 51, 102, 0.9)");
                 return false;
             }
         }
 
         window.addEventListener('DOMContentLoaded', () => {
-            carregarDadosDoServidor();
-            // Atualiza os jogos automaticamente a cada 5 segundos para todo mundo ver na hora
-            setInterval(carregarDadosDoServidor, 5000);
-
+            renderGames();
+            renderizarCarrossel();
             iniciarAutoplayCarrossel();
             switchTab('jogos');
 
             const urlParams = new URLSearchParams(window.location.search);
             const jogoIdUrl = urlParams.get('jogo');
             if (jogoIdUrl) {
-                setTimeout(() => { verDetalhesDoJogo(Number(jogoIdUrl)); }, 500);
+                setTimeout(() => { verDetalhesDoJogo(Number(jogoIdUrl)); }, 300);
             }
 
             window.addEventListener('click', function(e) {
@@ -876,7 +1029,7 @@
             const track = document.getElementById('carouselTrack');
             const indicators = document.getElementById('carouselIndicators');
             const container = document.getElementById('carouselContainer');
-            if (!track || !indicators || !container || listaBannersCache.length === 0) return;
+            if (!track || !indicators || !container) return;
 
             track.innerHTML = '';
             indicators.innerHTML = '';
@@ -971,7 +1124,7 @@
             listaBannersCache = novosBanners;
             indiceCarrosselAtual = 0;
             renderizarCarrossel();
-            await salvarDadosNoServidor();
+            await sincronizarComGitHubForcado();
         }
 
         function toggleMenu(event) {
@@ -1062,7 +1215,8 @@
                 switchTab('jogos');
                 gameForm.reset();
 
-                await salvarDadosNoServidor();
+                // Força o salvamento direto no GitHub
+                await sincronizarComGitHubForcado();
             });
         }
 
@@ -1071,7 +1225,7 @@
                 listaJogosCache = listaJogosCache.filter(game => game.id !== id);
                 renderGames();
                 switchTab('jogos');
-                await salvarDadosNoServidor();
+                await sincronizarComGitHubForcado();
             }
         }
 
