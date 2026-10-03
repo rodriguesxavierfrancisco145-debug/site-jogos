@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PSP GAMER MOBILE 2</title>
+    <!-- Supabase JS Client UMD -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         :root {
             --bg-color: #0b0b0f;
@@ -660,7 +662,7 @@
 </head>
 <body>
 
-    <div id="syncStatus">Sincronizando com o GitHub...</div>
+    <div id="syncStatus">Sincronizando com o Supabase...</div>
 
     <div id="customModalOverlay" class="custom-modal-overlay">
         <div class="custom-modal">
@@ -708,7 +710,7 @@
             <div class="form-card">
                 <h2>Gerenciar Banners do Carrossel (Máx. 4)</h2>
                 <div id="carouselFormList" style="margin-bottom: 15px;"></div>
-                <button type="button" onclick="salvarBannersCarrossel()" style="background: linear-gradient(135deg, var(--accent-cyan), #0099ff); color: #0b0b0f; margin-bottom: 25px;">Salvar Banners no GitHub</button>
+                <button type="button" onclick="salvarBannersCarrossel()" style="background: linear-gradient(135deg, var(--accent-cyan), #0099ff); color: #0b0b0f; margin-bottom: 25px;">Salvar Banners no Supabase</button>
 
                 <h2 id="formTitle">Publicar Novo Jogo</h2>
                 <form id="gameForm">
@@ -768,7 +770,7 @@
 
         <div id="jogos" class="tab-content active">
             <div class="games-grid" id="gamesGrid">
-                <p class="empty-msg">Carregando jogos do GitHub...</p>
+                <p class="empty-msg">Carregando jogos do Supabase...</p>
             </div>
         </div>
 
@@ -783,141 +785,12 @@
     </div>
 
     <script>
-        let listaJogosCache = [
-          {
-            "id": 1790937103530,
-            "name": "God of War: Chains of Olympus",
-            "image": "https://i.ibb.co/4nhr0dZz/unnamed.jpg",
-            "category": "PSP",
-            "size": "1.20GB",
-            "format": "ISO",
-            "status": "Grátis",
-            "description": "Luta, Ação e aventura",
-            "link": "https://archive.org/download/god-of-war-chains-of-olympus-usa/God%20of%20War%20-%20Chains%20of%20Olympus%20%28USA%29.zip",
-            "btnText": "Baixar Agora (Download Direto)"
-          },
-          {
-            "id": 1790954010898,
-            "name": "God of War: Ghost of Sparta",
-            "image": "https://i.ibb.co/TxBqvzhs/unnamed-1.jpg",
-            "category": "PSP",
-            "size": "1.75GB",
-            "format": "ISO",
-            "status": "Grátis",
-            "description": "Luta, Ação",
-            "link": "https://archive.org/download/god-of-war-ghost-of-sparta-usa-en-fr-es/God%20of%20War%20-%20Ghost%20of%20Sparta%20%28USA%29%20%28En%2CFr%2C%2CEs%29.iso",
-            "btnText": "Baixar Agora (Download Direto)"
-          },
-          {
-            "id": 1790954322384,
-            "name": "Grand Theft Auto: Liberty City Stories",
-            "image": "https://i.ibb.co/Cp1mQ9zx/unnamed-2.jpg",
-            "category": "PSP",
-            "size": "1.26GB",
-            "format": "ISO",
-            "status": "Grátis",
-            "description": "Luta, Ação",
-            "link": "https://archive.org/download/GrandTheftAutoLibertyCityStoriesUSAEnFrDeEsItv3.00/Grand%20Theft%20Auto%20-%20Liberty%20City%20Stories%20%28USA%29%20%28En%2CFr%2CDe%2CEs%2CIt%29%20%28v3.00%29.iso",
-            "btnText": "Baixar Agora (Download Direto)"
-          },
-          {
-            "id": 1790954983808,
-            "name": "Grand Theft Auto: Vice City Stories",
-            "image": "https://i.ibb.co/sJjVVbZc/unnamed-3.jpg",
-            "category": "PSP",
-            "size": "1.70GB",
-            "format": "ISO",
-            "status": "Grátis",
-            "description": "Aventura e Ação RPG",
-            "link": "https://archive.org/download/grand-theft-auto-vice-city-stories-usa/Grand%20Theft%20Auto%20-%20Vice%20City%20Stories%20%28USA%29.iso",
-            "btnText": "Baixar Agora (Download Direto)"
-          },
-          {
-            "id": 1790956761561,
-            "name": "Naruto: Ultimate Ninja 3",
-            "image": "https://i.ibb.co/xVC8GL6/unnamed-4.jpg",
-            "category": "PSP",
-            "size": "1.21GB",
-            "format": "ZIP",
-            "status": "Grátis",
-            "description": "Luta",
-            "link": "https://archive.org/download/naruto-shippuden-ultimate-ninja-heroes-3-usa_202601/Naruto%20Shippuden%20-%20Ultimate%20Ninja%20Heroes%203%20%28USA%29.zip",
-            "btnText": "Baixar Agora (Download Direto)"
-          },
-          {
-            "id": 1790956999349,
-            "name": "Bleach: Heat the Soul 7",
-            "image": "https://i.ibb.co/DfRP19jH/unnamed-5.jpg",
-            "category": "PSP",
-            "size": "424.89MB",
-            "format": "ZIP",
-            "status": "Grátis",
-            "description": "Luta",
-            "link": "https://archive.org/download/bleach-heat-the-soul-7/Bleach%20-%20Heat%20the%20Soul%207%20%28Asia%29.zip",
-            "btnText": "Baixar Agora (Download Direto)"
-          },
-          {
-            "id": 1790961002839,
-            "name": "Def jam: Fight for NY-The Takeover",
-            "image": "https://i.ibb.co/yBFQHRxp/unnamed-6.jpg",
-            "category": "PSP",
-            "size": "502.20MB",
-            "format": "ZIP",
-            "status": "Grátis",
-            "description": "Luta",
-            "link": "https://archive.org/download/playstation-portable-rom-def-jam-fight-for-ny-the-takeover/Def%20Jam%20-%20Fight%20for%20NY%20-%20The%20Takeover%20%28USA%29%20%28v1.01%29.zip",
-            "btnText": "Baixar Agora (Download Direto)"
-          },
-          {
-            "id": 1790961425208,
-            "name": "UFC: Undisputed 2010",
-            "image": "https://i.ibb.co/vxTRHhHp/unnamed-7.jpg",
-            "category": "PSP",
-            "size": "1.43GB",
-            "format": "ZIP",
-            "status": "Grátis",
-            "description": "Luta",
-            "link": "https://archive.org/download/ufc-2010-undisputed-usa/UFC%202010%20Undisputed%20%28USA%29.zip",
-            "btnText": "Baixar Agora (Download Direto)"
-          },
-          {
-            "id": 1790963121413,
-            "name": "Grand Theft: Auto Sanandreas",
-            "image": "https://i.ibb.co/Rp9gRCt1/unnamed-8.jpg",
-            "category": "APK",
-            "size": "2.62GB",
-            "format": "APK",
-            "status": "Grátis",
-            "description": "RPG",
-            "link": "https://archive.org/download/gta-sa-5play/gta-sa-2.11.277-mod-menu-5play.apk",
-            "btnText": "Baixar Agora (Download Direto)"
-          },
-          {
-            "id": 1790963352828,
-            "name": "Tekken: Dark Resurrection",
-            "image": "https://i.ibb.co/hFZ6wpMd/unnamed-9.jpg",
-            "category": "PSP",
-            "size": "1.75GB",
-            "format": "ISO",
-            "status": "Grátis",
-            "description": "Luta",
-            "link": "https://archive.org/download/tekken-dark-resurrection-usa-psp_202603_ver2/a-tekken.iso",
-            "btnText": "Baixar Agora (Download Direto)"
-          },
-          {
-            "id": 1790963815728,
-            "name": "Red Dead Redemption",
-            "image": "https://i.ibb.co/JjnRPKMK/58b6e9bc7801b5a60410a7f75ec6b890.jpg",
-            "category": "APK",
-            "size": "2.89GB",
-            "format": "APK",
-            "status": "Grátis",
-            "description": "RPG mundo aberto",
-            "link": "https://files.an1.co/red-dead-redemption-mods_1.58.63226194-an1.com.apk",
-            "btnText": "Baixar Agora (Download Direto)"
-          }
-        ];
+        // Configuração do Supabase
+        const SUPABASE_URL = 'https://phpwhgiuploxznujeoem.supabase.co';
+        const SUPABASE_KEY = 'sb_publishable_5T4SyWQQt73nbTfolPBrAw_Fzg9v8Tb';
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
+        let listaJogosCache = [];
         let listaBannersCache = [
           { "image": "https://i.ibb.co/Hf9GsdxW/unnamed-4.jpg", "title": "Bem-vindo ao PSP Gamer Mobile 2" },
           { "image": "https://i.ibb.co/TxBqvzhs/unnamed-1.jpg", "title": "Novos Jogos Adicionados Semanalmente" },
@@ -930,102 +803,51 @@
         const SENHA_ADMIN = "1234";
         let categoriaAtual = 'Todos';
 
-        const GITHUB_CONFIG = {
-            token: "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",
-            owner: "Rodriguesxavierfrancisco145",
-            repo: "site-jogos",
-            path: "index.html"
-        };
-
-        async function sincronizarComGitHubForcado(tentativas = 3) {
+        async function carregarDadosDoSupabase() {
             const status = document.getElementById('syncStatus');
             if(status) {
-                status.innerText = "🔄 Forçando salvamento no GitHub...";
-                status.style.background = "rgba(0, 240, 255, 0.9)";
+                status.innerText = "🔄 Carregando dados...";
                 status.style.display = 'block';
             }
 
-            const url = `https://api.github.com/repos/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/contents/${GITHUB_CONFIG.path}`;
+            try {
+                // Carregar Jogos
+                const { data: jogos, error: erroJogos } = await supabase.from('jogos').select('*');
+                if (erroJogos) throw erroJogos;
+                if (jogos) listaJogosCache = jogos;
 
-            for (let tentativa = 1; tentativa <= tentativas; tentativa++) {
-                try {
-                    const getResp = await fetch(url, {
-                        headers: { 
-                            'Authorization': `token ${GITHUB_CONFIG.token}`,
-                            'Cache-Control': 'no-cache'
-                        }
-                    });
-                    
-                    if (!getResp.ok) {
-                        throw new Error(`Erro ao buscar arquivo (Status: ${getResp.status})`);
-                    }
-                    
-                    const fileData = await getResp.json();
-                    const sha = fileData.sha;
+                // Carregar Banners (se existir tabela configurada, caso contrário mantém padrão)
+                const { data: banners, error: erroBanners } = await supabase.from('banners').select('*');
+                if (!erroBanners && banners && banners.length > 0) {
+                    listaBannersCache = banners;
+                }
 
-                    let htmlAtual = document.documentElement.outerHTML;
-
-                    htmlAtual = htmlAtual.replace(
-                        /let listaJogosCache\s*=\s*\[[\s\S]*?\];/, 
-                        "let listaJogosCache = " + JSON.stringify(listaJogosCache, null, 2) + ";"
-                    );
-
-                    htmlAtual = htmlAtual.replace(
-                        /let listaBannersCache\s*=\s*\[[\s\S]*?\];/, 
-                        "let listaBannersCache = " + JSON.stringify(listaBannersCache, null, 2) + ";"
-                    );
-
-                    const contentBase64 = btoa(unescape(encodeURIComponent(htmlAtual)));
-
-                    const putResp = await fetch(url, {
-                        method: 'PUT',
-                        headers: {
-                            'Authorization': `token ${GITHUB_CONFIG.token}`,
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            message: `Atualização automática forçada - ${new Date().toLocaleString()}`,
-                            content: contentBase64,
-                            sha: sha
-                        })
-                    });
-
-                    if (putResp.ok) {
-                        if(status) {
-                            status.innerText = "✅ Salvo e sincronizado no GitHub com sucesso!";
-                            status.style.background = "rgba(0, 255, 136, 0.9)";
-                            setTimeout(() => { status.style.display = 'none'; }, 4000);
-                        }
-                        return true;
-                    } else {
-                        throw new Error(`Rejeitado pelo GitHub (Status: ${putResp.status})`);
-                    }
-
-                } catch (err) {
-                    console.warn(`Tentativa ${tentativa} falhou:`, err.message);
-                    if (tentativa === tentativas) {
-                        if(status) {
-                            status.innerText = "❌ Falha ao salvar no GitHub! Verifique sua conexão.";
-                            status.style.background = "rgba(255, 51, 102, 0.9)";
-                            setTimeout(() => { status.style.display = 'none'; }, 6000);
-                        }
-                        return false;
-                    }
-                    await new Promise(resolve => setTimeout(resolve, 2000));
+                if(status) {
+                    status.innerText = "✅ Dados carregados com sucesso!";
+                    setTimeout(() => { status.style.display = 'none'; }, 2000);
+                }
+            } catch (err) {
+                console.error("Erro ao carregar do Supabase:", err);
+                if(status) {
+                    status.innerText = "❌ Erro ao ligar ao Supabase";
+                    status.style.background = "rgba(255, 51, 102, 0.9)";
+                    setTimeout(() => { status.style.display = 'none'; }, 4000);
                 }
             }
-        }
 
-        window.addEventListener('DOMContentLoaded', () => {
             renderGames();
             renderizarCarrossel();
+        }
+
+        window.addEventListener('DOMContentLoaded', async () => {
+            await carregarDadosDoSupabase();
             iniciarAutoplayCarrossel();
             switchTab('jogos');
 
             const urlParams = new URLSearchParams(window.location.search);
             const jogoIdUrl = urlParams.get('jogo');
             if (jogoIdUrl) {
-                setTimeout(() => { verDetalhesDoJogo(Number(jogoIdUrl)); }, 300);
+                setTimeout(() => { verDetalhesDoJogo(jogoIdUrl); }, 300);
             }
 
             window.addEventListener('click', function(e) {
@@ -1135,7 +957,7 @@
             listaBannersCache = novosBanners;
             indiceCarrosselAtual = 0;
             renderizarCarrossel();
-            await sincronizarComGitHubForcado();
+            alert("Banners atualizados localmente!");
         }
 
         function toggleMenu(event) {
@@ -1209,38 +1031,56 @@
                 const link = document.getElementById('gameLink').value;
                 const btnText = document.getElementById('gameBtnText').value.trim() || 'Baixar Agora (Download Direto)';
 
-                if (editId) {
-                    listaJogosCache = listaJogosCache.map(game => {
-                        if (game.id == editId) {
-                            return { ...game, name, image, category, size, format, status, description, link, btnText };
-                        }
-                        return game;
-                    });
-                    cancelarEdicao();
-                } else {
-                    const newGame = { id: Date.now(), name, image, category, size, format, status, description, link, btnText };
-                    listaJogosCache.push(newGame);
+                const statusEl = document.getElementById('syncStatus');
+                if(statusEl) {
+                    statusEl.innerText = "🔄 Salvando no Supabase...";
+                    statusEl.style.display = 'block';
                 }
 
-                renderGames();
-                switchTab('jogos');
-                gameForm.reset();
+                if (editId) {
+                    // Atualizar no Supabase
+                    const { error } = await supabase
+                        .from('jogos')
+                        .update({ name, image, category, size, format, status, description, link, btnText })
+                        .eq('id', editId);
 
-                await sincronizarComGitHubForcado();
+                    if (error) {
+                        alert("Erro ao atualizar: " + error.message);
+                    } else {
+                        cancelarEdicao();
+                    }
+                } else {
+                    // Inserir no Supabase
+                    const { error } = await supabase
+                        .from('jogos')
+                        .insert([{ name, image, category, size, format, status, description, link, btnText }]);
+
+                    if (error) {
+                        alert("Erro ao inserir: " + error.message);
+                    } else {
+                        gameForm.reset();
+                    }
+                }
+
+                await carregarDadosDoSupabase();
+                switchTab('jogos');
             });
         }
 
         async function deleteGame(id) {
             if (confirm("Tem certeza que deseja excluir este jogo?")) {
-                listaJogosCache = listaJogosCache.filter(game => game.id !== id);
-                renderGames();
-                switchTab('jogos');
-                await sincronizarComGitHubForcado();
+                const { error } = await supabase.from('jogos').delete().eq('id', id);
+                if (error) {
+                    alert("Erro ao excluir: " + error.message);
+                } else {
+                    await carregarDadosDoSupabase();
+                    switchTab('jogos');
+                }
             }
         }
 
         function prepararEdicao(id) {
-            const game = listaJogosCache.find(g => g.id === id);
+            const game = listaJogosCache.find(g => g.id == id);
             if (!game) return;
 
             document.getElementById('editGameId').value = game.id;
@@ -1281,15 +1121,15 @@
         }
 
         function verDetalhesDoJogo(id) {
-            const game = listaJogosCache.find(g => g.id === id);
+            const game = listaJogosCache.find(g => g.id == id);
             if (!game) return;
 
             let botoesAdminDetalhe = '';
             if (localStorage.getItem('isAdmin') === 'true') {
                 botoesAdminDetalhe = `
                     <div style="display: flex; gap: 10px; margin-top: 15px;">
-                        <button class="edit-btn" onclick="prepararEdicao(${game.id})" style="margin-top:0;">Editar Jogo</button>
-                        <button class="delete-btn" onclick="deleteGame(${game.id})" style="margin-top:0;">Excluir Jogo</button>
+                        <button class="edit-btn" onclick="prepararEdicao('${game.id}')" style="margin-top:0;">Editar Jogo</button>
+                        <button class="delete-btn" onclick="deleteGame('${game.id}')" style="margin-top:0;">Excluir Jogo</button>
                     </div>
                 `;
             }
@@ -1311,7 +1151,7 @@
                         <p class="detail-desc">${game.description}</p>
 
                         <div class="action-bar">
-                            <button class="share-btn" onclick="compartilharJogo(${game.id}, '${game.name.replace(/'/g, "\\'")}')">🔗 Compartilhar</button>
+                            <button class="share-btn" onclick="compartilharJogo('${game.id}', '${game.name.replace(/'/g, "\\'")}')">🔗 Compartilhar</button>
                         </div>
                         
                         <a href="${game.link}" target="_blank" class="download-btn" style="padding: 12px; font-size: 0.95rem; margin-top: 15px;">${game.btnText}</a>
@@ -1351,8 +1191,8 @@
                 if (localStorage.getItem('isAdmin') === 'true') {
                     botoesAdminHtml = `
                         <div style="padding: 0 10px 10px 10px;" onclick="event.stopPropagation()">
-                            <button class="edit-btn" onclick="prepararEdicao(${game.id})">Editar</button>
-                            <button class="delete-btn" onclick="deleteGame(${game.id})">Excluir</button>
+                            <button class="edit-btn" onclick="prepararEdicao('${game.id}')">Editar</button>
+                            <button class="delete-btn" onclick="deleteGame('${game.id}')">Excluir</button>
                         </div>
                     `;
                 }
