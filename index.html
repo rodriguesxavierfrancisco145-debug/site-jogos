@@ -660,7 +660,7 @@
 </head>
 <body>
 
-    <div id="syncStatus">Sincronizando com o GitHub...</div>
+    <div id="syncStatus">Código gerado com sucesso!</div>
 
     <div id="customModalOverlay" class="custom-modal-overlay">
         <div class="custom-modal">
@@ -702,13 +702,20 @@
         <div id="inicio" class="tab-content">
             <header style="margin-bottom: 15px;">
                 <h1 id="panelTitle" style="font-size: 1.8rem; color: var(--accent-pink);">🔒 Painel Restrito</h1>
-                <p id="panelSub" style="font-size: 0.85rem; color: var(--text-muted);">Adicione jogos e altere o carrossel</p>
+                <p id="panelSub" style="font-size: 0.85rem; color: var(--text-muted);">Adicione jogos e gere o código manual</p>
             </header>
+
+            <div class="form-card" style="border: 2px solid var(--accent-cyan); background: #12121b;">
+                <h2 style="color: var(--accent-cyan);">📋 Copiar Código para o Seu Arquivo</h2>
+                <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 10px;">Copie este bloco abaixo e cole no seu código HTML sempre que alterar os jogos ou banners:</p>
+                <textarea id="codigoGeradoArea" rows="6" readonly style="width:100%; background:#050508; color:#00ff88; font-family:monospace; font-size:0.8rem; padding:10px; border-radius:8px; border:1px solid rgba(0,240,255,0.3); resize:none;"></textarea>
+                <button type="button" onclick="copiarCodigoPainel()" style="background: linear-gradient(135deg, var(--accent-cyan), #0099ff); color: #0b0b0f; margin-top: 10px;">Copiar Código Atualizado</button>
+            </div>
 
             <div class="form-card">
                 <h2>Gerenciar Banners do Carrossel (Máx. 4)</h2>
                 <div id="carouselFormList" style="margin-bottom: 15px;"></div>
-                <button type="button" onclick="salvarBannersCarrossel()" style="background: linear-gradient(135deg, var(--accent-cyan), #0099ff); color: #0b0b0f; margin-bottom: 25px;">Salvar Banners no GitHub</button>
+                <button type="button" onclick="salvarBannersCarrossel()" style="background: linear-gradient(135deg, var(--accent-cyan), #0099ff); color: #0b0b0f; margin-bottom: 25px;">Atualizar Banners</button>
 
                 <h2 id="formTitle">Publicar Novo Jogo</h2>
                 <form id="gameForm">
@@ -768,7 +775,7 @@
 
         <div id="jogos" class="tab-content active">
             <div class="games-grid" id="gamesGrid">
-                <p class="empty-msg">Carregando jogos do GitHub...</p>
+                <p class="empty-msg">Carregando jogos...</p>
             </div>
         </div>
 
@@ -931,13 +938,6 @@
         const SENHA_ADMIN = "1234";
         let categoriaAtual = 'Todos';
 
-        const GITHUB_CONFIG = {
-            token: "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",
-            owner: "Rodriguesxavierfrancisco145",
-            repo: "site-jogos",
-            path: "index.html"
-        };
-
         function mostrarStatusSync(texto, cor = "rgba(0, 255, 136, 0.9)") {
             const status = document.getElementById('syncStatus');
             if(status) {
@@ -948,92 +948,25 @@
             }
         }
 
-        async function verificarAtualizacoesGitHub() {
-            try {
-                const url = `https://api.github.com/repos/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/commits?path=${GITHUB_CONFIG.path}&per_page=1`;
-                const resp = await fetch(url);
-                if (resp.ok) {
-                    const commits = await resp.json();
-                    if (commits && commits.length > 0) {
-                        const ultimoCommitSha = commits[0].sha;
-                        const shaSalvo = localStorage.getItem('ultimoCommitSha');
-                        
-                        if (shaSalvo && shaSalvo !== ultimoCommitSha) {
-                            localStorage.setItem('ultimoCommitSha', ultimoCommitSha);
-                            window.location.reload(true);
-                            return;
-                        }
-                        localStorage.setItem('ultimoCommitSha', ultimoCommitSha);
-                    }
-                }
-            } catch(e) {
-                // Ignora falhas de rede na verificação em segundo plano para não atrapalhar o usuário
-            }
+        function atualizarCaixaCodigoGerado() {
+            const textarea = document.getElementById('codigoGeradoArea');
+            if (!textarea) return;
+
+            let codigoTexto = `let listaJogosCache = ` + JSON.stringify(listaJogosCache, null, 2) + `;\n\n`;
+            codigoTexto += `let listaBannersCache = ` + JSON.stringify(listaBannersCache, null, 2) + `;`;
+            
+            textarea.value = codigoTexto;
         }
 
-        async function sincronizarComGitHubForcado() {
-            mostrarStatusSync("Forçando salvamento no GitHub...");
-            try {
-                const url = `https://api.github.com/repos/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/contents/${GITHUB_CONFIG.path}`;
-                
-                const getResp = await fetch(url, {
-                    headers: { 'Authorization': `token ${GITHUB_CONFIG.token}` }
-                });
-                
-                if (!getResp.ok) {
-                    mostrarStatusSync("Erro ao conectar no GitHub!", "rgba(255, 51, 102, 0.9)");
-                    return false;
-                }
-                
-                const fileData = await getResp.json();
-                const sha = fileData.sha;
-
-                let htmlAtual = document.documentElement.outerHTML;
-
-                htmlAtual = htmlAtual.replace(
-                    /let listaJogosCache\s*=\s*\[[\s\S]*?\];/, 
-                    "let listaJogosCache = " + JSON.stringify(listaJogosCache, null, 2) + ";"
-                );
-
-                htmlAtual = htmlAtual.replace(
-                    /let listaBannersCache\s*=\s*\[[\s\S]*?\];/, 
-                    "let listaBannersCache = " + JSON.stringify(listaBannersCache, null, 2) + ";"
-                );
-
-                const contentBase64 = btoa(unescape(encodeURIComponent(htmlAtual)));
-
-                const putResp = await fetch(url, {
-                    method: 'PUT',
-                    headers: {
-                        'Authorization': `token ${GITHUB_CONFIG.token}`,
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        message: 'Forçando atualização de jogos e banners no site',
-                        content: contentBase64,
-                        sha: sha
-                    })
-                });
-
-                if (putResp.ok) {
-                    const respData = await putResp.json();
-                    if(respData.commit && respData.commit.sha) {
-                        localStorage.setItem('ultimoCommitSha', respData.commit.sha);
-                    }
-                    mostrarStatusSync("Atualizado e salvo no GitHub com sucesso!");
-                    return true;
-                } else {
-                    mostrarStatusSync("Falha ao salvar no GitHub.", "rgba(255, 51, 102, 0.9)");
-                    return false;
-                }
-            } catch (err) {
-                mostrarStatusSync("Erro de rede ao sincronizar.", "rgba(255, 51, 102, 0.9)");
-                return false;
-            }
+        function copiarCodigoPainel() {
+            const textarea = document.getElementById('codigoGeradoArea');
+            if (!textarea) return;
+            textarea.select();
+            navigator.clipboard.writeText(textarea.value);
+            mostrarStatusSync("Código copiado com sucesso! Cole no seu arquivo HTML.");
         }
 
         window.addEventListener('DOMContentLoaded', () => {
-            verificarAtualizacoesGitHub();
             renderGames();
             renderizarCarrossel();
             iniciarAutoplayCarrossel();
@@ -1133,7 +1066,7 @@
             }
         }
 
-        async function salvarBannersCarrossel() {
+        function salvarBannersCarrossel() {
             let novosBanners = [];
             for (let i = 0; i < 4; i++) {
                 const imgInput = document.getElementById(`bannerImg_${i}`);
@@ -1152,7 +1085,8 @@
             listaBannersCache = novosBanners;
             indiceCarrosselAtual = 0;
             renderizarCarrossel();
-            await sincronizarComGitHubForcado();
+            atualizarCaixaCodigoGerado();
+            mostrarStatusSync("Banners atualizados! Copie o código gerado acima.");
         }
 
         function toggleMenu(event) {
@@ -1175,6 +1109,7 @@
             if (localStorage.getItem('isAdmin') === 'true') {
                 switchTab('inicio');
                 renderizarInputsAdminBanners();
+                atualizarCaixaCodigoGerado();
                 return;
             }
             let senha = prompt("Digite a senha de administrador:");
@@ -1182,6 +1117,7 @@
                 localStorage.setItem('isAdmin', 'true');
                 switchTab('inicio');
                 renderizarInputsAdminBanners();
+                atualizarCaixaCodigoGerado();
                 renderGames();
                 alert("Painel liberado!");
             } else if (senha !== null) {
@@ -1212,7 +1148,7 @@
 
         const gameForm = document.getElementById('gameForm');
         if(gameForm) {
-            gameForm.addEventListener('submit', async function(e) {
+            gameForm.addEventListener('submit', function(e) {
                 e.preventDefault();
 
                 const editId = document.getElementById('editGameId').value;
@@ -1240,20 +1176,21 @@
                 }
 
                 renderGames();
-                switchTab('jogos');
+                switchTab('inicio');
+                atualizarCaixaCodigoGerado();
                 gameForm.reset();
 
-                // Força o salvamento direto no GitHub
-                await sincronizarComGitHubForcado();
+                mostrarStatusSync("Jogo salvo! Copie o código atualizado acima.");
             });
         }
 
-        async function deleteGame(id) {
+        function deleteGame(id) {
             if (confirm("Tem certeza que deseja excluir este jogo?")) {
                 listaJogosCache = listaJogosCache.filter(game => game.id !== id);
                 renderGames();
-                switchTab('jogos');
-                await sincronizarComGitHubForcado();
+                switchTab('inicio');
+                atualizarCaixaCodigoGerado();
+                mostrarStatusSync("Jogo excluído! Copie o código atualizado acima.");
             }
         }
 
@@ -1278,6 +1215,7 @@
 
             switchTab('inicio');
             renderizarInputsAdminBanners();
+            atualizarCaixaCodigoGerado();
         }
 
         function cancelarEdicao() {
