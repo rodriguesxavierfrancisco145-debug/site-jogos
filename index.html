@@ -680,6 +680,15 @@
             to { opacity: 1; transform: translateY(0) scale(1); }
         }
 
+        @keyframes slideOutFloat {
+            0% { opacity: 1; transform: translateY(0) scale(1) rotate(0deg); }
+            100% { opacity: 0; transform: translateY(50px) scale(0.7) rotate(15deg); }
+        }
+
+        #whatsappFloatingBanner.closing {
+            animation: slideOutFloat 0.4s cubic-bezier(0.6, -0.28, 0.735, 0.045) forwards;
+        }
+
         .wa-banner-content {
             display: flex;
             align-items: center;
@@ -1136,10 +1145,11 @@
             }
         }
 
-        // Funções da Mensagem Flutuante do WhatsApp a cada 20 segundos
+        // Funções da Mensagem Flutuante do WhatsApp com animação de saída insana
         function mostrarBannerWhatsapp() {
             const banner = document.getElementById('whatsappFloatingBanner');
             if (banner) {
+                banner.classList.remove('closing');
                 banner.style.display = 'block';
             }
         }
@@ -1147,14 +1157,20 @@
         function fecharBannerWhatsapp() {
             const banner = document.getElementById('whatsappFloatingBanner');
             if (banner) {
-                banner.style.display = 'none';
+                banner.classList.add('closing');
+                setTimeout(() => {
+                    banner.style.display = 'none';
+                    banner.classList.remove('closing');
+                }, 400); // tempo correspondente à animação
             }
         }
 
         function iniciarLoopWhatsappBanner() {
-            // Exibe a primeira vez após 20 segundos e repete a cada 20 segundos
             setInterval(() => {
-                mostrarBannerWhatsapp();
+                const banner = document.getElementById('whatsappFloatingBanner');
+                if (banner && banner.style.display !== 'block' && !banner.classList.contains('closing')) {
+                    mostrarBannerWhatsapp();
+                }
             }, 20000);
         }
 
@@ -1180,7 +1196,7 @@
             renderGames();
             renderizarCarrossel();
             iniciarAutoplayCarrossel();
-            iniciarLoopWhatsappBanner(); // Inicia o timer de 20 segundos do WhatsApp
+            iniciarLoopWhatsappBanner();
             switchTab('jogos');
 
             const urlParams = new URLSearchParams(window.location.search);
@@ -1546,4 +1562,4 @@
         }
     </script>
 </body>
-                    </html>
+</html>
