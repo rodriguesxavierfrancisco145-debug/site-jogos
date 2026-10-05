@@ -823,6 +823,7 @@
             <button class="cat-btn" onclick="filtrarCategoria('PS2', this)">PS2</button>
             <button class="cat-btn" onclick="filtrarCategoria('PC', this)">PC</button>
             <button class="cat-btn" onclick="filtrarCategoria('APK', this)">APK</button>
+            <button class="cat-btn" onclick="filtrarCategoria('PedirJogo', this)">Pedir Jogo</button>
         </div>
 
         <div id="inicio" class="tab-content">
@@ -902,6 +903,33 @@
         <div id="jogos" class="tab-content active">
             <div class="games-grid" id="gamesGrid">
                 <p class="empty-msg">Carregando jogos...</p>
+            </div>
+        </div>
+
+        <div id="pedirJogoTab" class="tab-content">
+            <div class="form-card">
+                <h2>🎮 Pedir um Jogo</h2>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 18px;">Preencha os campos abaixo com o jogo que você deseja. Ao clicar em "Pedir Jogo", você será direcionado para o nosso WhatsApp com a mensagem pronta!</p>
+                <form id="pedirJogoForm" onsubmit="enviarPedidoWhatsapp(event)">
+                    <div class="input-group">
+                        <label for="pedidoNome">Nome do Jogo:</label>
+                        <input type="text" id="pedidoNome" required placeholder="Ex: GTA San Andreas, Naruto...">
+                    </div>
+                    <div class="input-group">
+                        <label for="pedidoPlataforma">Plataforma:</label>
+                        <select id="pedidoPlataforma" style="width:100%;">
+                            <option value="PSP">PSP</option>
+                            <option value="PS2">PS2</option>
+                            <option value="PC">PC</option>
+                            <option value="APK">APK / Android</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label for="pedidoObs">Observações (Opcional):</label>
+                        <textarea id="pedidoObs" rows="3" placeholder="Ex: Versão em português, mod, etc..."></textarea>
+                    </div>
+                    <button type="submit" style="background: linear-gradient(135deg, var(--accent-pink), #b00055); color: white;">Pedir Jogo</button>
+                </form>
             </div>
         </div>
 
@@ -1379,10 +1407,34 @@
         }
 
         function filtrarCategoria(cat, btn) {
+            if (cat === 'PedirJogo') {
+                document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+                if(btn) btn.classList.add('active');
+                switchTab('pedirJogoTab');
+                return;
+            }
+
             categoriaAtual = cat;
             document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
             if(btn) btn.classList.add('active');
+            switchTab('jogos');
             renderGames();
+        }
+
+        function enviarPedidoWhatsapp(e) {
+            e.preventDefault();
+            const nomeJogo = document.getElementById('pedidoNome').value.trim();
+            const plataforma = document.getElementById('pedidoPlataforma').value;
+            const obs = document.getElementById('pedidoObs').value.trim();
+
+            let mensagem = `Olá! Quero pedir um jogo:\n\n🎮 *Jogo:* ${nomeJogo}\n💻 *Plataforma:* ${plataforma}`;
+            if (obs) {
+                mensagem += `\n📝 *Observações:* ${obs}`;
+            }
+
+            const numeroWhatsApp = "258843843479"; // Número configurado com DDI de Moçambique
+            const urlWhatsapp = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensagem)}`;
+            window.open(urlWhatsapp, '_blank');
         }
 
         const gameForm = document.getElementById('gameForm');
