@@ -657,7 +657,6 @@
             display: none;
         }
 
-        /* Estilos da Mensagem Flutuante do WhatsApp */
         #whatsappFloatingBanner {
             display: none;
             position: fixed;
@@ -775,7 +774,6 @@
 
     <div id="syncStatus">Código gerado com sucesso!</div>
 
-    <!-- Mensagem Flutuante do WhatsApp -->
     <div id="whatsappFloatingBanner">
         <div class="wa-banner-content">
             <div class="wa-icon">💬</div>
@@ -1160,6 +1158,18 @@
             "description": "Corrida ",
             "link": "https://dl2.cdromance.org/download.php?file=Need%20for%20Speed%20-%20Most%20Wanted%20%28Europe%29.7z&id=85170&platform=ps2-iso&key=10286066450",
             "btnText": "Baixar Agora (Download Direto)"
+          },
+          {
+            "id": 1791314531080,
+            "name": "Monster Hunter Freedom Unite",
+            "image": "https://i.ibb.co/pvxTV1tz/96d314d0788c45f04838db4872575f67.jpg",
+            "category": "PSP",
+            "size": "783.98MB",
+            "format": "7Z",
+            "status": "Grátis ",
+            "description": "Aventura e RPG",
+            "link": "https://dl9a.cdromance.org/download.php?file=Monster_Hunter_Freedom_Unite_USA_PSP-BAHAMUT.7z&id=80547&platform=psp&key=9138381868",
+            "btnText": "Baixar Agora (Download Direto)"
           }
         ];
 
@@ -1197,7 +1207,6 @@
             }
         }
 
-        // Funções da Mensagem Flutuante do WhatsApp com animação de saída insana
         function mostrarBannerWhatsapp() {
             const banner = document.getElementById('whatsappFloatingBanner');
             if (banner) {
@@ -1213,7 +1222,7 @@
                 setTimeout(() => {
                     banner.style.display = 'none';
                     banner.classList.remove('closing');
-                }, 400); // tempo correspondente à animação
+                }, 400);
             }
         }
 
@@ -1444,7 +1453,7 @@
                 mensagem += `\n📝 *Observações:* ${obs}`;
             }
 
-            const numeroWhatsApp = "258843843479"; // Número configurado com DDI de Moçambique
+            const numeroWhatsApp = "258843843479";
             const urlWhatsapp = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensagem)}`;
             window.open(urlWhatsapp, '_blank');
         }
@@ -1638,4 +1647,4 @@
         }
     </script>
 </body>
-                        </html>
+                    </html>
