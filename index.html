@@ -239,7 +239,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(11, 11, 15, 0.8);
+            background: rgba(11, 11, 15, 0.85);
             backdrop-filter: blur(5px);
             z-index: 1000;
             align-items: center;
@@ -297,6 +297,63 @@
             cursor: pointer;
             box-shadow: 0 4px 15px rgba(255, 0, 127, 0.4);
             transition: all 0.2s;
+        }
+
+        /* Estilos do Modal de Desbloqueio por Compartilhamento */
+        .unlock-modal {
+            background: linear-gradient(145deg, #161622, #101017);
+            border: 2px solid var(--accent-pink);
+            border-radius: 16px;
+            padding: 22px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.9), 0 0 25px rgba(255, 0, 127, 0.3);
+            text-align: center;
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            background: #0b0b0f;
+            border-radius: 12px;
+            height: 16px;
+            border: 1px solid rgba(255,255,255,0.1);
+            margin: 15px 0 8px 0;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-pink), var(--primary));
+            width: 0%;
+            transition: width 0.4s ease;
+            box-shadow: 0 0 10px var(--primary);
+        }
+
+        .progress-text {
+            font-size: 0.85rem;
+            color: var(--accent-cyan);
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .share-step-btn {
+            background: linear-gradient(135deg, #25D366, #128C7E);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            width: 100%;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-transform: none;
         }
 
         .categories {
@@ -523,6 +580,7 @@
             font-weight: 800;
             margin-top: auto;
             box-shadow: 0 4px 12px rgba(0, 240, 255, 0.3);
+            cursor: pointer;
         }
 
         .delete-btn {
@@ -786,11 +844,37 @@
         </div>
     </div>
 
+    <!-- Modal Padrão de Informações -->
     <div id="customModalOverlay" class="custom-modal-overlay">
         <div class="custom-modal">
             <h3 id="modalTitle">Título</h3>
             <p id="modalText">Mensagem</p>
             <button class="custom-modal-btn" onclick="fecharModalInfo()">OK</button>
+        </div>
+    </div>
+
+    <!-- NOVO: Modal de Compartilhamento para Desbloquear Download -->
+    <div id="shareLockModalOverlay" class="custom-modal-overlay">
+        <div class="unlock-modal">
+            <h3 style="color: var(--accent-pink);">🔒 Download Bloqueado!</h3>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 10px;">
+                Para baixar o jogo <strong id="shareGameName" style="color: white;"></strong>, você precisa compartilhar o link do nosso canal com **5 grupos** do WhatsApp!
+            </p>
+            
+            <div class="progress-bar-container">
+                <div id="shareProgressBar" class="progress-bar-fill"></div>
+            </div>
+            <div id="shareProgressText" class="progress-text">Progresso: 0 / 5 Grupos</div>
+
+            <button class="share-step-btn" onclick="realizarCompartilhamentoZap()">
+                💬 Compartilhar no WhatsApp (<span id="shareCountNum">0</span>/5)
+            </button>
+            
+            <div id="finalDownloadArea" style="display: none; margin-top: 15px;">
+                <a id="finalRealDownloadBtn" href="#" target="_blank" class="download-btn" style="padding: 12px; font-size: 0.95rem; background: linear-gradient(135deg, var(--primary), #00aa5b); color: #0b0b0f;" onclick="fecharShareModal()">📥 Baixar Agora Gratuitamente</a>
+            </div>
+
+            <button onclick="fecharShareModal()" style="background: #333; color: #aaa; margin-top: 12px; font-size: 0.8rem; padding: 8px;">Cancelar / Fechar</button>
         </div>
     </div>
 
@@ -804,7 +888,7 @@
                 <span onclick="toggleMenu(event)" title="Menu">☰</span>
                 <div id="dropdownMenu" class="dropdown-menu">
                     <div class="dropdown-item" onclick="abrirModalInfo('Suporte', 'Precisa de ajuda com algum jogo ou link quebrado? Entre em contato pelo canal.')">Suporte</div>
-                    <div class="dropdown-item" onclick="abrirModalInfo('Ajuda', '1. Escolha o jogo.\n2. Clique para ver detalhes.\n3. Baixe direto.')">Ajuda</div>
+                    <div class="dropdown-item" onclick="abrirModalInfo('Ajuda', '1. Escolha o jogo.\n2. Clique para ver detalhes.\n3. Compartilhe para desbloquear o download.')">Ajuda</div>
                     <div class="dropdown-item" onclick="abrirModalInfo('Parceria', 'Divulgue seu canal ou site conosco!')">Parceria</div>
                 </div>
             </div>
@@ -1245,6 +1329,10 @@
         const SENHA_ADMIN = "Rodri2012";
         let categoriaAtual = 'Todos';
 
+        // Variáveis de controle do Sistema de Compartilhamento
+        let compartilhamentosAtuais = 0;
+        const META_COMPARTILHAMENTOS = 5;
+
         function mostrarStatusSync(texto, cor = "rgba(0, 255, 136, 0.9)") {
             const status = document.getElementById('syncStatus');
             if(status) {
@@ -1281,6 +1369,48 @@
                     mostrarBannerWhatsapp();
                 }
             }, 20000);
+        }
+
+        // Funções do Modal de Desbloqueio por Compartilhamento
+        function iniciarProcessoDownload(linkDownload, nomeJogo) {
+            compartilhamentosAtuais = 0;
+            atualizarInterfaceProgresso();
+            
+            document.getElementById('shareGameName').innerText = nomeJogo;
+            document.getElementById('finalRealDownloadBtn').href = linkDownload;
+            document.getElementById('finalDownloadArea').style.display = 'none';
+            document.querySelector('.share-step-btn').style.display = 'flex';
+            
+            document.getElementById('shareLockModalOverlay').classList.add('show');
+        }
+
+        function realizarCompartilhamentoZap() {
+            if (compartilhamentosAtuais < META_COMPARTILHAMENTOS) {
+                compartilhamentosAtuais++;
+                atualizarInterfaceProgresso();
+
+                // Link para abrir o WhatsApp compartilhando o canal/site
+                const textoZap = encodeURIComponent("🎮 Olá! Encontrei o canal PSP GAMER MOBILE 2 onde tem vários jogos de PSP, PS2 e APK com download direto! Acesse aqui:");
+                const urlZap = `https://api.whatsapp.com/send?text=${textoZap}`;
+                window.open(urlZap, '_blank');
+
+                if (compartilhamentosAtuais >= META_COMPARTILHAMENTOS) {
+                    document.querySelector('.share-step-btn').style.display = 'none';
+                    document.getElementById('finalDownloadArea').style.display = 'block';
+                    mostrarStatusSync("Parabéns! O download foi liberado com sucesso!", "rgba(0, 255, 136, 0.95)");
+                }
+            }
+        }
+
+        function atualizarInterfaceProgresso() {
+            const porcentagem = (compartilhamentosAtuais / META_COMPARTILHAMENTOS) * 100;
+            document.getElementById('shareProgressBar').style.width = porcentagem + '%';
+            document.getElementById('shareProgressText').innerText = `Progresso: ${compartilhamentosAtuais} / ${META_COMPARTILHAMENTOS} Grupos`;
+            document.getElementById('shareCountNum').innerText = compartilhamentosAtuais;
+        }
+
+        function fecharShareModal() {
+            document.getElementById('shareLockModalOverlay').classList.remove('show');
         }
 
         function atualizarCaixaCodigoGerado() {
@@ -1630,7 +1760,7 @@
                             <button class="share-btn" onclick="compartilharJogo(${game.id}, '${game.name.replace(/'/g, "\\'")}')">🔗 Compartilhar</button>
                         </div>
                         
-                        <a href="${game.link}" target="_blank" class="download-btn" style="padding: 12px; font-size: 0.95rem; margin-top: 15px;">${game.btnText}</a>
+                        <div onclick="iniciarProcessoDownload('${game.link}', '${game.name.replace(/'/g, "\\'")}')" class="download-btn" style="padding: 12px; font-size: 0.95rem; margin-top: 15px;">${game.btnText}</div>
                         ${botoesAdminDetalhe}
                     </div>
                 </div>
