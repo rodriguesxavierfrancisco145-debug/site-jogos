@@ -1,1698 +1,1821 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PSP GAMER MOBILE 2</title>
-    <style>
-        :root {
-            --bg-color: #0b0b0f;
-            --card-bg: #13131a;
-            --text-color: #f1f1f6;
-            --text-muted: #8e8e99;
-            --primary: #00ff88;
-            --primary-hover: #00cc6a;
-            --accent-pink: #ff007f;
-            --accent-cyan: #00f0ff;
-            --danger: #ff3366;
-            --warning: #ffaa00;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            padding: 15px;
-            background-image: 
-                radial-gradient(circle at 10% 20%, rgba(255, 0, 127, 0.08) 0%, transparent 40%),
-                radial-gradient(circle at 90% 80%, rgba(0, 240, 255, 0.08) 0%, transparent 40%);
-            background-attachment: fixed;
-        }
-
-        .container {
-            max-width: 500px;
-            margin: 0 auto;
-        }
-
-        .top-bar {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 10px;
-            margin-bottom: 20px;
-            position: relative;
-        }
-
-        .logo {
-            color: var(--accent-pink);
-            font-size: 1.1rem;
-            font-weight: 900;
-            text-shadow: 0 0 10px rgba(255, 0, 127, 0.5);
-            letter-spacing: 0.5px;
-            animation: pulseLogo 3s infinite alternate;
-            white-space: nowrap;
-            cursor: pointer;
-        }
-
-        @keyframes pulseLogo {
-            0% { text-shadow: 0 0 8px rgba(255, 0, 127, 0.4); }
-            100% { text-shadow: 0 0 16px rgba(255, 0, 127, 0.8), 0 0 20px rgba(0, 240, 255, 0.3); }
-        }
-
-        .search-container {
-            flex: 1;
-        }
-
-        .search-box {
-            width: 100%;
-            background-color: #1a1a24;
-            border: 1px solid rgba(0, 240, 255, 0.2);
-            border-radius: 20px;
-            padding: 9px 16px;
-            color: white;
-            font-size: 0.9rem;
-            outline: none;
-            transition: all 0.3s ease;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);
-        }
-
-        .search-box:focus {
-            border-color: var(--accent-cyan);
-            box-shadow: 0 0 10px rgba(0, 240, 255, 0.4), inset 0 2px 4px rgba(0,0,0,0.5);
-        }
-
-        .top-icons {
-            display: flex;
-            align-items: center;
-            color: white;
-            font-size: 1.1rem;
-            cursor: pointer;
-            position: relative;
-        }
-
-        .top-icons span {
-            background: #1a1a24;
-            padding: 8px 10px;
-            border-radius: 50%;
-            border: 1px solid rgba(255,255,255,0.05);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-        }
-
-        .top-icons span:hover {
-            border-color: var(--accent-pink);
-            transform: scale(1.05);
-        }
-
-        .dropdown-menu {
-            display: none;
-            position: absolute;
-            right: 0;
-            top: 45px;
-            background-color: var(--card-bg);
-            border: 1px solid rgba(0, 240, 255, 0.25);
-            border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.7), 0 0 15px rgba(0, 240, 255, 0.1);
-            width: 160px;
-            z-index: 100;
-            overflow: hidden;
-            animation: fadeInMenu 0.2s ease forwards;
-        }
-
-        @keyframes fadeInMenu {
-            from { opacity: 0; transform: translateY(-8px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .dropdown-menu.show {
-            display: block;
-        }
-
-        .dropdown-item {
-            padding: 12px 15px;
-            font-size: 0.85rem;
-            color: var(--text-color);
-            cursor: pointer;
-            border-bottom: 1px solid rgba(255,255,255,0.04);
-            text-decoration: none;
-            display: block;
-            transition: all 0.2s;
-        }
-
-        .dropdown-item:last-child {
-            border-bottom: none;
-        }
-
-        .dropdown-item:hover {
-            background-color: rgba(255, 0, 127, 0.15);
-            color: var(--accent-pink);
-            padding-left: 18px;
-        }
-
-        .carousel-container {
-            position: relative;
-            width: 100%;
-            height: 180px;
-            border-radius: 16px;
-            overflow: hidden;
-            margin-bottom: 20px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.6), 0 0 15px rgba(0, 240, 255, 0.15);
-            border: 1px solid rgba(0, 240, 255, 0.25);
-            background: #13131a;
-        }
-
-        .carousel-track {
-            display: flex;
-            width: 100%;
-            height: 100%;
-            transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
-        }
-
-        .carousel-slide {
-            min-width: 100%;
-            height: 100%;
-            position: relative;
-        }
-
-        .carousel-slide img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            filter: brightness(0.9);
-            transition: transform 0.6s ease;
-        }
-
-        .carousel-slide:hover img {
-            transform: scale(1.03);
-        }
-
-        .carousel-caption {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: linear-gradient(to top, rgba(11, 11, 15, 0.95), rgba(11, 11, 15, 0.2));
-            padding: 12px 15px;
-            font-size: 0.9rem;
-            font-weight: bold;
-            color: white;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.8);
-        }
-
-        .carousel-indicators {
-            position: absolute;
-            bottom: 10px;
-            right: 15px;
-            display: flex;
-            gap: 6px;
-            z-index: 10;
-        }
-
-        .indicator {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.4);
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .indicator.active {
-            background: var(--accent-pink);
-            width: 22px;
-            border-radius: 4px;
-            box-shadow: 0 0 8px var(--accent-pink);
-        }
-
-        .custom-modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(11, 11, 15, 0.8);
-            backdrop-filter: blur(5px);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .custom-modal-overlay.show {
-            display: flex;
-            opacity: 1;
-        }
-
-        .custom-modal {
-            background: linear-gradient(145deg, #161622, #101017);
-            border: 1px solid rgba(0, 240, 255, 0.3);
-            border-radius: 16px;
-            padding: 22px;
-            width: 100%;
-            max-width: 380px;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.8), 0 0 20px rgba(0, 240, 255, 0.2);
-            transform: scale(0.8) translateY(20px);
-            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        .custom-modal-overlay.show .custom-modal {
-            transform: scale(1) translateY(0);
-        }
-
-        .custom-modal h3 {
-            color: var(--accent-cyan);
-            font-size: 1.2rem;
-            margin-bottom: 12px;
-            text-shadow: 0 0 8px rgba(0, 240, 255, 0.4);
-        }
-
-        .custom-modal p {
-            color: var(--text-color);
-            font-size: 0.9rem;
-            line-height: 1.5;
-            margin-bottom: 20px;
-            white-space: pre-wrap;
-        }
-
-        .custom-modal-btn {
-            background: linear-gradient(135deg, var(--accent-pink), #b00055);
-            color: white;
-            border: none;
-            padding: 10px;
-            border-radius: 10px;
-            font-size: 0.9rem;
-            font-weight: bold;
-            width: 100%;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(255, 0, 127, 0.4);
-            transition: all 0.2s;
-        }
-
-        .categories {
-            display: flex;
-            gap: 10px;
-            overflow-x: auto;
-            padding-bottom: 12px;
-            margin-bottom: 20px;
-            scrollbar-width: none;
-        }
-
-        .categories::-webkit-scrollbar {
-            display: none;
-        }
-
-        .cat-btn {
-            background: linear-gradient(135deg, #1a1a24, #121218);
-            color: var(--text-muted);
-            border: 1px solid rgba(255,255,255,0.06);
-            padding: 9px 20px;
-            border-radius: 25px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            cursor: pointer;
-            white-space: nowrap;
-            transition: all 0.3s;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-        }
-
-        .cat-btn:hover {
-            color: white;
-            border-color: rgba(0, 240, 255, 0.4);
-            transform: translateY(-2px);
-        }
-
-        .cat-btn.active {
-            background: linear-gradient(135deg, var(--accent-pink), #b00055);
-            color: white;
-            border-color: var(--accent-pink);
-            box-shadow: 0 0 15px rgba(255, 0, 127, 0.5);
-        }
-
-        .tab-content {
-            display: none;
-            animation: fadeInTab 0.3s ease;
-        }
-        @keyframes fadeInTab {
-            from { opacity: 0; transform: translateY(5px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .tab-content.active {
-            display: block;
-        }
-
-        .form-card {
-            background: linear-gradient(145deg, #161622, #101017);
-            padding: 22px;
-            border-radius: 16px;
-            margin-bottom: 20px;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.5);
-            border: 1px solid rgba(0, 240, 255, 0.15);
-        }
-
-        .form-card h2 {
-            margin-bottom: 18px;
-            font-size: 1.3rem;
-            color: var(--accent-cyan);
-            text-shadow: 0 0 8px rgba(0, 240, 255, 0.3);
-        }
-
-        .input-group {
-            margin-bottom: 14px;
-        }
-
-        .input-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            font-weight: 500;
-        }
-
-        .input-group input, .input-group select, .input-group textarea {
-            width: 100%;
-            padding: 11px;
-            border-radius: 10px;
-            border: 1px solid rgba(255,255,255,0.08);
-            background-color: #0b0b0f;
-            color: white;
-            font-size: 0.9rem;
-            outline: none;
-            transition: all 0.3s;
-        }
-
-        .form-row {
-            display: flex;
-            gap: 15px;
-        }
-
-        .form-row .input-group {
-            flex: 1;
-        }
-
-        button {
-            background: linear-gradient(135deg, var(--primary), #00aa5b);
-            color: #0b0b0f;
-            border: none;
-            padding: 12px 20px;
-            font-size: 1rem;
-            font-weight: 800;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.3s;
-            width: 100%;
-            box-shadow: 0 4px 15px rgba(0, 255, 136, 0.3);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 255, 136, 0.5);
-        }
-
-        .games-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 14px;
-        }
-
-        @keyframes fadeInGame {
-            from { opacity: 0; transform: scale(0.9) translateY(15px); }
-            to { opacity: 1; transform: scale(1) translateY(0); }
-        }
-
-        .game-card {
-            background: linear-gradient(145deg, #15151f, #0f0f16);
-            border-radius: 14px;
-            overflow: hidden;
-            box-shadow: 0 6px 20px rgba(0,0,0,0.5);
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            position: relative;
-            cursor: pointer;
-            border: 1px solid rgba(255, 255, 255, 0.04);
-            transition: all 0.35s;
-            animation: fadeInGame 0.4s forwards;
-        }
-
-        .game-card:hover {
-            transform: translateY(-5px) scale(1.02);
-            border-color: rgba(0, 240, 255, 0.5);
-            box-shadow: 0 12px 30px rgba(0,0,0,0.7), 0 0 15px rgba(0, 240, 255, 0.25);
-        }
-
-        .card-img-container {
-            position: relative;
-            width: 100%;
-            height: 140px;
-            overflow: hidden;
-        }
-
-        .game-card img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.5s ease;
-        }
-
-        .game-card:hover img {
-            transform: scale(1.1);
-        }
-
-        .price-badge {
-            position: absolute;
-            top: 8px;
-            right: 8px;
-            background: rgba(11, 11, 15, 0.85);
-            backdrop-filter: blur(5px);
-            padding: 4px 10px;
-            border-radius: 12px;
-            font-size: 0.75rem;
-            font-weight: bold;
-            color: var(--primary);
-            border: 1px solid rgba(0, 255, 136, 0.3);
-        }
-
-        .game-info {
-            padding: 12px;
-            display: flex;
-            flex-direction: column;
-            flex: 1;
-        }
-
-        .game-info h3 {
-            font-size: 0.95rem;
-            margin-bottom: 6px;
-            color: white;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            font-weight: 700;
-        }
-
-        .game-details {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            margin-bottom: 8px;
-            display: flex;
-            flex-direction: column;
-            gap: 3px;
-        }
-
-        .download-btn {
-            display: block;
-            text-align: center;
-            background: linear-gradient(135deg, var(--accent-cyan), #0099ff);
-            color: #0b0b0f;
-            text-decoration: none;
-            padding: 9px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 800;
-            margin-top: auto;
-            box-shadow: 0 4px 12px rgba(0, 240, 255, 0.3);
-        }
-
-        .delete-btn {
-            background: linear-gradient(135deg, var(--danger), #cc0033);
-            color: white;
-            margin-top: 6px;
-            padding: 7px;
-            font-size: 0.75rem;
-            width: 100%;
-            border-radius: 8px;
-            font-weight: bold;
-        }
-
-        .edit-btn {
-            background: linear-gradient(135deg, var(--warning), #cc8800);
-            color: #0b0b0f;
-            margin-top: 6px;
-            padding: 7px;
-            font-size: 0.75rem;
-            width: 100%;
-            border-radius: 8px;
-            font-weight: bold;
-        }
-
-        .empty-msg {
-            text-align: center;
-            grid-column: 1 / -1;
-            color: var(--text-muted);
-            font-style: italic;
-            padding: 40px;
-            background: var(--card-bg);
-            border-radius: 12px;
-        }
-
-        .game-detail-card {
-            background: linear-gradient(145deg, #161622, #101017);
-            border-radius: 16px;
-            overflow: hidden;
-            padding: 20px;
-            box-shadow: 0 10px 35px rgba(0,0,0,0.6);
-            border: 1px solid rgba(0, 240, 255, 0.2);
-        }
-
-        .back-btn {
-            background: #1a1a24;
-            color: var(--text-color);
-            border: 1px solid rgba(255,255,255,0.08);
-            padding: 8px 16px;
-            border-radius: 10px;
-            font-size: 0.85rem;
-            cursor: pointer;
-            margin-bottom: 15px;
-            width: auto;
-            font-weight: bold;
-        }
-
-        .detail-img-container {
-            position: relative;
-            width: 100%;
-            height: 210px;
-            margin-bottom: 15px;
-        }
-
-        .detail-img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 12px;
-        }
-
-        .detail-desc {
-            font-size: 0.9rem;
-            color: var(--text-muted);
-            margin: 15px 0;
-            line-height: 1.5;
-            white-space: pre-wrap;
-            background: #0b0b0f;
-            padding: 12px;
-            border-radius: 10px;
-        }
-
-        .action-bar {
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
-            background: #0b0b0f;
-            padding: 10px 15px;
-            border-radius: 12px;
-            margin-top: 15px;
-        }
-
-        .share-btn {
-            background: linear-gradient(135deg, var(--accent-pink), #b00055);
-            color: white;
-            border: none;
-            padding: 8px 14px;
-            border-radius: 8px;
-            font-size: 0.85rem;
-            font-weight: bold;
-            cursor: pointer;
-            width: auto;
-        }
-
-        .admin-login-area {
-            text-align: center;
-            margin-top: 40px;
-            padding-top: 20px;
-            border-top: 1px solid rgba(255,255,255,0.06);
-        }
-
-        .admin-link {
-            background: none;
-            border: none;
-            color: var(--text-muted);
-            font-size: 0.85rem;
-            line-height: 1.4;
-        }
-        
-        #syncStatus {
-            position: fixed;
-            bottom: 10px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0, 255, 136, 0.9);
-            color: #0b0b0f;
-            padding: 6px 16px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: bold;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-            z-index: 9999;
-            display: none;
-        }
-
-        #whatsappFloatingBanner {
-            display: none;
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            left: 20px;
-            max-width: 460px;
-            margin: 0 auto;
-            background: linear-gradient(145deg, #161622, #101017);
-            border: 1px solid rgba(0, 255, 136, 0.4);
-            border-radius: 16px;
-            padding: 15px 18px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.8), 0 0 20px rgba(0, 255, 136, 0.2);
-            z-index: 99999;
-            animation: slideUpFloat 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-        }
-
-        @keyframes slideUpFloat {
-            from { opacity: 0; transform: translateY(30px) scale(0.95); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
-        }
-
-        @keyframes slideOutFloat {
-            0% { opacity: 1; transform: translateY(0) scale(1) rotate(0deg); }
-            100% { opacity: 0; transform: translateY(50px) scale(0.7) rotate(15deg); }
-        }
-
-        #whatsappFloatingBanner.closing {
-            animation: slideOutFloat 0.4s cubic-bezier(0.6, -0.28, 0.735, 0.045) forwards;
-        }
-
-        .wa-banner-content {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            position: relative;
-        }
-
-        .wa-icon {
-            font-size: 2rem;
-            background: rgba(0, 255, 136, 0.1);
-            padding: 8px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 1px solid rgba(0, 255, 136, 0.2);
-        }
-
-        .wa-text-area {
-            flex: 1;
-            padding-right: 15px;
-        }
-
-        .wa-text-area h4 {
-            color: var(--primary);
-            font-size: 0.95rem;
-            margin-bottom: 3px;
-            font-weight: 700;
-        }
-
-        .wa-text-area p {
-            color: var(--text-color);
-            font-size: 0.8rem;
-            line-height: 1.3;
-            margin-bottom: 8px;
-        }
-
-        .wa-follow-btn {
-            display: inline-block;
-            background: linear-gradient(135deg, var(--primary), #00aa5b);
-            color: #0b0b0f;
-            text-decoration: none;
-            padding: 6px 14px;
-            border-radius: 8px;
-            font-size: 0.75rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            box-shadow: 0 3px 10px rgba(0, 255, 136, 0.3);
-            transition: transform 0.2s;
-        }
-
-        .wa-follow-btn:hover {
-            transform: scale(1.05);
-        }
-
-        .wa-close-btn {
-            position: absolute;
-            top: -5px;
-            right: -5px;
-            background: #1a1a24;
-            color: var(--text-muted);
-            border: 1px solid rgba(255,255,255,0.1);
-            width: 22px;
-            height: 22px;
-            border-radius: 50%;
-            font-size: 0.75rem;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.2s;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.5);
-        }
-
-        .wa-close-btn:hover {
-            background: var(--danger);
-            color: white;
-            border-color: var(--danger);
-        }
-    </style>
-</head>
-<body>
-
-    <div id="syncStatus">Código gerado com sucesso!</div>
-
-    <div id="whatsappFloatingBanner">
-        <div class="wa-banner-content">
-            <div class="wa-icon">💬</div>
-            <div class="wa-text-area">
-                <h4>Canal Oficial!</h4>
-                <p>Siga o nosso canal do WhatsApp para ficar por dentro das novidades.</p>
-                <a href="https://whatsapp.com/channel/0029VbDVqMICBtx8ZZL1Vx3K" target="_blank" class="wa-follow-btn">Seguir</a>
-            </div>
-            <div class="wa-close-btn" onclick="fecharBannerWhatsapp()" title="Fechar">✕</div>
-        </div>
-    </div>
-
-    <div id="customModalOverlay" class="custom-modal-overlay">
-        <div class="custom-modal">
-            <h3 id="modalTitle">Título</h3>
-            <p id="modalText">Mensagem</p>
-            <button class="custom-modal-btn" onclick="fecharModalInfo()">OK</button>
-        </div>
-    </div>
-
-    <div class="container">
-        <div class="top-bar">
-            <div class="logo" onclick="solicitarSenha()" title="Clique para Painel Admin">PSP GAMER MOBILE 2</div>
-            <div class="search-container">
-                <input type="text" class="search-box" id="searchInput" placeholder="Buscar jogos..." oninput="renderGames()">
-            </div>
-            <div class="top-icons">
-                <span onclick="toggleMenu(event)" title="Menu">☰</span>
-                <div id="dropdownMenu" class="dropdown-menu">
-                    <div class="dropdown-item" onclick="abrirModalInfo('Suporte', 'Precisa de ajuda com algum jogo ou link quebrado? Entre em contato pelo canal.')">Suporte</div>
-                    <div class="dropdown-item" onclick="abrirModalInfo('Ajuda', '1. Escolha o jogo.\n2. Clique para ver detalhes.\n3. Baixe direto.')">Ajuda</div>
-                    <div class="dropdown-item" onclick="abrirModalInfo('Parceria', 'Divulgue seu canal ou site conosco!')">Parceria</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="carousel-container" id="carouselContainer">
-            <div class="carousel-track" id="carouselTrack"></div>
-            <div class="carousel-indicators" id="carouselIndicators"></div>
-        </div>
-
-        <div class="categories">
-            <button class="cat-btn active" onclick="filtrarCategoria('Todos', this)">Todos</button>
-            <button class="cat-btn" onclick="filtrarCategoria('PSP', this)">PSP</button>
-            <button class="cat-btn" onclick="filtrarCategoria('PS2', this)">PS2</button>
-            <button class="cat-btn" onclick="filtrarCategoria('PC', this)">PC</button>
-            <button class="cat-btn" onclick="filtrarCategoria('APK', this)">APK</button>
-            <button class="cat-btn" onclick="filtrarCategoria('PedirJogo', this)">Pedir Jogo</button>
-        </div>
-
-        <div id="inicio" class="tab-content">
-            <header style="margin-bottom: 15px;">
-                <h1 id="panelTitle" style="font-size: 1.8rem; color: var(--accent-pink);">🔒 Painel Restrito</h1>
-                <p id="panelSub" style="font-size: 0.85rem; color: var(--text-muted);">Adicione jogos e gere o código manual</p>
-            </header>
-
-            <div class="form-card" style="border: 2px solid var(--accent-cyan); background: #12121b;">
-                <h2 style="color: var(--accent-cyan);">📋 Copiar Código para o Seu Arquivo</h2>
-                <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 10px;">Copie este bloco abaixo e cole no seu código HTML sempre que alterar os jogos ou banners:</p>
-                <textarea id="codigoGeradoArea" rows="6" readonly style="width:100%; background:#050508; color:#00ff88; font-family:monospace; font-size:0.8rem; padding:10px; border-radius:8px; border:1px solid rgba(0,240,255,0.3); resize:none;"></textarea>
-                <button type="button" onclick="copiarCodigoPainel()" style="background: linear-gradient(135deg, var(--accent-cyan), #0099ff); color: #0b0b0f; margin-top: 10px;">Copiar Código Atualizado</button>
-            </div>
-
-            <div class="form-card">
-                <h2>Gerenciar Banners do Carrossel (Máx. 4)</h2>
-                <div id="carouselFormList" style="margin-bottom: 15px;"></div>
-                <button type="button" onclick="salvarBannersCarrossel()" style="background: linear-gradient(135deg, var(--accent-cyan), #0099ff); color: #0b0b0f; margin-bottom: 25px;">Atualizar Banners</button>
-
-                <h2 id="formTitle">Publicar Novo Jogo</h2>
-                <form id="gameForm">
-                    <input type="hidden" id="editGameId">
-                    <div class="input-group">
-                        <label for="gameName">Nome do Jogo:</label>
-                        <input type="text" id="gameName" required placeholder="Ex: God of War">
-                    </div>
-                    <div class="input-group">
-                        <label for="gameImage">Link da Imagem (URL):</label>
-                        <input type="url" id="gameImage" required placeholder="Link direto da imagem">
-                    </div>
-                    <div class="input-group">
-                        <label for="gameCategory">Categoria:</label>
-                        <select id="gameCategory" style="width:150px;">
-                            <option value="PSP">PSP</option>
-                            <option value="PS2">PS2</option>
-                            <option value="PC">PC</option>
-                            <option value="APK">APK</option>
-                        </select>
-                    </div>
-                    <div class="form-row">
-                        <div class="input-group">
-                            <label for="gameSize">Tamanho:</label>
-                            <input type="text" id="gameSize" required placeholder="Ex: 1.2 GB">
-                        </div>
-                        <div class="input-group">
-                            <label for="gameFormat">Formato:</label>
-                            <input type="text" id="gameFormat" required placeholder="Ex: ISO / APK">
-                        </div>
-                    </div>
-                    <div class="input-group">
-                        <label for="gameStatus">Status:</label>
-                        <input type="text" id="gameStatus" required placeholder="Ex: Grátis">
-                    </div>
-                    <div class="input-group">
-                        <label for="gameDescription">Descrição:</label>
-                        <textarea id="gameDescription" rows="3" placeholder="Detalhes do jogo..."></textarea>
-                    </div>
-                    <div class="input-group">
-                        <label for="gameLink">Link de Download:</label>
-                        <input type="url" id="gameLink" required placeholder="Link de download direto">
-                    </div>
-                    <div class="input-group">
-                        <label for="gameBtnText">Texto do Botão:</label>
-                        <input type="text" id="gameBtnText" placeholder="Ex: Baixar Agora">
-                    </div>
-                    <button type="submit" id="submitBtn">Publicar Jogo</button>
-                </form>
-                <div id="cancelEditContainer" style="display:none; margin-top: 10px;">
-                    <button onclick="cancelarEdicao()" style="background: #555; color: white;">Cancelar Edição</button>
-                </div>
-
-                <button onclick="logoutAdmin()" style="background: var(--danger); color: white; margin-top: 25px;">Sair do Painel Admin</button>
-            </div>
-        </div>
-
-        <div id="jogos" class="tab-content active">
-            <div class="games-grid" id="gamesGrid">
-                <p class="empty-msg">Carregando jogos...</p>
-            </div>
-        </div>
-
-        <div id="pedirJogoTab" class="tab-content">
-            <div class="form-card">
-                <h2>🎮 Pedir um Jogo</h2>
-                <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 18px;">Preencha os campos abaixo com o jogo que você deseja. Ao clicar em "Pedir Jogo", você será direcionado para o nosso WhatsApp com a mensagem pronta!</p>
-                <form id="pedirJogoForm" onsubmit="enviarPedidoWhatsapp(event)">
-                    <div class="input-group">
-                        <label for="pedidoNome">Nome do Jogo:</label>
-                        <input type="text" id="pedidoNome" required placeholder="Ex: GTA San Andreas, Naruto...">
-                    </div>
-                    <div class="input-group">
-                        <label for="pedidoPlataforma">Plataforma:</label>
-                        <select id="pedidoPlataforma" style="width:100%;">
-                            <option value="PSP">PSP</option>
-                            <option value="PS2">PS2</option>
-                            <option value="PC">PC</option>
-                            <option value="APK">APK / Android</option>
-                        </select>
-                    </div>
-                    <div class="input-group">
-                        <label for="pedidoObs">Observações (Opcional):</label>
-                        <textarea id="pedidoObs" rows="3" placeholder="Ex: Versão em português, mod, etc..."></textarea>
-                    </div>
-                    <button type="submit" style="background: linear-gradient(135deg, var(--accent-pink), #b00055); color: white;">Pedir Jogo</button>
-                </form>
-            </div>
-        </div>
-
-        <div id="detalhes" class="tab-content">
-            <button class="back-btn" onclick="switchTab('jogos')">← Voltar</button>
-            <div id="gameDetailContent"></div>
-        </div>
-
-        <div class="admin-login-area">
-            <div class="admin-link">Bem-vindo ao PSP GAMER MOBILE 2. Divirta-se!</div>
-        </div>
-    </div>
-
-    <script>
-        let listaJogosCache = [
-          {
-            "id": 1790937103530,
-            "name": "God of War: Chains of Olympus",
-            "image": "https://i.ibb.co/4nhr0dZz/unnamed.jpg",
-            "category": "PSP",
-            "size": "1.20GB",
-            "format": "ISO",
-            "status": "Grátis",
-            "description": "Luta, Ação e aventura",
-            "link": "https://archive.org/download/god-of-war-chains-of-olympus-usa/God%20of%20War%20-%20Chains%20of%20Olympus%20%28USA%29.zip",
-            "btnText": "Baixar Agora (Download Direto)"
-          },
-          {
-            "id": 1790954010898,
-            "name": "God of War: Ghost of Sparta",
-            "image": "https://i.ibb.co/TxBqvzhs/unnamed-1.jpg",
-            "category": "PSP",
-            "size": "1.75GB",
-            "format": "ISO",
-            "status": "Grátis",
-            "description": "Luta, Ação",
-            "link": "https://archive.org/download/god-of-war-ghost-of-sparta-usa-en-fr-es/God%20of%20War%20-%20Ghost%20of%20Sparta%20%28USA%29%20%28En%2CFr%2C%2CEs%29.iso",
-            "btnText": "Baixar Agora (Download Direto)"
-          },
-          {
-            "id": 1790954322384,
-            "name": "Grand Theft Auto: Liberty City Stories",
-            "image": "https://i.ibb.co/Cp1mQ9zx/unnamed-2.jpg",
-            "category": "PSP",
-            "size": "1.26GB",
-            "format": "ISO",
-            "status": "Grátis",
-            "description": "Luta, Ação",
-            "link": "https://archive.org/download/GrandTheftAutoLibertyCityStoriesUSAEnFrDeEsItv3.00/Grand%20Theft%20Auto%20-%20Liberty%20City%20Stories%20%28USA%29%20%28En%2CFr%2CDe%2CEs%2CIt%29%20%28v3.00%29.iso",
-            "btnText": "Baixar Agora (Download Direto)"
-          },
-          {
-            "id": 1790954983808,
-            "name": "Grand Theft Auto: Vice City Stories",
-            "image": "https://i.ibb.co/sJjVVbZc/unnamed-3.jpg",
-            "category": "PSP",
-            "size": "1.70GB",
-            "format": "ISO",
-            "status": "Grátis",
-            "description": "Aventura e Ação RPG",
-            "link": "https://archive.org/download/grand-theft-auto-vice-city-stories-usa/Grand%20Theft%20Auto%20-%20Vice%20City%20Stories%20%28USA%29.iso",
-            "btnText": "Baixar Agora (Download Direto)"
-          },
-          {
-            "id": 1790956761561,
-            "name": "Naruto: Ultimate Ninja 3",
-            "image": "https://i.ibb.co/xVC8GL6/unnamed-4.jpg",
-            "category": "PSP",
-            "size": "1.21GB",
-            "format": "ZIP",
-            "status": "Grátis",
-            "description": "Luta",
-            "link": "https://archive.org/download/naruto-shippuden-ultimate-ninja-heroes-3-usa_202601/Naruto%20Shippuden%20-%20Ultimate%20Ninja%20Heroes%203%20%28USA%29.zip",
-            "btnText": "Baixar Agora (Download Direto)"
-          },
-          {
-            "id": 1790956999349,
-            "name": "Bleach: Heat the Soul 7",
-            "image": "https://i.ibb.co/DfRP19jH/unnamed-5.jpg",
-            "category": "PSP",
-            "size": "424.89MB",
-            "format": "ZIP",
-            "status": "Grátis",
-            "description": "Luta",
-            "link": "https://archive.org/download/bleach-heat-the-soul-7/Bleach%20-%20Heat%20the%20Soul%207%20%28Asia%29.zip",
-            "btnText": "Baixar Agora (Download Direto)"
-          },
-          {
-            "id": 1790961002839,
-            "name": "Def jam: Fight for NY-The Takeover",
-            "image": "https://i.ibb.co/yBFQHRxp/unnamed-6.jpg",
-            "category": "PSP",
-            "size": "502.20MB",
-            "format": "ZIP",
-            "status": "Grátis",
-            "description": "Luta",
-            "link": "https://archive.org/download/playstation-portable-rom-def-jam-fight-for-ny-the-takeover/Def%20Jam%20-%20Fight%20for%20NY%20-%20The%20Takeover%20%28USA%29%20%28v1.01%29.zip",
-            "btnText": "Baixar Agora (Download Direto)"
-          },
-          {
-            "id": 1790961425208,
-            "name": "UFC: Undisputed 2010",
-            "image": "https://i.ibb.co/vxTRHhHp/unnamed-7.jpg",
-            "category": "PSP",
-            "size": "1.43GB",
-            "format": "ZIP",
-            "status": "Grátis",
-            "description": "Luta",
-            "link": "https://archive.org/download/ufc-2010-undisputed-usa/UFC%202010%20Undisputed%20%28USA%29.zip",
-            "btnText": "Baixar Agora (Download Direto)"
-          },
-          {
-            "id": 1790963121413,
-            "name": "Grand Theft: Auto Sanandreas",
-            "image": "https://i.ibb.co/Rp9gRCt1/unnamed-8.jpg",
-            "category": "APK",
-            "size": "2.62GB",
-            "format": "APK",
-            "status": "Grátis",
-            "description": "RPG",
-            "link": "https://archive.org/download/gta-sa-5play/gta-sa-2.11.277-mod-menu-5play.apk",
-            "btnText": "Baixar Agora (Download Direto)"
-          },
-          {
-            "id": 1790963352828,
-            "name": "Tekken: Dark Resurrection",
-            "image": "https://i.ibb.co/hFZ6wpMd/unnamed-9.jpg",
-            "category": "PSP",
-            "size": "1.75GB",
-            "format": "ISO",
-            "status": "Grátis",
-            "description": "Luta",
-            "link": "https://archive.org/download/tekken-dark-resurrection-usa-psp_202603_ver2/a-tekken.iso",
-            "btnText": "Baixar Agora (Download Direto)"
-          },
-          {
-            "id": 1790963815728,
-            "name": "Red Dead Redemption",
-            "image": "https://i.ibb.co/JjnRPKMK/58b6e9bc7801b5a60410a7f75ec6b890.jpg",
-            "category": "APK",
-            "size": "2.89GB",
-            "format": "APK",
-            "status": "Grátis",
-            "description": "RPG mundo aberto",
-            "link": "https://files.an1.co/red-dead-redemption-mods_1.58.63226194-an1.com.apk",
-            "btnText": "Baixar Agora (Download Direto)"
-          },
-          {
-            "id": 1791120442202,
-            "name": "Minecraft",
-            "image": "https://i.ibb.co/RpCzK4Bb/unnamed.jpg",
-            "category": "APK",
-            "size": "127.15MB",
-            "format": "APK",
-            "status": "Grátis ",
-            "description": "Aventura ",
-            "link": "https://www.google.com/url?q=https%3A%2F%2Farchive.org%2Fdownload%2Fminecraft-apkmodget.com%2FMinecraft-Free-Edition.apk&sa=D&sntz=1&usg=AOvVaw05urVVQJ6yu2Sa4SIHkjH8",
-            "btnText": "Baixar Agora (Download Direto)"
-          },
-          {
-            "id": 1791133142943,
-            "name": "The Warriors",
-            "image": "https://i.ibb.co/xS27F8PZ/e9e8c0e73e59222e7eefd102ee1bba21.jpg",
-            "category": "PS2",
-            "size": "4.30GB",
-            "format": "ISO",
-            "status": "Grátis ",
-            "description": "Luta de rua ",
-            "link": "https://archive.org/download/the-warriors-ps2/Warriors%2C%20The.iso",
-            "btnText": "Baixar Agora (Download Direto)"
-          },
-          {
-            "id": 1791144001710,
-            "name": "Midnight Club 3: DUB Edition / L.A. Remix",
-            "image": "https://i.ibb.co/sGMK8HX/a6d9cd56df8bea6c10a076d06c8a6e92.jpg",
-            "category": "PSP",
-            "size": "1.00GB",
-            "format": "ZIP",
-            "status": "Grátis ",
-            "description": "Corrida ",
-            "link": "https://archive.org/download/midnight-club-3-dub-edition-usa/Midnight%20Club%203%20-%20DUB%20Edition%20%28USA%29.zip",
-            "btnText": "Baixar Agora (Download Direto)"
-          },
-          {
-            "id": 1791178391721,
-            "name": "Star Wars: Battlefront II",
-            "image": "https://i.ibb.co/KcyHRrnr/0363bb2b91ddf7be38f5b3219f701f26.jpg",
-            "category": "PSP",
-            "size": "738.66MB",
-            "format": "ISO",
-            "status": "Grátis ",
-            "description": "Luta , Ação ",
-            "link": "https://archive.org/download/PSPStarWarsBattlefrontIIUSA/Star%20Wars%20-%20Battlefront%20II%20%28USA%29.iso",
-            "btnText": "Baixar Agora (Download Direto)"
-          },
-          {
-            "id": 1791180573894,
-            "name": "Burnout Legends",
-            "image": "https://i.ibb.co/rRJvBhQm/fa9969b247a3366e4e05665e14268249.jpg",
-            "category": "PSP",
-            "size": "500.30MB",
-            "format": "ISO",
-            "status": "Grátis ",
-            "description": "Corrida ",
-            "link": "https://archive.org/download/burnout-legends-usa-en-fr-de-es-it-nl_202601/Burnout%20Legends%20%28USA%29%20%28En%2CFr%2CDe%2CEs%2CIt%2CNl%29.iso",
-            "btnText": "Baixar Agora (Download Direto)"
-          },
-          {
-            "id": 1791195972900,
-            "name": "Dante’s Inferno",
-            "image": "https://i.ibb.co/YFfh4rCg/c76a3af0efa710daacca3d47fe3067ac.jpg",
-            "category": "PSP",
-            "size": "1.81GB",
-            "format": "ISO",
-            "status": "Grátis ",
-            "description": "Todos os androids \nRoda em 60FPS",
-            "link": "https://archive.org/download/PSPDantesInfernoUSA/Dante%27s%20Inferno%20%28USA%29.iso",
-            "btnText": "Baixar Agora (Download Direto)"
-          },
-          {
-            "id": 1791304999123,
-            "name": "Need for Speed: Most Wanted Demo",
-            "image": "https://i.ibb.co/C5mNw5D4/21b0157f4b49a67599df0e38b399a9b9.jpg",
-            "category": "PS2",
-            "size": "2.47GB",
-            "format": "7Z",
-            "status": "Grátis ",
-            "description": "Corrida ",
-            "link": "https://dl2.cdromance.org/download.php?file=Need%20for%20Speed%20-%20Most%20Wanted%20%28Europe%29.7z&id=85170&platform=ps2-iso&key=10286066450",
-            "btnText": "Baixar Agora (Download Direto)"
-          },
-          {
-            "id": 1791314531080,
-            "name": "Monster Hunter Freedom Unite",
-            "image": "https://i.ibb.co/pvxTV1tz/96d314d0788c45f04838db4872575f67.jpg",
-            "category": "PSP",
-            "size": "783.98MB",
-            "format": "7Z",
-            "status": "Grátis ",
-            "description": "Aventura e RPG",
-            "link": "https://dl9a.cdromance.org/download.php?file=Monster_Hunter_Freedom_Unite_USA_PSP-BAHAMUT.7z&id=80547&platform=psp&key=9138381868",
-            "btnText": "Baixar Agora (Download Direto)"
-          },
-          {
-            "id": 1791395911016,
-            "name": "Spider-Man 3",
-            "image": "https://i.ibb.co/39S4CBdt/5cc5503d87d00c95c6e87b9f3082348b.jpg",
-            "category": "PSP",
-            "size": "1.68GB",
-            "format": "ISO",
-            "status": "Grátis ",
-            "description": "Ação e aventura ",
-            "link": "https://archive.org/download/spider-man-3_202311/Spider-Man%203.iso",
-            "btnText": "Baixar Agora (Download Direto)"
-          },
-          {
-            "id": 1791487309610,
-            "name": "Lord of the Rings: Aragorn's Quest ",
-            "image": "https://i.ibb.co/Q7TBTxpz/d5d177097533e08815b09a0a79a89abc.jpg",
-            "category": "PSP",
-            "size": "263.77MB",
-            "format": "7Z",
-            "status": "Grátis ",
-            "description": "Ação e aventura ",
-            "link": "https://dl5b.cdromance.org/download.php?file=Lord.of.the.Rings.Aragorns.Quest.EUR.PSP-WARG.7z&id=28472&platform=psp&key=6520439848",
-            "btnText": "Baixar Agora (Download Direto)"
-          },
-          {
-            "id": 1791488560025,
-            "name": "Star Wars: The Force Unleashed",
-            "image": "https://i.ibb.co/GQfPcmN9/d6d64793ea32025bcd382ccbdf419c1c.jpg",
-            "category": "PSP",
-            "size": "439.89MB",
-            "format": "7Z",
-            "status": "Grátis ",
-            "description": "Ação ",
-            "link": "https://dl5b.cdromance.org/download.php?file=Star_Wars_The_Force_Unleashed_USA_PSP-pSyPSP.7z&id=27803&platform=psp&key=5183581321",
-            "btnText": "Baixar Agora (Download Direto)"
-          },
-          {
-            "id": 1791489632368,
-            "name": "​Ben 10: Protector of Earth ",
-            "image": "https://i.ibb.co/p6hML9R6/bc5c5312b2dab98c670ac13d0a40308e.jpg",
-            "category": "PSP",
-            "size": "685.21MB",
-            "format": "ISO",
-            "status": "Grátis ",
-            "description": "Ação, luta e aventura ",
-            "link": "https://archive.org/download/pspben10protectorofearthusa/Ben%2010%20-%20Protector%20of%20Earth%20%28USA%29.iso",
-            "btnText": "Baixar Agora (Download Direto)"
-          }
-        ];
-
-        let listaBannersCache = [
-          {
-            "image": "https://i.ibb.co/Hf9GsdxW/unnamed-4.jpg",
-            "title": "Bem-vindo ao PSP Gamer Mobile 2"
-          },
-          {
-            "image": "https://i.ibb.co/TxBqvzhs/unnamed-1.jpg",
-            "title": "Novos Jogos Adicionados Semanalmente"
-          },
-          {
-            "image": "https://i.ibb.co/N6n6FHhs/unnamed-8.jpg",
-            "title": "Baixe com Links Diretos e Seguros"
-          },
-          {
-            "image": "https://i.ibb.co/whzq0NxW/unnamed-5.jpg",
-            "title": "Os melhores jogos so aqui"
-          }
-        ];
-
-        let indiceCarrosselAtual = 0;
-        let intervaloCarrossel = null;
-        const SENHA_ADMIN = "Rodri2012";
-        let categoriaAtual = 'Todos';
-
-        function mostrarStatusSync(texto, cor = "rgba(0, 255, 136, 0.9)") {
-            const status = document.getElementById('syncStatus');
-            if(status) {
-                status.innerText = texto;
-                status.style.background = cor;
-                status.style.display = 'block';
-                setTimeout(() => { status.style.display = 'none'; }, 4000);
-            }
-        }
-
-        function mostrarBannerWhatsapp() {
-            const banner = document.getElementById('whatsappFloatingBanner');
-            if (banner) {
-                banner.classList.remove('closing');
-                banner.style.display = 'block';
-            }
-        }
-
-        function fecharBannerWhatsapp() {
-            const banner = document.getElementById('whatsappFloatingBanner');
-            if (banner) {
-                banner.classList.add('closing');
-                setTimeout(() => {
-                    banner.style.display = 'none';
-                    banner.classList.remove('closing');
-                }, 400);
-            }
-        }
-
-        function iniciarLoopWhatsappBanner() {
-            setInterval(() => {
-                const banner = document.getElementById('whatsappFloatingBanner');
-                if (banner && banner.style.display !== 'block' && !banner.classList.contains('closing')) {
-                    mostrarBannerWhatsapp();
-                }
-            }, 20000);
-        }
-
-        function atualizarCaixaCodigoGerado() {
-            const textarea = document.getElementById('codigoGeradoArea');
-            if (!textarea) return;
-
-            let codigoTexto = `let listaJogosCache = ` + JSON.stringify(listaJogosCache, null, 2) + `;\n\n`;
-            codigoTexto += `let listaBannersCache = ` + JSON.stringify(listaBannersCache, null, 2) + `;`;
-            
-            textarea.value = codigoTexto;
-        }
-
-        function copiarCodigoPainel() {
-            const textarea = document.getElementById('codigoGeradoArea');
-            if (!textarea) return;
-            textarea.select();
-            navigator.clipboard.writeText(textarea.value);
-            mostrarStatusSync("Código copiado com sucesso! Cole no seu arquivo HTML.");
-        }
-
-        window.addEventListener('DOMContentLoaded', () => {
-            renderGames();
-            renderizarCarrossel();
-            iniciarAutoplayCarrossel();
-            iniciarLoopWhatsappBanner();
-            switchTab('jogos');
-
-            const urlParams = new URLSearchParams(window.location.search);
-            const jogoIdUrl = urlParams.get('jogo');
-            if (jogoIdUrl) {
-                setTimeout(() => { verDetalhesDoJogo(Number(jogoIdUrl)); }, 300);
-            }
-
-            window.addEventListener('click', function(e) {
-                if (!e.target.closest('.top-icons')) {
-                    const menu = document.getElementById('dropdownMenu');
-                    if(menu) menu.classList.remove('show');
-                }
-            });
-        });
-
-        function renderizarCarrossel() {
-            const track = document.getElementById('carouselTrack');
-            const indicators = document.getElementById('carouselIndicators');
-            const container = document.getElementById('carouselContainer');
-            if (!track || !indicators || !container) return;
-
-            track.innerHTML = '';
-            indicators.innerHTML = '';
-
-            listaBannersCache.forEach((banner, index) => {
-                const slide = document.createElement('div');
-                slide.className = 'carousel-slide';
-                slide.innerHTML = `
-                    <img src="${banner.image}" alt="${banner.title}" onerror="this.src='https://i.ibb.co/4nhr0dZz/unnamed.jpg'">
-                    <div class="carousel-caption">${banner.title}</div>
-                `;
-                track.appendChild(slide);
-
-                const ind = document.createElement('div');
-                ind.className = `indicator ${index === 0 ? 'active' : ''}`;
-                ind.onclick = () => irParaSlide(index);
-                indicators.appendChild(ind);
-            });
-            atualizarPosicaoCarrossel();
-        }
-
-        function atualizarPosicaoCarrossel() {
-            const track = document.getElementById('carouselTrack');
-            const indicators = document.querySelectorAll('.indicator');
-            if (!track || listaBannersCache.length === 0) return;
-
-            track.style.transform = `translateX(-${indiceCarrosselAtual * 100}%)`;
-            indicators.forEach((ind, i) => {
-                ind.classList.toggle('active', i === indiceCarrosselAtual);
-            });
-        }
-
-        function proximoSlide() {
-            if (!listaBannersCache.length) return;
-            indiceCarrosselAtual = (indiceCarrosselAtual + 1) % listaBannersCache.length;
-            atualizarPosicaoCarrossel();
-        }
-
-        function irParaSlide(index) {
-            indiceCarrosselAtual = index;
-            atualizarPosicaoCarrossel();
-            iniciarAutoplayCarrossel();
-        }
-
-        function iniciarAutoplayCarrossel() {
-            if (intervaloCarrossel) clearInterval(intervaloCarrossel);
-            intervaloCarrossel = setInterval(proximoSlide, 4500);
-        }
-
-        function renderizarInputsAdminBanners() {
-            const container = document.getElementById('carouselFormList');
-            if (!container) return;
-            container.innerHTML = '';
-
-            for (let i = 0; i < 4; i++) {
-                const banner = listaBannersCache[i] || { image: '', title: '' };
-                const div = document.createElement('div');
-                div.style.marginBottom = "12px";
-                div.style.padding = "10px";
-                div.style.background = "#0b0b0f";
-                div.style.borderRadius = "10px";
-                div.style.border = "1px solid rgba(255,255,255,0.06)";
-                div.innerHTML = `
-                    <p style="font-size: 0.8rem; color: var(--accent-cyan); margin-bottom: 6px; font-weight: bold;">Banner ${i + 1}</p>
-                    <div style="margin-bottom: 8px;">
-                        <input type="url" id="bannerImg_${i}" value="${banner.image}" placeholder="Link da imagem">
-                    </div>
-                    <div>
-                        <input type="text" id="bannerTitle_${i}" value="${banner.title}" placeholder="Título do banner">
-                    </div>
-                `;
-                container.appendChild(div);
-            }
-        }
-
-        function salvarBannersCarrossel() {
-            let novosBanners = [];
-            for (let i = 0; i < 4; i++) {
-                const imgInput = document.getElementById(`bannerImg_${i}`);
-                const titleInput = document.getElementById(`bannerTitle_${i}`);
-                if (imgInput && imgInput.value.trim()) {
-                    novosBanners.push({ 
-                        image: imgInput.value.trim(), 
-                        title: (titleInput && titleInput.value.trim()) ? titleInput.value.trim() : 'Destaque' 
-                    });
-                }
-            }
-            if (novosBanners.length === 0) {
-                alert("Adicione pelo menos 1 banner válido!");
-                return;
-            }
-            listaBannersCache = novosBanners;
-            indiceCarrosselAtual = 0;
-            renderizarCarrossel();
-            atualizarCaixaCodigoGerado();
-            mostrarStatusSync("Banners atualizados! Copie o código gerado acima.");
-        }
-
-        function toggleMenu(event) {
-            event.stopPropagation();
-            document.getElementById('dropdownMenu').classList.toggle('show');
-        }
-
-        function abrirModalInfo(titulo, texto) {
-            document.getElementById('modalTitle').innerText = titulo;
-            document.getElementById('modalText').innerText = texto;
-            document.getElementById('customModalOverlay').classList.add('show');
-            document.getElementById('dropdownMenu').classList.remove('show');
-        }
-
-        function fecharModalInfo() {
-            document.getElementById('customModalOverlay').classList.remove('show');
-        }
-
-        function solicitarSenha() {
-            if (localStorage.getItem('isAdmin') === 'true') {
-                switchTab('inicio');
-                renderizarInputsAdminBanners();
-                atualizarCaixaCodigoGerado();
-                return;
-            }
-            let senha = prompt("Digite a senha de administrador:");
-            if (senha === SENHA_ADMIN) {
-                localStorage.setItem('isAdmin', 'true');
-                switchTab('inicio');
-                renderizarInputsAdminBanners();
-                atualizarCaixaCodigoGerado();
-                renderGames();
-                alert("Painel liberado!");
-            } else if (senha !== null) {
-                alert("Senha incorreta!");
-            }
-        }
-
-        function logoutAdmin() {
-            localStorage.removeItem('isAdmin');
-            cancelarEdicao();
-            switchTab('jogos');
-            renderGames();
-            alert("Saiu do painel admin.");
-        }
-
-        function switchTab(tabId) {
-            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-            const target = document.getElementById(tabId);
-            if(target) target.classList.add('active');
-        }
-
-        function filtrarCategoria(cat, btn) {
-            if (cat === 'PedirJogo') {
-                document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
-                if(btn) btn.classList.add('active');
-                switchTab('pedirJogoTab');
-                return;
-            }
-
-            categoriaAtual = cat;
-            document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
-            if(btn) btn.classList.add('active');
-            switchTab('jogos');
-            renderGames();
-        }
-
-        function enviarPedidoWhatsapp(e) {
-            e.preventDefault();
-            const nomeJogo = document.getElementById('pedidoNome').value.trim();
-            const plataforma = document.getElementById('pedidoPlataforma').value;
-            const obs = document.getElementById('pedidoObs').value.trim();
-
-            let mensagem = `Olá! Quero pedir um jogo:\n\n🎮 *Jogo:* ${nomeJogo}\n💻 *Plataforma:* ${plataforma}`;
-            if (obs) {
-                mensagem += `\n📝 *Observações:* ${obs}`;
-            }
-
-            const numeroWhatsApp = "258843843479";
-            const urlWhatsapp = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensagem)}`;
-            window.open(urlWhatsapp, '_blank');
-        }
-
-        const gameForm = document.getElementById('gameForm');
-        if(gameForm) {
-            gameForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-
-                const editId = document.getElementById('editGameId').value;
-                const name = document.getElementById('gameName').value;
-                const image = document.getElementById('gameImage').value;
-                const category = document.getElementById('gameCategory').value || 'PSP';
-                const size = document.getElementById('gameSize').value;
-                const format = document.getElementById('gameFormat').value;
-                const status = document.getElementById('gameStatus').value;
-                const description = document.getElementById('gameDescription').value || 'Sem descrição.';
-                const link = document.getElementById('gameLink').value;
-                const btnText = document.getElementById('gameBtnText').value.trim() || 'Baixar Agora (Download Direto)';
-
-                if (editId) {
-                    listaJogosCache = listaJogosCache.map(game => {
-                        if (game.id == editId) {
-                            return { ...game, name, image, category, size, format, status, description, link, btnText };
-                        }
-                        return game;
-                    });
-                    cancelarEdicao();
-                } else {
-                    const newGame = { id: Date.now(), name, image, category, size, format, status, description, link, btnText };
-                    listaJogosCache.push(newGame);
-                }
-
-                renderGames();
-                switchTab('inicio');
-                atualizarCaixaCodigoGerado();
-                gameForm.reset();
-
-                mostrarStatusSync("Jogo salvo! Copie o código atualizado acima.");
-            });
-        }
-
-        function deleteGame(id) {
-            if (confirm("Tem certeza que deseja excluir este jogo?")) {
-                listaJogosCache = listaJogosCache.filter(game => game.id !== id);
-                renderGames();
-                switchTab('inicio');
-                atualizarCaixaCodigoGerado();
-                mostrarStatusSync("Jogo excluído! Copie o código atualizado acima.");
-            }
-        }
-
-        function prepararEdicao(id) {
-            const game = listaJogosCache.find(g => g.id === id);
-            if (!game) return;
-
-            document.getElementById('editGameId').value = game.id;
-            document.getElementById('gameName').value = game.name;
-            document.getElementById('gameImage').value = game.image;
-            document.getElementById('gameCategory').value = game.category || 'PSP';
-            document.getElementById('gameSize').value = game.size;
-            document.getElementById('gameFormat').value = game.format;
-            document.getElementById('gameStatus').value = game.status;
-            document.getElementById('gameDescription').value = game.description;
-            document.getElementById('gameLink').value = game.link;
-            document.getElementById('gameBtnText').value = game.btnText || '';
-
-            document.getElementById('formTitle').innerText = "Editar Jogo";
-            document.getElementById('submitBtn').innerText = "Salvar Alterações";
-            document.getElementById('cancelEditContainer').style.display = "block";
-
-            switchTab('inicio');
-            renderizarInputsAdminBanners();
-            atualizarCaixaCodigoGerado();
-        }
-
-        function cancelarEdicao() {
-            if(gameForm) gameForm.reset();
-            document.getElementById('editGameId').value = "";
-            document.getElementById('formTitle').innerText = "Publicar Novo Jogo";
-            document.getElementById('submitBtn').innerText = "Publicar Jogo";
-            document.getElementById('cancelEditContainer').style.display = "none";
-        }
-
-        function compartilharJogo(id, nome) {
-            const linkCompartilhamento = window.location.origin + window.location.pathname + '?jogo=' + id;
-            if (navigator.share) {
-                navigator.share({ title: nome, text: `Baixe ${nome} na PSP GAMER MOBILE 2!`, url: linkCompartilhamento }).catch(() => {});
-            } else {
-                navigator.clipboard.writeText(linkCompartilhamento);
-                alert("Link copiado: " + linkCompartilhamento);
-            }
-        }
-
-        function verDetalhesDoJogo(id) {
-            const game = listaJogosCache.find(g => g.id === id);
-            if (!game) return;
-
-            let botoesAdminDetalhe = '';
-            if (localStorage.getItem('isAdmin') === 'true') {
-                botoesAdminDetalhe = `
-                    <div style="display: flex; gap: 10px; margin-top: 15px;">
-                        <button class="edit-btn" onclick="prepararEdicao(${game.id})" style="margin-top:0;">Editar Jogo</button>
-                        <button class="delete-btn" onclick="deleteGame(${game.id})" style="margin-top:0;">Excluir Jogo</button>
-                    </div>
-                `;
-            }
-
-            document.getElementById('gameDetailContent').innerHTML = `
-                <div class="game-detail-card">
-                    <div class="detail-img-container">
-                        <img src="${game.image}" class="detail-img" alt="${game.name}" onerror="this.src='https://i.ibb.co/4nhr0dZz/unnamed.jpg'">
-                        <div class="price-badge">${game.status}</div>
-                    </div>
-                    <div class="detail-info">
-                        <h2>${game.name}</h2>
-                        <div class="game-details" style="font-size: 0.85rem; margin-bottom: 15px; gap: 6px;">
-                            <span>📦 Tamanho: <strong>${game.size}</strong></span>
-                            <span>📁 Formato: <strong>${game.format}</strong></span>
-                            <span>📂 Categoria: <strong>${game.category}</strong></span>
-                        </div>
-                        <h4 style="font-size: 0.95rem; color: white; margin-bottom: 5px;">Informações:</h4>
-                        <p class="detail-desc">${game.description}</p>
-
-                        <div class="action-bar">
-                            <button class="share-btn" onclick="compartilharJogo(${game.id}, '${game.name.replace(/'/g, "\\'")}')">🔗 Compartilhar</button>
-                        </div>
-                        
-                        <a href="${game.link}" target="_blank" class="download-btn" style="padding: 12px; font-size: 0.95rem; margin-top: 15px;">${game.btnText}</a>
-                        ${botoesAdminDetalhe}
-                    </div>
-                </div>
-            `;
-            switchTab('detalhes');
-        }
-
-        function renderGames() {
-            const gamesGrid = document.getElementById('gamesGrid');
-            const searchInput = document.getElementById('searchInput');
-            if (!gamesGrid) return;
-
-            const termoBusca = searchInput ? searchInput.value.toLowerCase() : '';
-            gamesGrid.innerHTML = '';
-
-            let filtrados = listaJogosCache.filter(game => {
-                let matchCat = (categoriaAtual === 'Todos' || (game.category && game.category === categoriaAtual));
-                let matchBusca = game.name.toLowerCase().includes(termoBusca);
-                return matchCat && matchBusca;
-            });
-
-            if (filtrados.length === 0) {
-                gamesGrid.innerHTML = '<p class="empty-msg">Nenhum jogo encontrado.</p>';
-                return;
-            }
-
-            filtrados.forEach((game, index) => {
-                const card = document.createElement('div');
-                card.className = 'game-card';
-                card.style.animationDelay = `${index * 0.03}s`;
-                card.onclick = () => verDetalhesDoJogo(game.id);
-
-                let botoesAdminHtml = '';
-                if (localStorage.getItem('isAdmin') === 'true') {
-                    botoesAdminHtml = `
-                        <div style="padding: 0 10px 10px 10px;" onclick="event.stopPropagation()">
-                            <button class="edit-btn" onclick="prepararEdicao(${game.id})">Editar</button>
-                            <button class="delete-btn" onclick="deleteGame(${game.id})">Excluir</button>
-                        </div>
-                    `;
-                }
-
-                card.innerHTML = `
-                    <div>
-                        <div class="card-img-container">
-                            <img src="${game.image}" alt="${game.name}" onerror="this.src='https://i.ibb.co/4nhr0dZz/unnamed.jpg'">
-                            <div class="price-badge">${game.status}</div>
-                        </div>
-                        <div class="game-info">
-                            <h3>${game.name}</h3>
-                            <div class="game-details">
-                                <span>📦 Tamanho: <strong>${game.size}</strong></span>
-                                <span>📁 Formato: <strong>${game.format}</strong></span>
-                            </div>
-                            <span class="download-btn" style="display: block;">Ver Detalhes / Baixar</span>
-                        </div>
-                    </div>
-                    ${botoesAdminHtml}
-                `;
-                gamesGrid.appendChild(card);
-            });
-        }
-    </script>
-</body>
-</html>
+<!DOCTYPE html>  <html lang="pt-BR">  
+<head>  
+    <meta charset="UTF-8">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+    <title>PSP GAMER MOBILE 2</title>  
+    <style>  
+        :root {  
+            --bg-color: #0b0b0f;  
+            --card-bg: #13131a;  
+            --text-color: #f1f1f6;  
+            --text-muted: #8e8e99;  
+            --primary: #00ff88;  
+            --primary-hover: #00cc6a;  
+            --accent-pink: #ff007f;  
+            --accent-cyan: #00f0ff;  
+            --danger: #ff3366;  
+            --warning: #ffaa00;  
+        }  * {  
+        margin: 0;  
+        padding: 0;  
+        box-sizing: border-box;  
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;  
+    }  
+
+    body {  
+        background-color: var(--bg-color);  
+        color: var(--text-color);  
+        padding: 15px;  
+        background-image:   
+            radial-gradient(circle at 10% 20%, rgba(255, 0, 127, 0.08) 0%, transparent 40%),  
+            radial-gradient(circle at 90% 80%, rgba(0, 240, 255, 0.08) 0%, transparent 40%);  
+        background-attachment: fixed;  
+    }  
+
+    .container {  
+        max-width: 500px;  
+        margin: 0 auto;  
+    }  
+
+    .top-bar {  
+        display: flex;  
+        align-items: center;  
+        justify-content: space-between;  
+        gap: 10px;  
+        margin-bottom: 20px;  
+        position: relative;  
+    }  
+
+    .logo {  
+        color: var(--accent-pink);  
+        font-size: 1.1rem;  
+        font-weight: 900;  
+        text-shadow: 0 0 10px rgba(255, 0, 127, 0.5);  
+        letter-spacing: 0.5px;  
+        animation: pulseLogo 3s infinite alternate;  
+        white-space: nowrap;  
+        cursor: pointer;  
+    }  
+
+    @keyframes pulseLogo {  
+        0% { text-shadow: 0 0 8px rgba(255, 0, 127, 0.4); }  
+        100% { text-shadow: 0 0 16px rgba(255, 0, 127, 0.8), 0 0 20px rgba(0, 240, 255, 0.3); }  
+    }  
+
+    .search-container {  
+        flex: 1;  
+    }  
+
+    .search-box {  
+        width: 100%;  
+        background-color: #1a1a24;  
+        border: 1px solid rgba(0, 240, 255, 0.2);  
+        border-radius: 20px;  
+        padding: 9px 16px;  
+        color: white;  
+        font-size: 0.9rem;  
+        outline: none;  
+        transition: all 0.3s ease;  
+        box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);  
+    }  
+
+    .search-box:focus {  
+        border-color: var(--accent-cyan);  
+        box-shadow: 0 0 10px rgba(0, 240, 255, 0.4), inset 0 2px 4px rgba(0,0,0,0.5);  
+    }  
+
+    .top-icons {  
+        display: flex;  
+        align-items: center;  
+        color: white;  
+        font-size: 1.1rem;  
+        cursor: pointer;  
+        position: relative;  
+    }  
+
+    .top-icons span {  
+        background: #1a1a24;  
+        padding: 8px 10px;  
+        border-radius: 50%;  
+        border: 1px solid rgba(255,255,255,0.05);  
+        display: flex;  
+        align-items: center;  
+        justify-content: center;  
+        transition: all 0.3s ease;  
+    }  
+
+    .top-icons span:hover {  
+        border-color: var(--accent-pink);  
+        transform: scale(1.05);  
+    }  
+
+    .dropdown-menu {  
+        display: none;  
+        position: absolute;  
+        right: 0;  
+        top: 45px;  
+        background-color: var(--card-bg);  
+        border: 1px solid rgba(0, 240, 255, 0.25);  
+        border-radius: 12px;  
+        box-shadow: 0 10px 25px rgba(0,0,0,0.7), 0 0 15px rgba(0, 240, 255, 0.1);  
+        width: 160px;  
+        z-index: 100;  
+        overflow: hidden;  
+        animation: fadeInMenu 0.2s ease forwards;  
+    }  
+
+    @keyframes fadeInMenu {  
+        from { opacity: 0; transform: translateY(-8px); }  
+        to { opacity: 1; transform: translateY(0); }  
+    }  
+
+    .dropdown-menu.show {  
+        display: block;  
+    }  
+
+    .dropdown-item {  
+        padding: 12px 15px;  
+        font-size: 0.85rem;  
+        color: var(--text-color);  
+        cursor: pointer;  
+        border-bottom: 1px solid rgba(255,255,255,0.04);  
+        text-decoration: none;  
+        display: block;  
+        transition: all 0.2s;  
+    }  
+
+    .dropdown-item:last-child {  
+        border-bottom: none;  
+    }  
+
+    .dropdown-item:hover {  
+        background-color: rgba(255, 0, 127, 0.15);  
+        color: var(--accent-pink);  
+        padding-left: 18px;  
+    }  
+
+    .carousel-container {  
+        position: relative;  
+        width: 100%;  
+        height: 180px;  
+        border-radius: 16px;  
+        overflow: hidden;  
+        margin-bottom: 20px;  
+        box-shadow: 0 8px 25px rgba(0,0,0,0.6), 0 0 15px rgba(0, 240, 255, 0.15);  
+        border: 1px solid rgba(0, 240, 255, 0.25);  
+        background: #13131a;  
+    }  
+
+    .carousel-track {  
+        display: flex;  
+        width: 100%;  
+        height: 100%;  
+        transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);  
+    }  
+
+    .carousel-slide {  
+        min-width: 100%;  
+        height: 100%;  
+        position: relative;  
+    }  
+
+    .carousel-slide img {  
+        width: 100%;  
+        height: 100%;  
+        object-fit: cover;  
+        filter: brightness(0.9);  
+        transition: transform 0.6s ease;  
+    }  
+
+    .carousel-slide:hover img {  
+        transform: scale(1.03);  
+    }  
+
+    .carousel-caption {  
+        position: absolute;  
+        bottom: 0;  
+        left: 0;  
+        right: 0;  
+        background: linear-gradient(to top, rgba(11, 11, 15, 0.95), rgba(11, 11, 15, 0.2));  
+        padding: 12px 15px;  
+        font-size: 0.9rem;  
+        font-weight: bold;  
+        color: white;  
+        text-shadow: 0 2px 4px rgba(0,0,0,0.8);  
+    }  
+
+    .carousel-indicators {  
+        position: absolute;  
+        bottom: 10px;  
+        right: 15px;  
+        display: flex;  
+        gap: 6px;  
+        z-index: 10;  
+    }  
+
+    .indicator {  
+        width: 8px;  
+        height: 8px;  
+        border-radius: 50%;  
+        background: rgba(255, 255, 255, 0.4);  
+        cursor: pointer;  
+        transition: all 0.3s;  
+    }  
+
+    .indicator.active {  
+        background: var(--accent-pink);  
+        width: 22px;  
+        border-radius: 4px;  
+        box-shadow: 0 0 8px var(--accent-pink);  
+    }  
+
+    .custom-modal-overlay {  
+        display: none;  
+        position: fixed;  
+        top: 0;  
+        left: 0;  
+        width: 100%;  
+        height: 100%;  
+        background: rgba(11, 11, 15, 0.8);  
+        backdrop-filter: blur(5px);  
+        z-index: 1000;  
+        align-items: center;  
+        justify-content: center;  
+        padding: 20px;  
+        opacity: 0;  
+        transition: opacity 0.3s ease;  
+    }  
+
+    .custom-modal-overlay.show {  
+        display: flex;  
+        opacity: 1;  
+    }  
+
+    .custom-modal {  
+        background: linear-gradient(145deg, #161622, #101017);  
+        border: 1px solid rgba(0, 240, 255, 0.3);  
+        border-radius: 16px;  
+        padding: 22px;  
+        width: 100%;  
+        max-width: 380px;  
+        box-shadow: 0 15px 40px rgba(0,0,0,0.8), 0 0 20px rgba(0, 240, 255, 0.2);  
+        transform: scale(0.8) translateY(20px);  
+        transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);  
+    }  
+
+    .custom-modal-overlay.show .custom-modal {  
+        transform: scale(1) translateY(0);  
+    }  
+
+    .custom-modal h3 {  
+        color: var(--accent-cyan);  
+        font-size: 1.2rem;  
+        margin-bottom: 12px;  
+        text-shadow: 0 0 8px rgba(0, 240, 255, 0.4);  
+    }  
+
+    .custom-modal p {  
+        color: var(--text-color);  
+        font-size: 0.9rem;  
+        line-height: 1.5;  
+        margin-bottom: 20px;  
+        white-space: pre-wrap;  
+    }  
+
+    .custom-modal-btn {  
+        background: linear-gradient(135deg, var(--accent-pink), #b00055);  
+        color: white;  
+        border: none;  
+        padding: 10px;  
+        border-radius: 10px;  
+        font-size: 0.9rem;  
+        font-weight: bold;  
+        width: 100%;  
+        cursor: pointer;  
+        box-shadow: 0 4px 15px rgba(255, 0, 127, 0.4);  
+        transition: all 0.2s;  
+    }  
+
+    .categories {  
+        display: flex;  
+        gap: 10px;  
+        overflow-x: auto;  
+        padding-bottom: 12px;  
+        margin-bottom: 20px;  
+        scrollbar-width: none;  
+    }  
+
+    .categories::-webkit-scrollbar {  
+        display: none;  
+    }  
+
+    .cat-btn {  
+        background: linear-gradient(135deg, #1a1a24, #121218);  
+        color: var(--text-muted);  
+        border: 1px solid rgba(255,255,255,0.06);  
+        padding: 9px 20px;  
+        border-radius: 25px;  
+        font-size: 0.9rem;  
+        font-weight: 600;  
+        cursor: pointer;  
+        white-space: nowrap;  
+        transition: all 0.3s;  
+        box-shadow: 0 4px 10px rgba(0,0,0,0.3);  
+    }  
+
+    .cat-btn:hover {  
+        color: white;  
+        border-color: rgba(0, 240, 255, 0.4);  
+        transform: translateY(-2px);  
+    }  
+
+    .cat-btn.active {  
+        background: linear-gradient(135deg, var(--accent-pink), #b00055);  
+        color: white;  
+        border-color: var(--accent-pink);  
+        box-shadow: 0 0 15px rgba(255, 0, 127, 0.5);  
+    }  
+
+    .tab-content {  
+        display: none;  
+        animation: fadeInTab 0.3s ease;  
+    }  
+    @keyframes fadeInTab {  
+        from { opacity: 0; transform: translateY(5px); }  
+        to { opacity: 1; transform: translateY(0); }  
+    }  
+    .tab-content.active {  
+        display: block;  
+    }  
+
+    .form-card {  
+        background: linear-gradient(145deg, #161622, #101017);  
+        padding: 22px;  
+        border-radius: 16px;  
+        margin-bottom: 20px;  
+        box-shadow: 0 8px 30px rgba(0,0,0,0.5);  
+        border: 1px solid rgba(0, 240, 255, 0.15);  
+    }  
+
+    .form-card h2 {  
+        margin-bottom: 18px;  
+        font-size: 1.3rem;  
+        color: var(--accent-cyan);  
+        text-shadow: 0 0 8px rgba(0, 240, 255, 0.3);  
+    }  
+
+    .input-group {  
+        margin-bottom: 14px;  
+    }  
+
+    .input-group label {  
+        display: block;  
+        margin-bottom: 5px;  
+        font-size: 0.85rem;  
+        color: var(--text-muted);  
+        font-weight: 500;  
+    }  
+
+    .input-group input, .input-group select, .input-group textarea {  
+        width: 100%;  
+        padding: 11px;  
+        border-radius: 10px;  
+        border: 1px solid rgba(255,255,255,0.08);  
+        background-color: #0b0b0f;  
+        color: white;  
+        font-size: 0.9rem;  
+        outline: none;  
+        transition: all 0.3s;  
+    }  
+
+    .form-row {  
+        display: flex;  
+        gap: 15px;  
+    }  
+
+    .form-row .input-group {  
+        flex: 1;  
+    }  
+
+    button {  
+        background: linear-gradient(135deg, var(--primary), #00aa5b);  
+        color: #0b0b0f;  
+        border: none;  
+        padding: 12px 20px;  
+        font-size: 1rem;  
+        font-weight: 800;  
+        border-radius: 10px;  
+        cursor: pointer;  
+        transition: all 0.3s;  
+        width: 100%;  
+        box-shadow: 0 4px 15px rgba(0, 255, 136, 0.3);  
+        text-transform: uppercase;  
+        letter-spacing: 0.5px;  
+    }  
+
+    button:hover {  
+        transform: translateY(-2px);  
+        box-shadow: 0 6px 20px rgba(0, 255, 136, 0.5);  
+    }  
+
+    .games-grid {  
+        display: grid;  
+        grid-template-columns: 1fr 1fr;  
+        gap: 14px;  
+    }  
+
+    @keyframes fadeInGame {  
+        from { opacity: 0; transform: scale(0.9) translateY(15px); }  
+        to { opacity: 1; transform: scale(1) translateY(0); }  
+    }  
+
+    .game-card {  
+        background: linear-gradient(145deg, #15151f, #0f0f16);  
+        border-radius: 14px;  
+        overflow: hidden;  
+        box-shadow: 0 6px 20px rgba(0,0,0,0.5);  
+        display: flex;  
+        flex-direction: column;  
+        justify-content: space-between;  
+        position: relative;  
+        cursor: pointer;  
+        border: 1px solid rgba(255, 255, 255, 0.04);  
+        transition: all 0.35s;  
+        animation: fadeInGame 0.4s forwards;  
+    }  
+
+    .game-card:hover {  
+        transform: translateY(-5px) scale(1.02);  
+        border-color: rgba(0, 240, 255, 0.5);  
+        box-shadow: 0 12px 30px rgba(0,0,0,0.7), 0 0 15px rgba(0, 240, 255, 0.25);  
+    }  
+
+    .card-img-container {  
+        position: relative;  
+        width: 100%;  
+        height: 140px;  
+        overflow: hidden;  
+    }  
+
+    .game-card img {  
+        width: 100%;  
+        height: 100%;  
+        object-fit: cover;  
+        transition: transform 0.5s ease;  
+    }  
+
+    .game-card:hover img {  
+        transform: scale(1.1);  
+    }  
+
+    .price-badge {  
+        position: absolute;  
+        top: 8px;  
+        right: 8px;  
+        background: rgba(11, 11, 15, 0.85);  
+        backdrop-filter: blur(5px);  
+        padding: 4px 10px;  
+        border-radius: 12px;  
+        font-size: 0.75rem;  
+        font-weight: bold;  
+        color: var(--primary);  
+        border: 1px solid rgba(0, 255, 136, 0.3);  
+    }  
+
+    .game-info {  
+        padding: 12px;  
+        display: flex;  
+        flex-direction: column;  
+        flex: 1;  
+    }  
+
+    .game-info h3 {  
+        font-size: 0.95rem;  
+        margin-bottom: 6px;  
+        color: white;  
+        white-space: nowrap;  
+        overflow: hidden;  
+        text-overflow: ellipsis;  
+        font-weight: 700;  
+    }  
+
+    .game-details {  
+        font-size: 0.75rem;  
+        color: var(--text-muted);  
+        margin-bottom: 8px;  
+        display: flex;  
+        flex-direction: column;  
+        gap: 3px;  
+    }  
+
+    .download-btn {  
+        display: block;  
+        text-align: center;  
+        background: linear-gradient(135deg, var(--accent-cyan), #0099ff);  
+        color: #0b0b0f;  
+        text-decoration: none;  
+        padding: 9px;  
+        border-radius: 20px;  
+        font-size: 0.8rem;  
+        font-weight: 800;  
+        margin-top: auto;  
+        box-shadow: 0 4px 12px rgba(0, 240, 255, 0.3);  
+    }  
+
+    .delete-btn {  
+        background: linear-gradient(135deg, var(--danger), #cc0033);  
+        color: white;  
+        margin-top: 6px;  
+        padding: 7px;  
+        font-size: 0.75rem;  
+        width: 100%;  
+        border-radius: 8px;  
+        font-weight: bold;  
+    }  
+
+    .edit-btn {  
+        background: linear-gradient(135deg, var(--warning), #cc8800);  
+        color: #0b0b0f;  
+        margin-top: 6px;  
+        padding: 7px;  
+        font-size: 0.75rem;  
+        width: 100%;  
+        border-radius: 8px;  
+        font-weight: bold;  
+    }  
+
+    .empty-msg {  
+        text-align: center;  
+        grid-column: 1 / -1;  
+        color: var(--text-muted);  
+        font-style: italic;  
+        padding: 40px;  
+        background: var(--card-bg);  
+        border-radius: 12px;  
+    }  
+
+    .game-detail-card {  
+        background: linear-gradient(145deg, #161622, #101017);  
+        border-radius: 16px;  
+        overflow: hidden;  
+        padding: 20px;  
+        box-shadow: 0 10px 35px rgba(0,0,0,0.6);  
+        border: 1px solid rgba(0, 240, 255, 0.2);  
+    }  
+
+    .back-btn {  
+        background: #1a1a24;  
+        color: var(--text-color);  
+        border: 1px solid rgba(255,255,255,0.08);  
+        padding: 8px 16px;  
+        border-radius: 10px;  
+        font-size: 0.85rem;  
+        cursor: pointer;  
+        margin-bottom: 15px;  
+        width: auto;  
+        font-weight: bold;  
+    }  
+
+    .detail-img-container {  
+        position: relative;  
+        width: 100%;  
+        height: 210px;  
+        margin-bottom: 15px;  
+    }  
+
+    .detail-img {  
+        width: 100%;  
+        height: 100%;  
+        object-fit: cover;  
+        border-radius: 12px;  
+    }  
+
+    .detail-desc {  
+        font-size: 0.9rem;  
+        color: var(--text-muted);  
+        margin: 15px 0;  
+        line-height: 1.5;  
+        white-space: pre-wrap;  
+        background: #0b0b0f;  
+        padding: 12px;  
+        border-radius: 10px;  
+    }  
+
+    .action-bar {  
+        display: flex;  
+        align-items: center;  
+        justify-content: flex-end;  
+        background: #0b0b0f;  
+        padding: 10px 15px;  
+        border-radius: 12px;  
+        margin-top: 15px;  
+    }  
+
+    .share-btn {  
+        background: linear-gradient(135deg, var(--accent-pink), #b00055);  
+        color: white;  
+        border: none;  
+        padding: 8px 14px;  
+        border-radius: 8px;  
+        font-size: 0.85rem;  
+        font-weight: bold;  
+        cursor: pointer;  
+        width: auto;  
+    }  
+
+    .admin-login-area {  
+        text-align: center;  
+        margin-top: 40px;  
+        padding-top: 20px;  
+        border-top: 1px solid rgba(255,255,255,0.06);  
+    }  
+
+    .admin-link {  
+        background: none;  
+        border: none;  
+        color: var(--text-muted);  
+        font-size: 0.85rem;  
+        line-height: 1.4;  
+    }  
+      
+    #syncStatus {  
+        position: fixed;  
+        bottom: 10px;  
+        left: 50%;  
+        transform: translateX(-50%);  
+        background: rgba(0, 255, 136, 0.9);  
+        color: #0b0b0f;  
+        padding: 6px 16px;  
+        border-radius: 20px;  
+        font-size: 0.8rem;  
+        font-weight: bold;  
+        box-shadow: 0 4px 15px rgba(0,0,0,0.5);  
+        z-index: 9999;  
+        display: none;  
+    }  
+
+    #whatsappFloatingBanner {  
+        display: none;  
+        position: fixed;  
+        bottom: 20px;  
+        right: 20px;  
+        left: 20px;  
+        max-width: 460px;  
+        margin: 0 auto;  
+        background: linear-gradient(145deg, #161622, #101017);  
+        border: 1px solid rgba(0, 255, 136, 0.4);  
+        border-radius: 16px;  
+        padding: 15px 18px;  
+        box-shadow: 0 10px 30px rgba(0,0,0,0.8), 0 0 20px rgba(0, 255, 136, 0.2);  
+        z-index: 99999;  
+        animation: slideUpFloat 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;  
+    }  
+
+    @keyframes slideUpFloat {  
+        from { opacity: 0; transform: translateY(30px) scale(0.95); }  
+        to { opacity: 1; transform: translateY(0) scale(1); }  
+    }  
+
+    @keyframes slideOutFloat {  
+        0% { opacity: 1; transform: translateY(0) scale(1) rotate(0deg); }  
+        100% { opacity: 0; transform: translateY(50px) scale(0.7) rotate(15deg); }  
+    }  
+
+    #whatsappFloatingBanner.closing {  
+        animation: slideOutFloat 0.4s cubic-bezier(0.6, -0.28, 0.735, 0.045) forwards;  
+    }  
+
+    .wa-banner-content {  
+        display: flex;  
+        align-items: center;  
+        gap: 12px;  
+        position: relative;  
+    }  
+
+    .wa-icon {  
+        font-size: 2rem;  
+        background: rgba(0, 255, 136, 0.1);  
+        padding: 8px;  
+        border-radius: 12px;  
+        display: flex;  
+        align-items: center;  
+        justify-content: center;  
+        border: 1px solid rgba(0, 255, 136, 0.2);  
+    }  
+
+    .wa-text-area {  
+        flex: 1;  
+        padding-right: 15px;  
+    }  
+
+    .wa-text-area h4 {  
+        color: var(--primary);  
+        font-size: 0.95rem;  
+        margin-bottom: 3px;  
+        font-weight: 700;  
+    }  
+
+    .wa-text-area p {  
+        color: var(--text-color);  
+        font-size: 0.8rem;  
+        line-height: 1.3;  
+        margin-bottom: 8px;  
+    }  
+
+    .wa-follow-btn {  
+        display: inline-block;  
+        background: linear-gradient(135deg, var(--primary), #00aa5b);  
+        color: #0b0b0f;  
+        text-decoration: none;  
+        padding: 6px 14px;  
+        border-radius: 8px;  
+        font-size: 0.75rem;  
+        font-weight: 800;  
+        text-transform: uppercase;  
+        box-shadow: 0 3px 10px rgba(0, 255, 136, 0.3);  
+        transition: transform 0.2s;  
+    }  
+
+    .wa-follow-btn:hover {  
+        transform: scale(1.05);  
+    }  
+
+    .wa-close-btn {  
+        position: absolute;  
+        top: -5px;  
+        right: -5px;  
+        background: #1a1a24;  
+        color: var(--text-muted);  
+        border: 1px solid rgba(255,255,255,0.1);  
+        width: 22px;  
+        height: 22px;  
+        border-radius: 50%;  
+        font-size: 0.75rem;  
+        font-weight: bold;  
+        display: flex;  
+        align-items: center;  
+        justify-content: center;  
+        cursor: pointer;  
+        transition: all 0.2s;  
+        box-shadow: 0 2px 5px rgba(0,0,0,0.5);  
+    }  
+
+    .wa-close-btn:hover {  
+        background: var(--danger);  
+        color: white;  
+        border-color: var(--danger);  
+    }  
+
+    /* Estilos do Tela de Bloqueio por Compartilhamento */  
+    #shareLockOverlay {  
+        position: fixed;  
+        top: 0;  
+        left: 0;  
+        width: 100%;  
+        height: 100%;  
+        background: rgba(11, 11, 15, 0.96);  
+        backdrop-filter: blur(8px);  
+        z-index: 999999;  
+        display: flex;  
+        align-items: center;  
+        justify-content: center;  
+        padding: 20px;  
+    }  
+
+    .share-lock-card {  
+        background: linear-gradient(145deg, #161622, #101017);  
+        border: 1px solid rgba(0, 255, 136, 0.3);  
+        border-radius: 20px;  
+        padding: 25px;  
+        width: 100%;  
+        max-width: 400px;  
+        text-align: center;  
+        box-shadow: 0 15px 40px rgba(0,0,0,0.9), 0 0 25px rgba(0, 255, 136, 0.15);  
+    }  
+
+    .share-lock-card h2 {  
+        color: var(--primary);  
+        font-size: 1.3rem;  
+        margin-bottom: 12px;  
+    }  
+
+    .share-lock-card p {  
+        color: var(--text-muted);  
+        font-size: 0.85rem;  
+        line-height: 1.4;  
+        margin-bottom: 20px;  
+    }  
+
+    .share-progress-container {  
+        background: #0b0b0f;  
+        border-radius: 12px;  
+        padding: 15px;  
+        margin-bottom: 20px;  
+        border: 1px solid rgba(255,255,255,0.06);  
+    }  
+
+    .share-counter {  
+        font-size: 1.5rem;  
+        font-weight: 900;  
+        color: var(--accent-cyan);  
+        margin-bottom: 10px;  
+    }  
+
+    .share-progress-bar-bg {  
+        width: 100%;  
+        height: 10px;  
+        background: #1a1a24;  
+        border-radius: 5px;  
+        overflow: hidden;  
+    }  
+
+    .share-progress-bar-fill {  
+        width: 0%;  
+        height: 100%;  
+        background: linear-gradient(90deg, var(--accent-pink), var(--primary));  
+        transition: width 0.3s ease;  
+    }  
+</style>
+
+</head>  
+<body>  <!-- TELA DE BLOQUEIO DE COMPARTILHAMENTO -->  
+<div id="shareLockOverlay">  
+    <div class="share-lock-card">  
+        <h2>🔒 Acesso Bloqueado</h2>  
+        <p>Para desbloquear o site e acessar todos os jogos grátis, você precisa compartilhar o nosso canal do WhatsApp com amigos, grupos ou canais!</p>  
+          
+        <div class="share-progress-container">  
+            <div class="share-counter" id="shareCounterText">0/5</div>  
+            <div class="share-progress-bar-bg">  
+                <div class="share-progress-bar-fill" id="shareProgressBar"></div>  
+            </div>  
+        </div>  
+
+        <button onclick="realizarCompartilhamento()" style="background: linear-gradient(135deg, var(--primary), #00aa5b); color: #0b0b0f; margin-bottom: 10px;">Compartilhar no WhatsApp</button>  
+        <p id="shareMsgAviso" style="font-size: 0.75rem; color: var(--accent-pink); margin-top: 5px; margin-bottom: 0; min-height: 15px;"></p>  
+    </div>  
+</div>  
+
+<div id="syncStatus">Código gerado com sucesso!</div>  
+
+<div id="whatsappFloatingBanner">  
+    <div class="wa-banner-content">  
+        <div class="wa-icon">💬</div>  
+        <div class="wa-text-area">  
+            <h4>Canal Oficial!</h4>  
+            <p>Siga o nosso canal do WhatsApp para ficar por dentro das novidades.</p>  
+            <a href="https://whatsapp.com/channel/0029VbDVqMICBtx8ZZL1Vx3K" target="_blank" class="wa-follow-btn">Seguir</a>  
+        </div>  
+        <div class="wa-close-btn" onclick="fecharBannerWhatsapp()" title="Fechar">✕</div>  
+    </div>  
+</div>  
+
+<div id="customModalOverlay" class="custom-modal-overlay">  
+    <div class="custom-modal">  
+        <h3 id="modalTitle">Título</h3>  
+        <p id="modalText">Mensagem</p>  
+        <button class="custom-modal-btn" onclick="fecharModalInfo()">OK</button>  
+    </div>  
+</div>  
+
+<div class="container">  
+    <div class="top-bar">  
+        <div class="logo" onclick="solicitarSenha()" title="Clique para Painel Admin">PSP GAMER MOBILE 2</div>  
+        <div class="search-container">  
+            <input type="text" class="search-box" id="searchInput" placeholder="Buscar jogos..." oninput="renderGames()">  
+        </div>  
+        <div class="top-icons">  
+            <span onclick="toggleMenu(event)" title="Menu">☰</span>  
+            <div id="dropdownMenu" class="dropdown-menu">  
+                <div class="dropdown-item" onclick="abrirModalInfo('Suporte', 'Precisa de ajuda com algum jogo ou link quebrado? Entre em contato pelo canal.')">Suporte</div>  
+                <div class="dropdown-item" onclick="abrirModalInfo('Ajuda', '1. Escolha o jogo.\n2. Clique para ver detalhes.\n3. Baixe direto.')">Ajuda</div>  
+                <div class="dropdown-item" onclick="abrirModalInfo('Parceria', 'Divulgue seu canal ou site conosco!')">Parceria</div>  
+            </div>  
+        </div>  
+    </div>  
+
+    <div class="carousel-container" id="carouselContainer">  
+        <div class="carousel-track" id="carouselTrack"></div>  
+        <div class="carousel-indicators" id="carouselIndicators"></div>  
+    </div>  
+
+    <div class="categories">  
+        <button class="cat-btn active" onclick="filtrarCategoria('Todos', this)">Todos</button>  
+        <button class="cat-btn" onclick="filtrarCategoria('PSP', this)">PSP</button>  
+        <button class="cat-btn" onclick="filtrarCategoria('PS2', this)">PS2</button>  
+        <button class="cat-btn" onclick="filtrarCategoria('PC', this)">PC</button>  
+        <button class="cat-btn" onclick="filtrarCategoria('APK', this)">APK</button>  
+        <button class="cat-btn" onclick="filtrarCategoria('PedirJogo', this)">Pedir Jogo</button>  
+    </div>  
+
+    <div id="inicio" class="tab-content">  
+        <header style="margin-bottom: 15px;">  
+            <h1 id="panelTitle" style="font-size: 1.8rem; color: var(--accent-pink);">🔒 Painel Restrito</h1>  
+            <p id="panelSub" style="font-size: 0.85rem; color: var(--text-muted);">Adicione jogos e gere o código manual</p>  
+        </header>  
+
+        <div class="form-card" style="border: 2px solid var(--accent-cyan); background: #12121b;">  
+            <h2 style="color: var(--accent-cyan);">📋 Copiar Código para o Seu Arquivo</h2>  
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 10px;">Copie este bloco abaixo e cole no seu código HTML sempre que alterar os jogos ou banners:</p>  
+            <textarea id="codigoGeradoArea" rows="6" readonly style="width:100%; background:#050508; color:#00ff88; font-family:monospace; font-size:0.8rem; padding:10px; border-radius:8px; border:1px solid rgba(0,240,255,0.3); resize:none;"></textarea>  
+            <button type="button" onclick="copiarCodigoPainel()" style="background: linear-gradient(135deg, var(--accent-cyan), #0099ff); color: #0b0b0f; margin-top: 10px;">Copiar Código Atualizado</button>  
+        </div>  
+
+        <div class="form-card">  
+            <h2>Gerenciar Banners do Carrossel (Máx. 4)</h2>  
+            <div id="carouselFormList" style="margin-bottom: 15px;"></div>  
+            <button type="button" onclick="salvarBannersCarrossel()" style="background: linear-gradient(135deg, var(--accent-cyan), #0099ff); color: #0b0b0f; margin-bottom: 25px;">Atualizar Banners</button>  
+
+            <h2 id="formTitle">Publicar Novo Jogo</h2>  
+            <form id="gameForm">  
+                <input type="hidden" id="editGameId">  
+                <div class="input-group">  
+                    <label for="gameName">Nome do Jogo:</label>  
+                    <input type="text" id="gameName" required placeholder="Ex: God of War">  
+                </div>  
+                <div class="input-group">  
+                    <label for="gameImage">Link da Imagem (URL):</label>  
+                    <input type="url" id="gameImage" required placeholder="Link direto da imagem">  
+                </div>  
+                <div class="input-group">  
+                    <label for="gameCategory">Categoria:</label>  
+                    <select id="gameCategory" style="width:150px;">  
+                        <option value="PSP">PSP</option>  
+                        <option value="PS2">PS2</option>  
+                        <option value="PC">PC</option>  
+                        <option value="APK">APK</option>  
+                    </select>  
+                </div>  
+                <div class="form-row">  
+                    <div class="input-group">  
+                        <label for="gameSize">Tamanho:</label>  
+                        <input type="text" id="gameSize" required placeholder="Ex: 1.2 GB">  
+                    </div>  
+                    <div class="input-group">  
+                        <label for="gameFormat">Formato:</label>  
+                        <input type="text" id="gameFormat" required placeholder="Ex: ISO / APK">  
+                    </div>  
+                </div>  
+                <div class="input-group">  
+                    <label for="gameStatus">Status:</label>  
+                    <input type="text" id="gameStatus" required placeholder="Ex: Grátis">  
+                </div>  
+                <div class="input-group">  
+                    <label for="gameDescription">Descrição:</label>  
+                    <textarea id="gameDescription" rows="3" placeholder="Detalhes do jogo..."></textarea>  
+                </div>  
+                <div class="input-group">  
+                    <label for="gameLink">Link de Download:</label>  
+                    <input type="url" id="gameLink" required placeholder="Link de download direto">  
+                </div>  
+                <div class="input-group">  
+                    <label for="gameBtnText">Texto do Botão:</label>  
+                    <input type="text" id="gameBtnText" placeholder="Ex: Baixar Agora">  
+                </div>  
+                <button type="submit" id="submitBtn">Publicar Jogo</button>  
+            </form>  
+            <div id="cancelEditContainer" style="display:none; margin-top: 10px;">  
+                <button onclick="cancelarEdicao()" style="background: #555; color: white;">Cancelar Edição</button>  
+            </div>  
+
+            <button onclick="logoutAdmin()" style="background: var(--danger); color: white; margin-top: 25px;">Sair do Painel Admin</button>  
+        </div>  
+    </div>  
+
+    <div id="jogos" class="tab-content active">  
+        <div class="games-grid" id="gamesGrid">  
+            <p class="empty-msg">Carregando jogos...</p>  
+        </div>  
+    </div>  
+
+    <div id="pedirJogoTab" class="tab-content">  
+        <div class="form-card">  
+            <h2>🎮 Pedir um Jogo</h2>  
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 18px;">Preencha os campos abaixo com o jogo que você deseja. Ao clicar em "Pedir Jogo", você será direcionado para o nosso WhatsApp com a mensagem pronta!</p>  
+            <form id="pedirJogoForm" onsubmit="enviarPedidoWhatsapp(event)">  
+                <div class="input-group">  
+                    <label for="pedidoNome">Nome do Jogo:</label>  
+                    <input type="text" id="pedidoNome" required placeholder="Ex: GTA San Andreas, Naruto...">  
+                </div>  
+                <div class="input-group">  
+                    <label for="pedidoPlataforma">Plataforma:</label>  
+                    <select id="pedidoPlataforma" style="width:100%;">  
+                        <option value="PSP">PSP</option>  
+                        <option value="PS2">PS2</option>  
+                        <option value="PC">PC</option>  
+                        <option value="APK">APK / Android</option>  
+                    </select>  
+                </div>  
+                <div class="input-group">  
+                    <label for="pedidoObs">Observações (Opcional):</label>  
+                    <textarea id="pedidoObs" rows="3" placeholder="Ex: Versão em português, mod, etc..."></textarea>  
+                </div>  
+                <button type="submit" style="background: linear-gradient(135deg, var(--accent-pink), #b00055); color: white;">Pedir Jogo</button>  
+            </form>  
+        </div>  
+    </div>  
+
+    <div id="detalhes" class="tab-content">  
+        <button class="back-btn" onclick="switchTab('jogos')">← Voltar</button>  
+        <div id="gameDetailContent"></div>  
+    </div>  
+
+    <div class="admin-login-area">  
+        <div class="admin-link">Bem-vindo ao PSP GAMER MOBILE 2. Divirta-se!</div>  
+    </div>  
+</div>  
+
+<script>  
+    let listaJogosCache = [  
+      {  
+        "id": 1790937103530,  
+        "name": "God of War: Chains of Olympus",  
+        "image": "https://i.ibb.co/4nhr0dZz/unnamed.jpg",  
+        "category": "PSP",  
+        "size": "1.20GB",  
+        "format": "ISO",  
+        "status": "Grátis",  
+        "description": "Luta, Ação e aventura",  
+        "link": "https://archive.org/download/god-of-war-chains-of-olympus-usa/God%20of%20War%20-%20Chains%20of%20Olympus%20%28USA%29.zip",  
+        "btnText": "Baixar Agora (Download Direto)"  
+      },  
+      {  
+        "id": 1790954010898,  
+        "name": "God of War: Ghost of Sparta",  
+        "image": "https://i.ibb.co/TxBqvzhs/unnamed-1.jpg",  
+        "category": "PSP",  
+        "size": "1.75GB",  
+        "format": "ISO",  
+        "status": "Grátis",  
+        "description": "Luta, Ação",  
+        "link": "https://archive.org/download/god-of-war-ghost-of-sparta-usa-en-fr-es/God%20of%20War%20-%20Ghost%20of%20Sparta%20%28USA%29%20%28En%2CFr%2C%2CEs%29.iso",  
+        "btnText": "Baixar Agora (Download Direto)"  
+      },  
+      {  
+        "id": 1790954322384,  
+        "name": "Grand Theft Auto: Liberty City Stories",  
+        "image": "https://i.ibb.co/Cp1mQ9zx/unnamed-2.jpg",  
+        "category": "PSP",  
+        "size": "1.26GB",  
+        "format": "ISO",  
+        "status": "Grátis",  
+        "description": "Luta, Ação",  
+        "link": "https://archive.org/download/GrandTheftAutoLibertyCityStoriesUSAEnFrDeEsItv3.00/Grand%20Theft%20Auto%20-%20Liberty%20City%20Stories%20%28USA%29%20%28En%2CFr%2CDe%2CEs%2CIt%29%20%28v3.00%29.iso",  
+        "btnText": "Baixar Agora (Download Direto)"  
+      },  
+      {  
+        "id": 1790954983808,  
+        "name": "Grand Theft Auto: Vice City Stories",  
+        "image": "https://i.ibb.co/sJjVVbZc/unnamed-3.jpg",  
+        "category": "PSP",  
+        "size": "1.70GB",  
+        "format": "ISO",  
+        "status": "Grátis",  
+        "description": "Aventura e Ação RPG",  
+        "link": "https://archive.org/download/grand-theft-auto-vice-city-stories-usa/Grand%20Theft%20Auto%20-%20Vice%20City%20Stories%20%28USA%29.iso",  
+        "btnText": "Baixar Agora (Download Direto)"  
+      },  
+      {  
+        "id": 1790956761561,  
+        "name": "Naruto: Ultimate Ninja 3",  
+        "image": "https://i.ibb.co/xVC8GL6/unnamed-4.jpg",  
+        "category": "PSP",  
+        "size": "1.21GB",  
+        "format": "ZIP",  
+        "status": "Grátis",  
+        "description": "Luta",  
+        "link": "https://archive.org/download/naruto-shippuden-ultimate-ninja-heroes-3-usa_202601/Naruto%20Shippuden%20-%20Ultimate%20Ninja%20Heroes%203%20%28USA%29.zip",  
+        "btnText": "Baixar Agora (Download Direto)"  
+      },  
+      {  
+        "id": 1790956999349,  
+        "name": "Bleach: Heat the Soul 7",  
+        "image": "https://i.ibb.co/DfRP19jH/unnamed-5.jpg",  
+        "category": "PSP",  
+        "size": "424.89MB",  
+        "format": "ZIP",  
+        "status": "Grátis",  
+        "description": "Luta",  
+        "link": "https://archive.org/download/bleach-heat-the-soul-7/Bleach%20-%20Heat%20the%20Soul%207%20%28Asia%29.zip",  
+        "btnText": "Baixar Agora (Download Direto)"  
+      },  
+      {  
+        "id": 1790961002839,  
+        "name": "Def jam: Fight for NY-The Takeover",  
+        "image": "https://i.ibb.co/yBFQHRxp/unnamed-6.jpg",  
+        "category": "PSP",  
+        "size": "502.20MB",  
+        "format": "ZIP",  
+        "status": "Grátis",  
+        "description": "Luta",  
+        "link": "https://archive.org/download/playstation-portable-rom-def-jam-fight-for-ny-the-takeover/Def%20Jam%20-%20Fight%20for%20NY%20-%20The%20Takeover%20%28USA%29%20%28v1.01%29.zip",  
+        "btnText": "Baixar Agora (Download Direto)"  
+      },  
+      {  
+        "id": 1790961425208,  
+        "name": "UFC: Undisputed 2010",  
+        "image": "https://i.ibb.co/vxTRHhHp/unnamed-7.jpg",  
+        "category": "PSP",  
+        "size": "1.43GB",  
+        "format": "ZIP",  
+        "status": "Grátis",  
+        "description": "Luta",  
+        "link": "https://archive.org/download/ufc-2010-undisputed-usa/UFC%202010%20Undisputed%20%28USA%29.zip",  
+        "btnText": "Baixar Agora (Download Direto)"  
+      },  
+      {  
+        "id": 1790963121413,  
+        "name": "Grand Theft: Auto Sanandreas",  
+        "image": "https://i.ibb.co/Rp9gRCt1/unnamed-8.jpg",  
+        "category": "APK",  
+        "size": "2.62GB",  
+        "format": "APK",  
+        "status": "Grátis",  
+        "description": "RPG",  
+        "link": "https://archive.org/download/gta-sa-5play/gta-sa-2.11.277-mod-menu-5play.apk",  
+        "btnText": "Baixar Agora (Download Direto)"  
+      },  
+      {  
+        "id": 1790963352828,  
+        "name": "Tekken: Dark Resurrection",  
+        "image": "https://i.ibb.co/hFZ6wpMd/unnamed-9.jpg",  
+        "category": "PSP",  
+        "size": "1.75GB",  
+        "format": "ISO",  
+        "status": "Grátis",  
+        "description": "Luta",  
+        "link": "https://archive.org/download/tekken-dark-resurrection-usa-psp_202603_ver2/a-tekken.iso",  
+        "btnText": "Baixar Agora (Download Direto)"  
+      },  
+      {  
+        "id": 1790963815728,  
+        "name": "Red Dead Redemption",  
+        "image": "https://i.ibb.co/JjnRPKMK/58b6e9bc7801b5a60410a7f75ec6b890.jpg",  
+        "category": "APK",  
+        "size": "2.89GB",  
+        "format": "APK",  
+        "status": "Grátis",  
+        "description": "RPG mundo aberto",  
+        "link": "https://files.an1.co/red-dead-redemption-mods_1.58.63226194-an1.com.apk",  
+        "btnText": "Baixar Agora (Download Direto)"  
+      },  
+      {  
+        "id": 1791120442202,  
+        "name": "Minecraft",  
+        "image": "https://i.ibb.co/RpCzK4Bb/unnamed.jpg",  
+        "category": "APK",  
+        "size": "127.15MB",  
+        "format": "APK",  
+        "status": "Grátis ",  
+        "description": "Aventura ",  
+        "link": "https://www.google.com/url?q=https%3A%2F%2Farchive.org%2Fdownload%2Fminecraft-apkmodget.com%2FMinecraft-Free-Edition.apk&sa=D&sntz=1&usg=AOvVaw05urVVQJ6yu2Sa4SIHkjH8",  
+        "btnText": "Baixar Agora (Download Direto)"  
+      },  
+      {  
+        "id": 1791133142943,  
+        "name": "The Warriors",  
+        "image": "https://i.ibb.co/xS27F8PZ/e9e8c0e73e59222e7eefd102ee1bba21.jpg",  
+        "category": "PS2",  
+        "size": "4.30GB",  
+        "format": "ISO",  
+        "status": "Grátis ",  
+        "description": "Luta de rua ",  
+        "link": "https://archive.org/download/the-warriors-ps2/Warriors%2C%20The.iso",  
+        "btnText": "Baixar Agora (Download Direto)"  
+      },  
+      {  
+        "id": 1791144001710,  
+        "name": "Midnight Club 3: DUB Edition / L.A. Remix",  
+        "image": "https://i.ibb.co/sGMK8HX/a6d9cd56df8bea6c10a076d06c8a6e92.jpg",  
+        "category": "PSP",  
+        "size": "1.00GB",  
+        "format": "ZIP",  
+        "status": "Grátis ",  
+        "description": "Corrida ",  
+        "link": "https://archive.org/download/midnight-club-3-dub-edition-usa/Midnight%20Club%203%20-%20DUB%20Edition%20%28USA%29.zip",  
+        "btnText": "Baixar Agora (Download Direto)"  
+      },  
+      {  
+        "id": 1791178391721,  
+        "name": "Star Wars: Battlefront II",  
+        "image": "https://i.ibb.co/KcyHRrnr/0363bb2b91ddf7be38f5b3219f701f26.jpg",  
+        "category": "PSP",  
+        "size": "738.66MB",  
+        "format": "ISO",  
+        "status": "Grátis ",  
+        "description": "Luta , Ação ",  
+        "link": "https://archive.org/download/PSPStarWarsBattlefrontIIUSA/Star%20Wars%20-%20Battlefront%20II%20%28USA%29.iso",  
+        "btnText": "Baixar Agora (Download Direto)"  
+      },  
+      {  
+        "id": 1791180573894,  
+        "name": "Burnout Legends",  
+        "image": "https://i.ibb.co/rRJvBhQm/fa9969b247a3366e4e05665e14268249.jpg",  
+        "category": "PSP",  
+        "size": "500.30MB",  
+        "format": "ISO",  
+        "status": "Grátis ",  
+        "description": "Corrida ",  
+        "link": "https://archive.org/download/burnout-legends-usa-en-fr-de-es-it-nl_202601/Burnout%20Legends%20%28USA%29%20%28En%2CFr%2CDe%2CEs%2CIt%2CNl%29.iso",  
+        "btnText": "Baixar Agora (Download Direto)"  
+      },  
+      {  
+        "id": 1791195972900,  
+        "name": "Dante’s Inferno",  
+        "image": "https://i.ibb.co/YFfh4rCg/c76a3af0efa710daacca3d47fe3067ac.jpg",  
+        "category": "PSP",  
+        "size": "1.81GB",  
+        "format": "ISO",  
+        "status": "Grátis ",  
+        "description": "Todos os androids \nRoda em 60FPS",  
+        "link": "https://archive.org/download/PSPDantesInfernoUSA/Dante%27s%20Inferno%20%28USA%29.iso",  
+        "btnText": "Baixar Agora (Download Direto)"  
+      },  
+      {  
+        "id": 1791304999123,  
+        "name": "Need for Speed: Most Wanted Demo",  
+        "image": "https://i.ibb.co/C5mNw5D4/21b0157f4b49a67599df0e38b399a9b9.jpg",  
+        "category": "PS2",  
+        "size": "2.47GB",  
+        "format": "7Z",  
+        "status": "Grátis ",  
+        "description": "Corrida ",  
+        "link": "https://dl2.cdromance.org/download.php?file=Need%20for%20Speed%20-%20Most%20Wanted%20%28Europe%29.7z&id=85170&platform=ps2-iso&key=10286066450",  
+        "btnText": "Baixar Agora (Download Direto)"  
+      },  
+      {  
+        "id": 1791314531080,  
+        "name": "Monster Hunter Freedom Unite",  
+        "image": "https://i.ibb.co/pvxTV1tz/96d314d0788c45f04838db4872575f67.jpg",  
+        "category": "PSP",  
+        "size": "783.98MB",  
+        "format": "7Z",  
+        "status": "Grátis ",  
+        "description": "Aventura e RPG",  
+        "link": "https://dl9a.cdromance.org/download.php?file=Monster_Hunter_Freedom_Unite_USA_PSP-BAHAMUT.7z&id=80547&platform=psp&key=9138381868",  
+        "btnText": "Baixar Agora (Download Direto)"  
+      },  
+      {  
+        "id": 1791395911016,  
+        "name": "Spider-Man 3",  
+        "image": "https://i.ibb.co/39S4CBdt/5cc5503d87d00c95c6e87b9f3082348b.jpg",  
+        "category": "PSP",  
+        "size": "1.68GB",  
+        "format": "ISO",  
+        "status": "Grátis ",  
+        "description": "Ação e aventura ",  
+        "link": "https://archive.org/download/spider-man-3_202311/Spider-Man%203.iso",  
+        "btnText": "Baixar Agora (Download Direto)"  
+      },  
+      {  
+        "id": 1791487309610,  
+        "name": "Lord of the Rings: Aragorn's Quest ",  
+        "image": "https://i.ibb.co/Q7TBTxpz/d5d177097533e08815b09a0a79a89abc.jpg",  
+        "category": "PSP",  
+        "size": "263.77MB",  
+        "format": "7Z",  
+        "status": "Grátis ",  
+        "description": "Ação e aventura ",  
+        "link": "https://dl5b.cdromance.org/download.php?file=Lord.of.the.Rings.Aragorns.Quest.EUR.PSP-WARG.7z&id=28472&platform=psp&key=6520439848",  
+        "btnText": "Baixar Agora (Download Direto)"  
+      },  
+      {  
+        "id": 1791488560025,  
+        "name": "Star Wars: The Force Unleashed",  
+        "image": "https://i.ibb.co/GQfPcmN9/d6d64793ea32025bcd382ccbdf419c1c.jpg",  
+        "category": "PSP",  
+        "size": "439.89MB",  
+        "format": "7Z",  
+        "status": "Grátis ",  
+        "description": "Ação ",  
+        "link": "https://dl5b.cdromance.org/download.php?file=Star_Wars_The_Force_Unleashed_USA_PSP-pSyPSP.7z&id=27803&platform=psp&key=5183581321",  
+        "btnText": "Baixar Agora (Download Direto)"  
+      },  
+      {  
+        "id": 1791489632368,  
+        "name": "​Ben 10: Protector of Earth ",  
+        "image": "https://i.ibb.co/p6hML9R6/bc5c5312b2dab98c670ac13d0a40308e.jpg",  
+        "category": "PSP",  
+        "size": "685.21MB",  
+        "format": "ISO",  
+        "status": "Grátis ",  
+        "description": "Ação, luta e aventura ",  
+        "link": "https://archive.org/download/pspben10protectorofearthusa/Ben%2010%20-%20Protector%20of%20Earth%20%28USA%29.iso",  
+        "btnText": "Baixar Agora (Download Direto)"  
+      }  
+    ];  
+
+    let listaBannersCache = [  
+      {  
+        "image": "https://i.ibb.co/Hf9GsdxW/unnamed-4.jpg",  
+        "title": "Bem-vindo ao PSP Gamer Mobile 2"  
+      },  
+      {  
+        "image": "https://i.ibb.co/TxBqvzhs/unnamed-1.jpg",  
+        "title": "Novos Jogos Adicionados Semanalmente"  
+      },  
+      {  
+        "image": "https://i.ibb.co/N6n6FHhs/unnamed-8.jpg",  
+        "title": "Baixe com Links Diretos e Seguros"  
+      },  
+      {  
+        "image": "https://i.ibb.co/whzq0NxW/unnamed-5.jpg",  
+        "title": "Os melhores jogos so aqui"  
+      }  
+    ];  
+
+    let indiceCarrosselAtual = 0;  
+    let intervaloCarrossel = null;  
+    const SENHA_ADMIN = "Rodri2012";  
+    let categoriaAtual = 'Todos';  
+
+    // Lógica do Bloqueio de Compartilhamento (0/5)  
+    const LINK_CANAL_COMPARTILHAR = "https://whatsapp.com/channel/0029VbDVqMICBtx8ZZL1Vx3K";  
+    let progressoCompartilhamento = parseInt(localStorage.getItem('psp_share_count') || '0');  
+
+    function atualizarInterfaceBloqueio() {  
+        const contadorText = document.getElementById('shareCounterText');  
+        const barraFill = document.getElementById('shareProgressBar');  
+        const overlay = document.getElementById('shareLockOverlay');  
+
+        if (progressoCompartilhamento >= 5) {  
+            if (overlay) overlay.style.display = 'none';  
+        } else {  
+            if (overlay) overlay.style.display = 'flex';  
+            if (contadorText) contadorText.innerText = `${progressoCompartilhamento}/5`;  
+            if (barraFill) barraFill.style.width = `${(progressoCompartilhamento / 5) * 100}%`;  
+        }  
+    }  
+
+    function realizarCompartilhamento() {  
+        if (progressoCompartilhamento >= 5) return;  
+
+        progressoCompartilhamento++;  
+        localStorage.setItem('psp_share_count', progressoCompartilhamento);  
+        atualizarInterfaceBloqueio();  
+
+        const aviso = document.getElementById('shareMsgAviso');  
+        if (progressoCompartilhamento < 5) {  
+            if (aviso) aviso.innerText = `Faltam mais ${5 - progressoCompartilhamento} compartilhamentos!`;  
+        } else {  
+            if (aviso) aviso.innerText = "Desbloqueado com sucesso!";  
+        }  
+
+        // Abre o WhatsApp para enviar o link do canal  
+        const textoMensagem = encodeURIComponent("🔥 Venha baixar vários jogos incríveis de PSP, PS2 e APK de graça na PSP GAMER MOBILE 2! Siga o canal oficial: " + LINK_CANAL_COMPARTILHAR);  
+        window.open(`https://api.whatsapp.com/send?text=${textoMensagem}`, '_blank');  
+    }  
+
+    function mostrarStatusSync(texto, cor = "rgba(0, 255, 136, 0.9)") {  
+        const status = document.getElementById('syncStatus');  
+        if(status) {  
+            status.innerText = texto;  
+            status.style.background = cor;  
+            status.style.display = 'block';  
+            setTimeout(() => { status.style.display = 'none'; }, 4000);  
+        }  
+    }  
+
+    function mostrarBannerWhatsapp() {  
+        const banner = document.getElementById('whatsappFloatingBanner');  
+        if (banner) {  
+            banner.classList.remove('closing');  
+            banner.style.display = 'block';  
+        }  
+    }  
+
+    function fecharBannerWhatsapp() {  
+        const banner = document.getElementById('whatsappFloatingBanner');  
+        if (banner) {  
+            banner.classList.add('closing');  
+            setTimeout(() => {  
+                banner.style.display = 'none';  
+                banner.classList.remove('closing');  
+            }, 400);  
+        }  
+    }  
+
+    function iniciarLoopWhatsappBanner() {  
+        setInterval(() => {  
+            const banner = document.getElementById('whatsappFloatingBanner');  
+            if (banner && banner.style.display !== 'block' && !banner.classList.contains('closing')) {  
+                mostrarBannerWhatsapp();  
+            }  
+        }, 20000);  
+    }  
+
+    function atualizarCaixaCodigoGerado() {  
+        const textarea = document.getElementById('codigoGeradoArea');  
+        if (!textarea) return;  
+
+        let codigoTexto = `let listaJogosCache = ` + JSON.stringify(listaJogosCache, null, 2) + `;\n\n`;  
+        codigoTexto += `let listaBannersCache = ` + JSON.stringify(listaBannersCache, null, 2) + `;`;  
+          
+        textarea.value = codigoTexto;  
+    }  
+
+    function copiarCodigoPainel() {  
+        const textarea = document.getElementById('codigoGeradoArea');  
+        if (!textarea) return;  
+        textarea.select();  
+        navigator.clipboard.writeText(textarea.value);  
+        mostrarStatusSync("Código copiado com sucesso! Cole no seu arquivo HTML.");  
+    }  
+
+    window.addEventListener('DOMContentLoaded', () => {  
+        atualizarInterfaceBloqueio();  
+        renderGames();  
+        renderizarCarrossel();  
+        iniciarAutoplayCarrossel();  
+        iniciarLoopWhatsappBanner();  
+        switchTab('jogos');  
+
+        const urlParams = new URLSearchParams(window.location.search);  
+        const jogoIdUrl = urlParams.get('jogo');  
+        if (jogoIdUrl) {  
+            setTimeout(() => { verDetalhesDoJogo(Number(jogoIdUrl)); }, 300);  
+        }  
+
+        window.addEventListener('click', function(e) {  
+            if (!e.target.closest('.top-icons')) {  
+                const menu = document.getElementById('dropdownMenu');  
+                if(menu) menu.classList.remove('show');  
+            }  
+        });  
+    });  
+
+    function renderizarCarrossel() {  
+        const track = document.getElementById('carouselTrack');  
+        const indicators = document.getElementById('carouselIndicators');  
+        const container = document.getElementById('carouselContainer');  
+        if (!track || !indicators || !container) return;  
+
+        track.innerHTML = '';  
+        indicators.innerHTML = '';  
+
+        listaBannersCache.forEach((banner, index) => {  
+            const slide = document.createElement('div');  
+            slide.className = 'carousel-slide';  
+            slide.innerHTML = `  
+                <img src="${banner.image}" alt="${banner.title}" onerror="this.src='https://i.ibb.co/4nhr0dZz/unnamed.jpg'">  
+                <div class="carousel-caption">${banner.title}</div>  
+            `;  
+            track.appendChild(slide);  
+
+            const ind = document.createElement('div');  
+            ind.className = `indicator ${index === 0 ? 'active' : ''}`;  
+            ind.onclick = () => irParaSlide(index);  
+            indicators.appendChild(ind);  
+        });  
+        atualizarPosicaoCarrossel();  
+    }  
+
+    function atualizarPosicaoCarrossel() {  
+        const track = document.getElementById('carouselTrack');  
+        const indicators = document.querySelectorAll('.indicator');  
+        if (!track || listaBannersCache.length === 0) return;  
+
+        track.style.transform = `translateX(-${indiceCarrosselAtual * 100}%)`;  
+        indicators.forEach((ind, i) => {  
+            ind.classList.toggle('active', i === indiceCarrosselAtual);  
+        });  
+    }  
+
+    function proximoSlide() {  
+        if (!listaBannersCache.length) return;  
+        indiceCarrosselAtual = (indiceCarrosselAtual + 1) % listaBannersCache.length;  
+        atualizarPosicaoCarrossel();  
+    }  
+
+    function irParaSlide(index) {  
+        indiceCarrosselAtual = index;  
+        atualizarPosicaoCarrossel();  
+        iniciarAutoplayCarrossel();  
+    }  
+
+    function iniciarAutoplayCarrossel() {  
+        if (intervaloCarrossel) clearInterval(intervaloCarrossel);  
+        intervaloCarrossel = setInterval(proximoSlide, 4500);  
+    }  
+
+    function renderizarInputsAdminBanners() {  
+        const container = document.getElementById('carouselFormList');  
+        if (!container) return;  
+        container.innerHTML = '';  
+
+        for (let i = 0; i < 4; i++) {  
+            const banner = listaBannersCache[i] || { image: '', title: '' };  
+            const div = document.createElement('div');  
+            div.style.marginBottom = "12px";  
+            div.style.padding = "10px";  
+            div.style.background = "#0b0b0f";  
+            div.style.borderRadius = "10px";  
+            div.style.border = "1px solid rgba(255,255,255,0.06)";  
+            div.innerHTML = `  
+                <p style="font-size: 0.8rem; color: var(--accent-cyan); margin-bottom: 6px; font-weight: bold;">Banner ${i + 1}</p>  
+                <div style="margin-bottom: 8px;">  
+                    <input type="url" id="bannerImg_${i}" value="${banner.image}" placeholder="Link da imagem">  
+                </div>  
+                <div>  
+                    <input type="text" id="bannerTitle_${i}" value="${banner.title}" placeholder="Título do banner">  
+                </div>  
+            `;  
+            container.appendChild(div);  
+        }  
+    }  
+
+    function salvarBannersCarrossel() {  
+        let novosBanners = [];  
+        for (let i = 0; i < 4; i++) {  
+            const imgInput = document.getElementById(`bannerImg_${i}`);  
+            const titleInput = document.getElementById(`bannerTitle_${i}`);  
+            if (imgInput && imgInput.value.trim()) {  
+                novosBanners.push({   
+                    image: imgInput.value.trim(),   
+                    title: (titleInput && titleInput.value.trim()) ? titleInput.value.trim() : 'Destaque'   
+                });  
+            }  
+        }  
+        if (novosBanners.length === 0) {  
+            alert("Adicione pelo menos 1 banner válido!");  
+            return;  
+        }  
+        listaBannersCache = novosBanners;  
+        indiceCarrosselAtual = 0;  
+        renderizarCarrossel();  
+        atualizarCaixaCodigoGerado();  
+        mostrarStatusSync("Banners atualizados! Copie o código gerado acima.");  
+    }  
+
+    function toggleMenu(event) {  
+        event.stopPropagation();  
+        document.getElementById('dropdownMenu').classList.toggle('show');  
+    }  
+
+    function abrirModalInfo(titulo, texto) {  
+        document.getElementById('modalTitle').innerText = titulo;  
+        document.getElementById('modalText').innerText = texto;  
+        document.getElementById('customModalOverlay').classList.add('show');  
+        document.getElementById('dropdownMenu').classList.remove('show');  
+    }  
+
+    function fecharModalInfo() {  
+        document.getElementById('customModalOverlay').classList.remove('show');  
+    }  
+
+    function solicitarSenha() {  
+        if (localStorage.getItem('isAdmin') === 'true') {  
+            switchTab('inicio');  
+            renderizarInputsAdminBanners();  
+            atualizarCaixaCodigoGerado();  
+            return;  
+        }  
+        let senha = prompt("Digite a senha de administrador:");  
+        if (senha === SENHA_ADMIN) {  
+            localStorage.setItem('isAdmin', 'true');  
+            switchTab('inicio');  
+            renderizarInputsAdminBanners();  
+            atualizarCaixaCodigoGerado();  
+            renderGames();  
+            alert("Painel liberado!");  
+        } else if (senha !== null) {  
+            alert("Senha incorreta!");  
+        }  
+    }  
+
+    function logoutAdmin() {  
+        localStorage.removeItem('isAdmin');  
+        cancelarEdicao();  
+        switchTab('jogos');  
+        renderGames();  
+        alert("Saiu do painel admin.");  
+    }  
+
+    function switchTab(tabId) {  
+        document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));  
+        const target = document.getElementById(tabId);  
+        if(target) target.classList.add('active');  
+    }  
+
+    function filtrarCategoria(cat, btn) {  
+        if (cat === 'PedirJogo') {  
+            document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));  
+            if(btn) btn.classList.add('active');  
+            switchTab('pedirJogoTab');  
+            return;  
+        }  
+
+        categoriaAtual = cat;  
+        document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));  
+        if(btn) btn.classList.add('active');  
+        switchTab('jogos');  
+        renderGames();  
+    }  
+
+    function enviarPedidoWhatsapp(e) {  
+        e.preventDefault();  
+        const nomeJogo = document.getElementById('pedidoNome').value.trim();  
+        const plataforma = document.getElementById('pedidoPlataforma').value;  
+        const obs = document.getElementById('pedidoObs').value.trim();  
+
+        let mensagem = `Olá! Quero pedir um jogo:\n\n🎮 *Jogo:* ${nomeJogo}\n💻 *Plataforma:* ${plataforma}`;  
+        if (obs) {  
+            mensagem += `\n📝 *Observações:* ${obs}`;  
+        }  
+
+        const numeroWhatsApp = "258843843479";  
+        const urlWhatsapp = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensagem)}`;  
+        window.open(urlWhatsapp, '_blank');  
+    }  
+
+    const gameForm = document.getElementById('gameForm');  
+    if(gameForm) {  
+        gameForm.addEventListener('submit', function(e) {  
+            e.preventDefault();  
+
+            const editId = document.getElementById('editGameId').value;  
+            const name = document.getElementById('gameName').value;  
+            const image = document.getElementById('gameImage').value;  
+            const category = document.getElementById('gameCategory').value || 'PSP';  
+            const size = document.getElementById('gameSize').value;  
+            const format = document.getElementById('gameFormat').value;  
+            const status = document.getElementById('gameStatus').value;  
+            const description = document.getElementById('gameDescription').value || 'Sem descrição.';  
+            const link = document.getElementById('gameLink').value;  
+            const btnText = document.getElementById('gameBtnText').value.trim() || 'Baixar Agora (Download Direto)';  
+
+            if (editId) {  
+                listaJogosCache = listaJogosCache.map(game => {  
+                    if (game.id == editId) {  
+                        return { ...game, name, image, category, size, format, status, description, link, btnText };  
+                    }  
+                    return game;  
+                });  
+                cancelarEdicao();  
+            } else {  
+                const newGame = { id: Date.now(), name, image, category, size, format, status, description, link, btnText };  
+                listaJogosCache.push(newGame);  
+            }  
+
+            renderGames();  
+            switchTab('inicio');  
+            atualizarCaixaCodigoGerado();  
+            gameForm.reset();  
+
+            mostrarStatusSync("Jogo salvo! Copie o código atualizado acima.");  
+        });  
+    }  
+
+    function deleteGame(id) {  
+        if (confirm("Tem certeza que deseja excluir este jogo?")) {  
+            listaJogosCache = listaJogosCache.filter(game => game.id !== id);  
+            renderGames();  
+            switchTab('inicio');  
+            atualizarCaixaCodigoGerado();  
+            mostrarStatusSync("Jogo excluído! Copie o código atualizado acima.");  
+        }  
+    }  
+
+    function prepararEdicao(id) {  
+        const game = listaJogosCache.find(g => g.id === id);  
+        if (!game) return;  
+
+        document.getElementById('editGameId').value = game.id;  
+        document.getElementById('gameName').value = game.name;  
+        document.getElementById('gameImage').value = game.image;  
+        document.getElementById('gameCategory').value = game.category || 'PSP';  
+        document.getElementById('gameSize').value = game.size;  
+        document.getElementById('gameFormat').value = game.format;  
+        document.getElementById('gameStatus').value = game.status;  
+        document.getElementById('gameDescription').value = game.description;  
+        document.getElementById('gameLink').value = game.link;  
+        document.getElementById('gameBtnText').value = game.btnText || '';  
+
+        document.getElementById('formTitle').innerText = "Editar Jogo";  
+        document.getElementById('submitBtn').innerText = "Salvar Alterações";  
+        document.getElementById('cancelEditContainer').style.display = "block";  
+
+        switchTab('inicio');  
+        renderizarInputsAdminBanners();  
+        atualizarCaixaCodigoGerado();  
+    }  
+
+    function cancelarEdicao() {  
+        if(gameForm) gameForm.reset();  
+        document.getElementById('editGameId').value = "";  
+        document.getElementById('formTitle').innerText = "Publicar Novo Jogo";  
+        document.getElementById('submitBtn').innerText = "Publicar Jogo";  
+        document.getElementById('cancelEditContainer').style.display = "none";  
+    }  
+
+    function compartilharJogo(id, nome) {  
+        const linkCompartilhamento = window.location.origin + window.location.pathname + '?jogo=' + id;  
+        if (navigator.share) {  
+            navigator.share({ title: nome, text: `Baixe ${nome} na PSP GAMER MOBILE 2!`, url: linkCompartilhamento }).catch(() => {});  
+        } else {  
+            navigator.clipboard.writeText(linkCompartilhamento);  
+            alert("Link copiado: " + linkCompartilhamento);  
+        }  
+    }  
+
+    function verDetalhesDoJogo(id) {  
+        const game = listaJogosCache.find(g => g.id === id);  
+        if (!game) return;  
+
+        let botoesAdminDetalhe = '';  
+        if (localStorage.getItem('isAdmin') === 'true') {  
+            botoesAdminDetalhe = `  
+                <div style="display: flex; gap: 10px; margin-top: 15px;">  
+                    <button class="edit-btn" onclick="prepararEdicao(${game.id})" style="margin-top:0;">Editar Jogo</button>  
+                    <button class="delete-btn" onclick="deleteGame(${game.id})" style="margin-top:0;">Excluir Jogo</button>  
+                </div>  
+            `;  
+        }  
+
+        document.getElementById('gameDetailContent').innerHTML = `  
+            <div class="game-detail-card">  
+                <div class="detail-img-container">  
+                    <img src="${game.image}" class="detail-img" alt="${game.name}" onerror="this.src='https://i.ibb.co/4nhr0dZz/unnamed.jpg'">  
+                    <div class="price-badge">${game.status}</div>  
+                </div>  
+                <div class="detail-info">  
+                    <h2>${game.name}</h2>  
+                    <div class="game-details" style="font-size: 0.85rem; margin-bottom: 15px; gap: 6px;">  
+                        <span>📦 Tamanho: <strong>${game.size}</strong></span>  
+                        <span>📁 Formato: <strong>${game.format}</strong></span>  
+                        <span>📂 Categoria: <strong>${game.category}</strong></span>  
+                    </div>  
+                    <h4 style="font-size: 0.95rem; color: white; margin-bottom: 5px;">Informações:</h4>  
+                    <p class="detail-desc">${game.description}</p>  
+
+                    <div class="action-bar">  
+                        <button class="share-btn" onclick="compartilharJogo(${game.id}, '${game.name.replace(/'/g, "\\'")}')">🔗 Compartilhar</button>  
+                    </div>  
+                      
+                    <a href="${game.link}" target="_blank" class="download-btn" style="padding: 12px; font-size: 0.95rem; margin-top: 15px;">${game.btnText}</a>  
+                    ${botoesAdminDetalhe}  
+                </div>  
+            </div>  
+        `;  
+        switchTab('detalhes');  
+    }  
+
+    function renderGames() {  
+        const gamesGrid = document.getElementById('gamesGrid');  
+        const searchInput = document.getElementById('searchInput');  
+        if (!gamesGrid) return;  
+
+        const termoBusca = searchInput ? searchInput.value.toLowerCase() : '';  
+        gamesGrid.innerHTML = '';  
+
+        let filtrados = listaJogosCache.filter(game => {  
+            let matchCat = (categoriaAtual === 'Todos' || (game.category && game.category === categoriaAtual));  
+            let matchBusca = game.name.toLowerCase().includes(termoBusca);  
+            return matchCat && matchBusca;  
+        });  
+
+        if (filtrados.length === 0) {  
+            gamesGrid.innerHTML = '<p class="empty-msg">Nenhum jogo encontrado.</p>';  
+            return;  
+        }  
+
+        filtrados.forEach((game, index) => {  
+            const card = document.createElement('div');  
+            card.className = 'game-card';  
+            card.style.animationDelay = `${index * 0.03}s`;  
+            card.onclick = () => verDetalhesDoJogo(game.id);  
+
+            let botoesAdminHtml = '';  
+            if (localStorage.getItem('isAdmin') === 'true') {  
+                botoesAdminHtml = `  
+                    <div style="padding: 0 10px 10px 10px;" onclick="event.stopPropagation()">  
+                        <button class="edit-btn" onclick="prepararEdicao(${game.id})">Editar</button>  
+                        <button class="delete-btn" onclick="deleteGame(${game.id})">Excluir</button>  
+                    </div>  
+                `;  
+            }  
+
+            card.innerHTML = `  
+                <div>  
+                    <div class="card-img-container">  
+                        <img src="${game.image}" alt="${game.name}" onerror="this.src='https://i.ibb.co/4nhr0dZz/unnamed.jpg'">  
+                        <div class="price-badge">${game.status}</div>  
+                    </div>  
+                    <div class="game-info">  
+                        <h3>${game.name}</h3>  
+                        <div class="game-details">  
+                            <span>📦 Tamanho: <strong>${game.size}</strong></span>  
+                            <span>📁 Formato: <strong>${game.format}</strong></span>  
+                        </div>  
+                        <span class="download-btn" style="display: block;">Ver Detalhes / Baixar</span>  
+                    </div>  
+                </div>  
+                ${botoesAdminHtml}  
+            `;  
+            gamesGrid.appendChild(card);  
+        });  
+    }  
+</script>
+
+</body>  
+</html>  
