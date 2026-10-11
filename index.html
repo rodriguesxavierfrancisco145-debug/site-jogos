@@ -1368,9 +1368,9 @@ let intervaloCarrossel = null;
 const SENHA_ADMIN = "Rodri2012";      
 let categoriaAtual = 'Todos';      
 
-// Lógica do Bloqueio de Compartilhamento (0/5)      
+// Lógica do Bloqueio de Compartilhamento (Sempre zera ao abrir o site)      
 const LINK_CANAL_COMPARTILHAR = "https://whatsapp.com/channel/0029VbDVqMICBtx8ZZL1Vx3K";      
-let progressoCompartilhamento = parseInt(localStorage.getItem('psp_share_count') || '0');      
+let progressoCompartilhamento = 0;      
 
 function atualizarInterfaceBloqueio() {      
     const contadorText = document.getElementById('shareCounterText');      
@@ -1389,20 +1389,22 @@ function atualizarInterfaceBloqueio() {
 function realizarCompartilhamento() {      
     if (progressoCompartilhamento >= 5) return;      
 
-    progressoCompartilhamento++;      
-    localStorage.setItem('psp_share_count', progressoCompartilhamento);      
-    atualizarInterfaceBloqueio();      
-
-    const aviso = document.getElementById('shareMsgAviso');      
-    if (progressoCompartilhamento < 5) {      
-        if (aviso) aviso.innerText = `Faltam mais ${5 - progressoCompartilhamento} compartilhamentos!`;      
-    } else {      
-        if (aviso) aviso.innerText = "Desbloqueado com sucesso!";      
-    }      
-
-    // Abre o WhatsApp para enviar o link do canal      
+    // Abre o WhatsApp primeiro para enviar a mensagem do compartilhamento
     const textoMensagem = encodeURIComponent("🔥 Venha baixar vários jogos incríveis de PSP, PS2 e APK de graça na PSP GAMER MOBILE 2! Siga o canal oficial: " + LINK_CANAL_COMPARTILHAR);      
     window.open(`https://api.whatsapp.com/send?text=${textoMensagem}`, '_blank');      
+
+    // Só sobe a barra/contador DEPOIS que o usuário clica e vai para o WhatsApp
+    setTimeout(() => {
+        progressoCompartilhamento++;      
+        atualizarInterfaceBloqueio();      
+
+        const aviso = document.getElementById('shareMsgAviso');      
+        if (progressoCompartilhamento < 5) {      
+            if (aviso) aviso.innerText = `Faltam mais ${5 - progressoCompartilhamento} compartilhamentos!`;      
+        } else {      
+            if (aviso) aviso.innerText = "Desbloqueado com sucesso!";      
+        }
+    }, 800);      
 }      
 
 function mostrarStatusSync(texto, cor = "rgba(0, 255, 136, 0.9)") {      
