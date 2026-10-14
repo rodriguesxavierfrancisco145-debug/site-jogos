@@ -767,7 +767,6 @@
             border-color: var(--danger);
         }
 
-        /* Estilos do Tela de Bloqueio por Compartilhamento */
         #shareLockOverlay {
             position: fixed;
             top: 0;
@@ -840,7 +839,6 @@
 </head>
 
 <body>  
-    <!-- TELA DE BLOQUEIO DE COMPARTILHAMENTO -->      
     <div id="shareLockOverlay">      
         <div class="share-lock-card">      
             <h2>🔒 Acesso Bloqueado</h2>      
@@ -911,8 +909,17 @@
         <div id="inicio" class="tab-content">      
             <header style="margin-bottom: 15px;">      
                 <h1 id="panelTitle" style="font-size: 1.8rem; color: var(--accent-pink);">🔒 Painel Restrito</h1>      
-                <p id="panelSub" style="font-size: 0.85rem; color: var(--text-muted);">Adicione jogos e gere o código manual</p>      
+                <p id="panelSub" style="font-size: 0.85rem; color: var(--text-muted);">Adicione jogos e acompanhe os downloads</p>      
             </header>      
+
+            <!-- ESTATÍSTICAS DE DOWNLOADS -->
+            <div class="form-card" style="border: 2px solid var(--primary); background: #121b16;">      
+                <h2 style="color: var(--primary);">📊 Estatísticas de Downloads</h2>      
+                <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 12px;">Veja quantos cliques de download cada jogo recebeu:</p>      
+                <div id="adminDownloadsStats" style="max-height: 200px; overflow-y: auto; background: #070b09; padding: 10px; border-radius: 8px; border: 1px solid rgba(0,255,136,0.2);">
+                    <!-- Preenchido via script -->
+                </div>      
+            </div>      
 
             <div class="form-card" style="border: 2px solid var(--accent-cyan); background: #12121b;">      
                 <h2 style="color: var(--accent-cyan);">📋 Copiar Código para o Seu Arquivo</h2>      
@@ -1413,9 +1420,48 @@
         const SENHA_ADMIN = "Rodri2012";      
         let categoriaAtual = 'Todos';      
 
-        // Lógica do Bloqueio de Compartilhamento (0/5)      
         const LINK_CANAL_COMPARTILHAR = "https://whatsapp.com/channel/0029VbDVqMICBtx8ZZL1Vx3K";      
         let progressoCompartilhamento = parseInt(localStorage.getItem('psp_share_count') || '0');      
+
+        // Função para carregar contadores de download salvos
+        function getDownloadCounts() {
+            try {
+                return JSON.parse(localStorage.getItem('psp_download_counts') || '{}');
+            } catch(e) {
+                return {};
+            }
+        }
+
+        function registrarDownload(id) {
+            let counts = getDownloadCounts();
+            counts[id] = (counts[id] || 0) + 1;
+            localStorage.setItem('psp_download_counts', JSON.stringify(counts));
+            atualizarEstatisticasAdmin();
+        }
+
+        function atualizarEstatisticasAdmin() {
+            const container = document.getElementById('adminDownloadsStats');
+            if (!container) return;
+
+            let counts = getDownloadCounts();
+            let html = '';
+            
+            listaJogosCache.forEach(game => {
+                let totalDownloads = counts[game.id] || 0;
+                html += `
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.82rem;">
+                        <span style="color: white; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 70%;">${game.name}</span>
+                        <span style="color: var(--primary); font-weight: bold;">📥 ${totalDownloads} downloads</span>
+                    </div>
+                `;
+            });
+
+            if (listaJogosCache.length === 0) {
+                html = '<p style="color: var(--text-muted); font-size: 0.8rem; text-align: center;">Nenhum jogo cadastrado.</p>';
+            }
+
+            container.innerHTML = html;
+        }
 
         function atualizarInterfaceBloqueio() {      
             const contadorText = document.getElementById('shareCounterText');      
@@ -1512,6 +1558,7 @@
             iniciarAutoplayCarrossel();      
             iniciarLoopWhatsappBanner();      
             switchTab('jogos');      
+            atualizarEstatisticasAdmin();
 
             const urlParams = new URLSearchParams(window.location.search);      
             const jogoIdUrl = urlParams.get('jogo');      
@@ -1651,6 +1698,7 @@
                 switchTab('inicio');      
                 renderizarInputsAdminBanners();      
                 atualizarCaixaCodigoGerado();      
+                atualizarEstatisticasAdmin();
                 return;      
             }      
             let senha = prompt("Digite a senha de administrador:");      
@@ -1659,6 +1707,7 @@
                 switchTab('inicio');      
                 renderizarInputsAdminBanners();      
                 atualizarCaixaCodigoGerado();      
+                atualizarEstatisticasAdmin();
                 renderGames();      
                 alert("Painel liberado!");      
             } else if (senha !== null) {      
@@ -1743,6 +1792,7 @@
                 renderGames();      
                 switchTab('inicio');      
                 atualizarCaixaCodigoGerado();      
+                atualizarEstatisticasAdmin();
                 gameForm.reset();      
 
                 mostrarStatusSync("Jogo salvo! Copie o código atualizado acima.");      
@@ -1755,6 +1805,7 @@
                 renderGames();      
                 switchTab('inicio');      
                 atualizarCaixaCodigoGerado();      
+                atualizarEstatisticasAdmin();
                 mostrarStatusSync("Jogo excluído! Copie o código atualizado acima.");      
             }      
         }      
@@ -1835,7 +1886,7 @@
                             <button class="share-btn" onclick="compartilharJogo(${game.id}, '${game.name.replace(/'/g, "\\'")}')">🔗 Compartilhar</button>      
                         </div>      
                               
-                        <a href="${game.link}" target="_blank" class="download-btn" style="padding: 12px; font-size: 0.95rem; margin-top: 15px;">${game.btnText}</a>      
+                        <a href="${game.link}" target="_blank" onclick="registrarDownload(${game.id})" class="download-btn" style="padding: 12px; font-size: 0.95rem; margin-top: 15px;">${game.btnText}</a>      
                         ${botoesAdminDetalhe}      
                     </div>      
                 </div>      
@@ -1890,7 +1941,7 @@
                                 <span>📦 Tamanho: <strong>${game.size}</strong></span>      
                                 <span>📁 Formato: <strong>${game.format}</strong></span>      
                             </div>      
-                            <span class="download-btn" style="display: block;">Ver Detalhes / Baixar</span>      
+                            <span onclick="event.stopPropagation(); registrarDownload(${game.id}); window.open('${game.link}', '_blank');" class="download-btn" style="display: block;">Baixar Agora</span>      
                         </div>      
                     </div>      
                     ${botoesAdminHtml}      
