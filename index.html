@@ -36,7 +36,7 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        /* FUNDO NEON ANIMADO TOTALMENTE NOVO */
+        /* FUNDO NEON COM ANIMAÇÃO OTIMIZADA (GPU ACCELERATED) */
         .neon-bg-animation {
             position: fixed;
             top: 0;
@@ -46,50 +46,52 @@
             z-index: -1;
             overflow: hidden;
             background: linear-gradient(135deg, #050508 0%, #0a0a12 100%);
+            pointer-events: none;
         }
 
         .neon-blob {
             position: absolute;
-            filter: blur(80px);
-            opacity: 0.15;
+            filter: blur(50px); /* Reduzido levemente para melhor performance em mobile */
+            opacity: 0.12;
             border-radius: 50%;
             animation: floatBlob 15s infinite alternate ease-in-out;
+            will-change: transform; /* Força aceleração por hardware */
         }
 
         .blob-1 {
-            width: 350px;
-            height: 350px;
+            width: 280px;
+            height: 280px;
             background: var(--accent-pink);
-            top: -100px;
-            left: -100px;
+            top: -50px;
+            left: -50px;
             animation-duration: 12s;
         }
 
         .blob-2 {
-            width: 400px;
-            height: 400px;
+            width: 320px;
+            height: 320px;
             background: var(--accent-cyan);
-            bottom: -150px;
-            right: -150px;
+            bottom: -80px;
+            right: -80px;
             animation-duration: 18s;
             animation-delay: -3s;
         }
 
         .blob-3 {
-            width: 300px;
-            height: 300px;
+            width: 250px;
+            height: 250px;
             background: var(--primary);
             top: 40%;
             left: 30%;
-            opacity: 0.08;
+            opacity: 0.06;
             animation-duration: 20s;
             animation-delay: -5s;
         }
 
         @keyframes floatBlob {
-            0% { transform: translate(0px, 0px) scale(1); }
-            50% { transform: translate(50px, 80px) scale(1.15); }
-            100% { transform: translate(-40px, -60px) scale(0.9); }
+            0% { transform: translate3d(0px, 0px, 0) scale(1); }
+            50% { transform: translate3d(30px, 50px, 0) scale(1.1); }
+            100% { transform: translate3d(-25px, -35px, 0) scale(0.95); }
         }
 
         .container {
@@ -117,6 +119,7 @@
             animation: pulseLogo 3s infinite alternate;
             white-space: nowrap;
             cursor: pointer;
+            will-change: text-shadow;
         }
 
         @keyframes pulseLogo {
@@ -130,22 +133,20 @@
 
         .search-box {
             width: 100%;
-            background-color: rgba(18, 18, 26, 0.8);
-            backdrop-filter: blur(10px);
+            background-color: rgba(18, 18, 26, 0.9);
             border: 1px solid rgba(0, 240, 255, 0.25);
             border-radius: 24px;
             padding: 10px 18px;
             color: white;
             font-size: 0.88rem;
             outline: none;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: inset 0 2px 5px rgba(0,0,0,0.6), 0 0 10px rgba(0, 240, 255, 0.05);
+            transition: border-color 0.2s, box-shadow 0.2s;
         }
 
         .search-box:focus {
             border-color: var(--accent-cyan);
-            background-color: rgba(22, 22, 34, 0.9);
-            box-shadow: 0 0 15px rgba(0, 240, 255, 0.4), inset 0 2px 4px rgba(0,0,0,0.6);
+            background-color: rgba(22, 22, 34, 0.95);
+            box-shadow: 0 0 12px rgba(0, 240, 255, 0.3);
         }
 
         .top-icons {
@@ -158,8 +159,7 @@
         }
 
         .top-icons span {
-            background: rgba(18, 18, 26, 0.8);
-            backdrop-filter: blur(10px);
+            background: rgba(18, 18, 26, 0.9);
             width: 38px;
             height: 38px;
             border-radius: 50%;
@@ -167,15 +167,13 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            transition: border-color 0.2s, transform 0.2s;
         }
 
         .top-icons span:hover {
             border-color: var(--accent-pink);
             background: rgba(255, 0, 127, 0.15);
             transform: scale(1.05);
-            box-shadow: 0 0 15px rgba(255, 0, 127, 0.4);
         }
 
         .dropdown-menu {
@@ -183,20 +181,19 @@
             position: absolute;
             right: 0;
             top: 48px;
-            background-color: rgba(16, 16, 23, 0.95);
-            backdrop-filter: blur(12px);
+            background-color: rgba(16, 16, 23, 0.98);
             border: 1px solid rgba(0, 240, 255, 0.3);
             border-radius: 14px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.8), 0 0 20px rgba(0, 240, 255, 0.15);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.8);
             width: 170px;
             z-index: 100;
             overflow: hidden;
-            animation: fadeInMenu 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            animation: fadeInMenu 0.2s ease forwards;
         }
 
         @keyframes fadeInMenu {
-            from { opacity: 0; transform: translateY(-10px) scale(0.95); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
+            from { opacity: 0; transform: translateY(-8px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .dropdown-menu.show {
@@ -211,7 +208,7 @@
             border-bottom: 1px solid rgba(255,255,255,0.04);
             text-decoration: none;
             display: block;
-            transition: all 0.2s;
+            transition: background-color 0.2s, color 0.2s;
         }
 
         .dropdown-item:last-child {
@@ -221,7 +218,6 @@
         .dropdown-item:hover {
             background-color: rgba(255, 0, 127, 0.15);
             color: var(--accent-pink);
-            padding-left: 20px;
         }
 
         .carousel-container {
@@ -231,7 +227,7 @@
             border-radius: 18px;
             overflow: hidden;
             margin-bottom: 22px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.7), 0 0 25px rgba(0, 240, 255, 0.2);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.7);
             border: 1px solid rgba(0, 240, 255, 0.3);
             background: #101017;
         }
@@ -240,7 +236,8 @@
             display: flex;
             width: 100%;
             height: 100%;
-            transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+            transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+            will-change: transform;
         }
 
         .carousel-slide {
@@ -253,12 +250,11 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            filter: brightness(0.92);
-            transition: transform 0.6s ease;
+            transition: transform 0.5s ease;
         }
 
         .carousel-slide:hover img {
-            transform: scale(1.03);
+            transform: scale(1.02);
         }
 
         .carousel-caption {
@@ -266,12 +262,11 @@
             bottom: 0;
             left: 0;
             right: 0;
-            background: linear-gradient(to top, rgba(7, 7, 10, 0.95), rgba(7, 7, 10, 0.1));
+            background: linear-gradient(to top, rgba(7, 7, 10, 0.95), transparent);
             padding: 14px 16px;
             font-size: 0.9rem;
             font-weight: 700;
             color: white;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.8);
         }
 
         .carousel-indicators {
@@ -289,14 +284,13 @@
             border-radius: 50%;
             background: rgba(255, 255, 255, 0.35);
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: width 0.3s ease, background 0.3s ease;
         }
 
         .indicator.active {
             background: var(--accent-pink);
             width: 24px;
             border-radius: 4px;
-            box-shadow: 0 0 10px var(--accent-pink);
         }
 
         .custom-modal-overlay {
@@ -307,13 +301,12 @@
             width: 100%;
             height: 100%;
             background: rgba(5, 5, 8, 0.85);
-            backdrop-filter: blur(8px);
             z-index: 1000;
             align-items: center;
             justify-content: center;
             padding: 20px;
             opacity: 0;
-            transition: opacity 0.3s ease;
+            transition: opacity 0.25s ease;
         }
 
         .custom-modal-overlay.show {
@@ -322,27 +315,25 @@
         }
 
         .custom-modal {
-            background: linear-gradient(145deg, rgba(20, 20, 29, 0.95), rgba(13, 13, 18, 0.95));
-            backdrop-filter: blur(12px);
+            background: #14141d;
             border: 1px solid rgba(0, 240, 255, 0.4);
             border-radius: 20px;
             padding: 24px;
             width: 100%;
             max-width: 380px;
-            box-shadow: 0 20px 45px rgba(0,0,0,0.9), 0 0 30px rgba(0, 240, 255, 0.25);
-            transform: scale(0.85) translateY(15px);
-            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 20px 45px rgba(0,0,0,0.9);
+            transform: scale(0.9);
+            transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
         .custom-modal-overlay.show .custom-modal {
-            transform: scale(1) translateY(0);
+            transform: scale(1);
         }
 
         .custom-modal h3 {
             color: var(--accent-cyan);
             font-size: 1.25rem;
             margin-bottom: 12px;
-            text-shadow: 0 0 10px rgba(0, 240, 255, 0.4);
         }
 
         .custom-modal p {
@@ -363,8 +354,6 @@
             font-weight: bold;
             width: 100%;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(255, 0, 127, 0.4);
-            transition: all 0.2s;
         }
 
         .categories {
@@ -381,8 +370,7 @@
         }
 
         .cat-btn {
-            background: linear-gradient(135deg, rgba(20, 20, 29, 0.8), rgba(13, 13, 18, 0.8));
-            backdrop-filter: blur(8px);
+            background: #14141d;
             color: var(--text-muted);
             border: 1px solid rgba(255,255,255,0.08);
             padding: 9px 20px;
@@ -391,31 +379,27 @@
             font-weight: 600;
             cursor: pointer;
             white-space: nowrap;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+            transition: all 0.2s ease;
         }
 
         .cat-btn:hover {
             color: white;
             border-color: rgba(0, 240, 255, 0.5);
-            box-shadow: 0 0 15px rgba(0, 240, 255, 0.2);
-            transform: translateY(-2px);
         }
 
         .cat-btn.active {
             background: linear-gradient(135deg, var(--accent-pink), #99004d);
             color: white;
             border-color: var(--accent-pink);
-            box-shadow: 0 0 20px rgba(255, 0, 127, 0.6);
         }
 
         .tab-content {
             display: none;
-            animation: fadeInTab 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+            animation: fadeInTab 0.3s ease;
         }
 
         @keyframes fadeInTab {
-            from { opacity: 0; transform: translateY(8px); }
+            from { opacity: 0; transform: translateY(6px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
@@ -424,12 +408,11 @@
         }
 
         .form-card {
-            background: linear-gradient(145deg, rgba(20, 20, 29, 0.9), rgba(14, 14, 20, 0.9));
-            backdrop-filter: blur(12px);
+            background: #14141d;
             padding: 24px;
             border-radius: 20px;
             margin-bottom: 22px;
-            box-shadow: 0 10px 35px rgba(0,0,0,0.6), 0 0 20px rgba(0, 240, 255, 0.08);
+            box-shadow: 0 10px 35px rgba(0,0,0,0.6);
             border: 1px solid rgba(0, 240, 255, 0.25);
         }
 
@@ -437,7 +420,6 @@
             margin-bottom: 18px;
             font-size: 1.3rem;
             color: var(--accent-cyan);
-            text-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
         }
 
         .input-group {
@@ -457,16 +439,15 @@
             padding: 12px;
             border-radius: 12px;
             border: 1px solid rgba(255,255,255,0.1);
-            background-color: rgba(5, 5, 8, 0.7);
+            background-color: #050508;
             color: white;
             font-size: 0.9rem;
             outline: none;
-            transition: all 0.3s;
+            transition: border-color 0.2s;
         }
 
         .input-group input:focus, .input-group select:focus, .input-group textarea:focus {
             border-color: var(--accent-cyan);
-            box-shadow: 0 0 12px rgba(0, 240, 255, 0.3);
         }
 
         .form-row {
@@ -487,16 +468,15 @@
             font-weight: 800;
             border-radius: 12px;
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: opacity 0.2s, transform 0.2s;
             width: 100%;
-            box-shadow: 0 6px 20px rgba(0, 255, 136, 0.3);
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
 
         button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0, 255, 136, 0.5), 0 0 15px rgba(0, 255, 136, 0.3);
+            opacity: 0.9;
+            transform: translateY(-1px);
         }
 
         .games-grid {
@@ -506,13 +486,12 @@
         }
 
         @keyframes fadeInGame {
-            from { opacity: 0; transform: scale(0.92) translateY(15px); }
-            to { opacity: 1; transform: scale(1) translateY(0); }
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .game-card {
-            background: linear-gradient(145deg, rgba(19, 19, 27, 0.9), rgba(13, 13, 18, 0.9));
-            backdrop-filter: blur(10px);
+            background: #13131b;
             border-radius: 16px;
             overflow: hidden;
             box-shadow: 0 8px 25px rgba(0,0,0,0.6);
@@ -522,14 +501,15 @@
             position: relative;
             cursor: pointer;
             border: 1px solid rgba(255, 255, 255, 0.08);
-            transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-            animation: fadeInGame 0.4s forwards;
+            transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+            animation: fadeInGame 0.3s ease forwards;
+            will-change: transform;
         }
 
         .game-card:hover {
-            transform: translateY(-6px) scale(1.02);
+            transform: translateY(-4px);
             border-color: rgba(0, 240, 255, 0.6);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.8), 0 0 25px rgba(0, 240, 255, 0.3);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.8);
         }
 
         .card-img-container {
@@ -543,26 +523,24 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: transform 0.5s ease;
+            transition: transform 0.3s ease;
         }
 
         .game-card:hover img {
-            transform: scale(1.08);
+            transform: scale(1.05);
         }
 
         .price-badge {
             position: absolute;
             top: 10px;
             right: 10px;
-            background: rgba(5, 5, 8, 0.85);
-            backdrop-filter: blur(6px);
+            background: rgba(5, 5, 8, 0.9);
             padding: 5px 10px;
             border-radius: 12px;
             font-size: 0.72rem;
             font-weight: 800;
             color: var(--primary);
             border: 1px solid rgba(0, 255, 136, 0.4);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.5), 0 0 10px rgba(0, 255, 136, 0.2);
         }
 
         .game-info {
@@ -602,13 +580,11 @@
             font-size: 0.78rem;
             font-weight: 800;
             margin-top: auto;
-            box-shadow: 0 4px 15px rgba(0, 240, 255, 0.35);
-            transition: filter 0.2s;
+            transition: opacity 0.2s;
         }
 
         .download-btn:hover {
-            filter: brightness(1.15);
-            box-shadow: 0 0 20px rgba(0, 240, 255, 0.6);
+            opacity: 0.9;
         }
 
         .delete-btn {
@@ -639,24 +615,21 @@
             color: var(--text-muted);
             font-style: italic;
             padding: 40px;
-            background: rgba(16, 16, 23, 0.8);
+            background: #101017;
             border-radius: 16px;
-            border: 1px solid rgba(255,255,255,0.05);
         }
 
         .game-detail-card {
-            background: linear-gradient(145deg, rgba(20, 20, 29, 0.95), rgba(14, 14, 20, 0.95));
-            backdrop-filter: blur(12px);
+            background: #14141d;
             border-radius: 20px;
             overflow: hidden;
             padding: 22px;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.7), 0 0 25px rgba(0, 240, 255, 0.15);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.7);
             border: 1px solid rgba(0, 240, 255, 0.3);
         }
 
         .back-btn {
-            background: rgba(18, 18, 26, 0.8);
-            backdrop-filter: blur(8px);
+            background: #12121a;
             color: var(--text-color);
             border: 1px solid rgba(255,255,255,0.1);
             padding: 9px 18px;
@@ -666,13 +639,11 @@
             margin-bottom: 18px;
             width: auto;
             font-weight: bold;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-            transition: all 0.2s;
+            transition: border-color 0.2s;
         }
 
         .back-btn:hover {
             border-color: var(--accent-cyan);
-            box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
         }
 
         .detail-img-container {
@@ -687,7 +658,6 @@
             height: 100%;
             object-fit: cover;
             border-radius: 14px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.5);
         }
 
         .detail-desc {
@@ -696,7 +666,7 @@
             margin: 15px 0;
             line-height: 1.6;
             white-space: pre-wrap;
-            background: rgba(5, 5, 8, 0.7);
+            background: #050508;
             padding: 14px;
             border-radius: 12px;
             border: 1px solid rgba(255,255,255,0.06);
@@ -706,7 +676,7 @@
             display: flex;
             align-items: center;
             justify-content: flex-end;
-            background: rgba(5, 5, 8, 0.7);
+            background: #050508;
             padding: 12px 16px;
             border-radius: 12px;
             margin-top: 15px;
@@ -723,7 +693,6 @@
             font-weight: bold;
             cursor: pointer;
             width: auto;
-            box-shadow: 0 4px 12px rgba(255, 0, 127, 0.4);
         }
 
         .admin-login-area {
@@ -752,7 +721,7 @@
             border-radius: 24px;
             font-size: 0.82rem;
             font-weight: 800;
-            box-shadow: 0 6px 20px rgba(0,0,0,0.6), 0 0 15px rgba(0, 255, 136, 0.4);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.6);
             z-index: 9999;
             display: none;
         }
@@ -765,28 +734,27 @@
             left: 20px;
             max-width: 460px;
             margin: 0 auto;
-            background: linear-gradient(145deg, rgba(20, 20, 29, 0.95), rgba(14, 14, 20, 0.95));
-            backdrop-filter: blur(12px);
+            background: #14141d;
             border: 1px solid rgba(0, 255, 136, 0.5);
             border-radius: 18px;
             padding: 16px 20px;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.9), 0 0 30px rgba(0, 255, 136, 0.2);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.9);
             z-index: 99999;
-            animation: slideUpFloat 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            animation: slideUpFloat 0.3s ease forwards;
+            will-change: transform, opacity;
         }
 
         @keyframes slideUpFloat {
-            from { opacity: 0; transform: translateY(30px) scale(0.95); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         @keyframes slideOutFloat {
-            0% { opacity: 1; transform: translateY(0) scale(1) rotate(0deg); }
-            100% { opacity: 0; transform: translateY(50px) scale(0.7) rotate(15deg); }
+            to { opacity: 0; transform: translateY(30px); }
         }
 
         #whatsappFloatingBanner.closing {
-            animation: slideOutFloat 0.4s cubic-bezier(0.6, -0.28, 0.735, 0.045) forwards;
+            animation: slideOutFloat 0.3s ease forwards;
         }
 
         .wa-banner-content {
@@ -838,7 +806,6 @@
             font-size: 0.78rem;
             font-weight: 800;
             text-transform: uppercase;
-            box-shadow: 0 4px 12px rgba(0, 255, 136, 0.35);
             transition: transform 0.2s;
         }
 
@@ -862,14 +829,12 @@
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            transition: all 0.2s;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+            transition: background 0.2s, color 0.2s;
         }
 
         .wa-close-btn:hover {
             background: var(--danger);
             color: white;
-            border-color: var(--danger);
         }
 
         .whatsapp-floating-icon {
@@ -890,6 +855,7 @@
             border: 2px solid rgba(255, 255, 255, 0.3);
             animation: whatsappDanca 3s ease-in-out infinite;
             transition: transform 0.2s ease;
+            will-change: transform;
         }
 
         .whatsapp-floating-icon:hover {
@@ -903,9 +869,9 @@
         }
 
         @keyframes whatsappDanca {
-            0% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-8px) rotate(-3deg); }
-            100% { transform: translateY(0px) rotate(0deg); }
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-6px); }
+            100% { transform: translateY(0px); }
         }
 
         #shareLockOverlay {
@@ -915,7 +881,6 @@
             width: 100%;
             height: 100%;
             background: rgba(5, 5, 8, 0.95);
-            backdrop-filter: blur(12px);
             z-index: 999999;
             display: flex;
             align-items: center;
@@ -924,22 +889,20 @@
         }
 
         .share-lock-card {
-            background: linear-gradient(145deg, rgba(20, 20, 29, 0.95), rgba(14, 14, 20, 0.95));
-            backdrop-filter: blur(12px);
+            background: #14141d;
             border: 1px solid rgba(0, 255, 136, 0.5);
             border-radius: 22px;
             padding: 28px;
             width: 100%;
             max-width: 400px;
             text-align: center;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.95), 0 0 35px rgba(0, 255, 136, 0.2);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.95);
         }
 
         .share-lock-card h2 {
             color: var(--primary);
             font-size: 1.4rem;
             margin-bottom: 12px;
-            text-shadow: 0 0 12px rgba(0, 255, 136, 0.4);
         }
 
         .share-lock-card p {
@@ -950,7 +913,7 @@
         }
 
         .share-progress-container {
-            background: rgba(5, 5, 8, 0.7);
+            background: #050508;
             border-radius: 14px;
             padding: 16px;
             margin-bottom: 22px;
@@ -962,7 +925,6 @@
             font-weight: 900;
             color: var(--accent-cyan);
             margin-bottom: 10px;
-            text-shadow: 0 0 10px rgba(0, 240, 255, 0.4);
         }
 
         .share-progress-bar-bg {
@@ -978,7 +940,6 @@
             height: 100%;
             background: linear-gradient(90deg, var(--accent-pink), var(--primary));
             transition: width 0.3s ease;
-            box-shadow: 0 0 10px var(--primary);
         }
     </style>  
 </head>
@@ -1643,7 +1604,7 @@
                 setTimeout(() => {      
                     banner.style.display = 'none';      
                     banner.classList.remove('closing');      
-                }, 400);      
+                }, 300);      
             }      
         }      
 
@@ -1760,7 +1721,7 @@
                 const div = document.createElement('div');      
                 div.style.marginBottom = "12px";      
                 div.style.padding = "12px";      
-                div.style.background = "rgba(5, 5, 8, 0.7)";      
+                div.style.background = "#050508";      
                 div.style.borderRadius = "12px";      
                 div.style.border = "1px solid rgba(255,255,255,0.08)";      
                 div.innerHTML = `      
@@ -2034,7 +1995,7 @@
             filtrados.forEach((game, index) => {      
                 const card = document.createElement('div');      
                 card.className = 'game-card';      
-                card.style.animationDelay = `${index * 0.03}s`;      
+                card.style.animationDelay = `${index * 0.02}s`;      
                 card.onclick = () => verDetalhesDoJogo(game.id);      
 
                 let botoesAdminHtml = '';      
