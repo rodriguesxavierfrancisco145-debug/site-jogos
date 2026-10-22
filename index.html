@@ -119,7 +119,7 @@
             border: 1px solid rgba(0, 240, 255, 0.25);
             border-radius: 12px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.7), 0 0 15px rgba(0, 240, 255, 0.1);
-            width: 160px;
+            width: 170px;
             z-index: 100;
             overflow: hidden;
             animation: fadeInMenu 0.2s ease forwards;
@@ -931,6 +931,8 @@
             <div class="top-icons">      
                 <span onclick="toggleMenu(event)" title="Menu">☰</span>      
                 <div id="dropdownMenu" class="dropdown-menu">      
+                    <div class="dropdown-item" onclick="abrirPaginaPedirJogo()">🎮 Pedir Jogo</div>
+                    <div class="dropdown-item" onclick="abrirPaginaDenunciarJogo()">⚠️ Denunciar Jogo</div>
                     <div class="dropdown-item" onclick="abrirModalInfo('Suporte', 'Precisa de ajuda com algum jogo ou link quebrado? Entre em contato pelo canal.')">Suporte</div>      
                     <div class="dropdown-item" onclick="abrirModalInfo('Ajuda', '1. Escolha o jogo.\n2. Clique para ver detalhes.\n3. Baixe direto.')">Ajuda</div>      
                     <div class="dropdown-item" onclick="abrirModalInfo('Parceria', 'Divulgue seu canal ou site conosco!')">Parceria</div>      
@@ -949,7 +951,6 @@
             <button class="cat-btn" onclick="filtrarCategoria('PS2', this)">PS2</button>      
             <button class="cat-btn" onclick="filtrarCategoria('PC', this)">PC</button>      
             <button class="cat-btn" onclick="filtrarCategoria('APK', this)">APK</button>      
-            <button class="cat-btn" onclick="filtrarCategoria('PedirJogo', this)">Pedir Jogo</button>      
         </div>      
 
         <div id="inicio" class="tab-content">      
@@ -1033,6 +1034,7 @@
         </div>      
 
         <div id="pedirJogoTab" class="tab-content">      
+            <button class="back-btn" onclick="switchTab('jogos')">← Voltar</button>
             <div class="form-card">      
                 <h2>🎮 Pedir um Jogo</h2>      
                 <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 18px;">Preencha os campos abaixo com o jogo que você deseja. Ao clicar em "Pedir Jogo", você será direcionado para o nosso WhatsApp com a mensagem pronta!</p>      
@@ -1055,6 +1057,34 @@
                         <textarea id="pedidoObs" rows="3" placeholder="Ex: Versão em português, mod, etc..."></textarea>      
                     </div>      
                     <button type="submit" style="background: linear-gradient(135deg, var(--accent-pink), #b00055); color: white;">Pedir Jogo</button>      
+                </form>      
+            </div>      
+        </div>      
+
+        <div id="denunciarJogoTab" class="tab-content">      
+            <button class="back-btn" onclick="switchTab('jogos')">← Voltar</button>
+            <div class="form-card">      
+                <h2>⚠️ Denunciar um Jogo</h2>      
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 18px;">Encontrou um erro, link quebrado ou arquivo corrompido? Preencha os detalhes abaixo para nos avisar via WhatsApp!</p>      
+                <form id="denunciarJogoForm" onsubmit="enviarDenunciaWhatsapp(event)">      
+                    <div class="input-group">      
+                        <label for="denunciaNome">Nome do Jogo:</label>      
+                        <input type="text" id="denunciaNome" required placeholder="Ex: God of War, GTA...">      
+                    </div>      
+                    <div class="input-group">      
+                        <label for="denunciaMotivo">Motivo da Denúncia:</label>      
+                        <select id="denunciaMotivo" style="width:100%;">      
+                            <option value="Link Off / Quebrado">Link Off / Quebrado</option>      
+                            <option value="Arquivo Corrompido">Arquivo Corrompido</option>      
+                            <option value="Jogo Incorreto / Errado">Jogo Incorreto / Errado</option>      
+                            <option value="Outro Problema">Outro Problema</option>      
+                        </select>      
+                    </div>      
+                    <div class="input-group">      
+                        <label for="denunciaDetalhes">Detalhes do Problema:</label>      
+                        <textarea id="denunciaDetalhes" rows="3" required placeholder="Ex: O link do Google Drive não abre, o arquivo veio sem senha, etc..."></textarea>      
+                    </div>      
+                    <button type="submit" style="background: linear-gradient(135deg, var(--danger), #cc0033); color: white;">Enviar Denúncia</button>      
                 </form>      
             </div>      
         </div>      
@@ -1356,7 +1386,7 @@
             "format": "RAR",
             "status": "Grátis ",
             "description": "Corrida ",
-            "link": "https://archive.org/download/wf-repack-t1coon/Wreckfest%20%5BMULTi-ENG-RUS%5D%20%5BR%5D%20%5BTN%5D.rar",
+            "link": "https://archive.org/download/wf-repack-t1coon/Wreckfest%20%5BMULTi-ENG-RUS%5D%20%5BR%5D%20%5TN%5D.rar",
             "btnText": "Baixar Agora (Download Direto)"
           },
           {
@@ -1714,6 +1744,16 @@
             document.getElementById('customModalOverlay').classList.remove('show');      
         }      
 
+        function abrirPaginaPedirJogo() {
+            document.getElementById('dropdownMenu').classList.remove('show');
+            switchTab('pedirJogoTab');
+        }
+
+        function abrirPaginaDenunciarJogo() {
+            document.getElementById('dropdownMenu').classList.remove('show');
+            switchTab('denunciarJogoTab');
+        }
+
         function solicitarSenha() {      
             if (localStorage.getItem('isAdmin') === 'true') {      
                 switchTab('inicio');      
@@ -1749,13 +1789,6 @@
         }      
 
         function filtrarCategoria(cat, btn) {      
-            if (cat === 'PedirJogo') {      
-                document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));      
-                if(btn) btn.classList.add('active');      
-                switchTab('pedirJogoTab');      
-                return;      
-            }      
-
             categoriaAtual = cat;      
             document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));      
             if(btn) btn.classList.add('active');      
@@ -1773,6 +1806,19 @@
             if (obs) {      
                 mensagem += `\n📝 *Observações:* ${obs}`;      
             }      
+
+            const numeroWhatsApp = "258843843479";      
+            const urlWhatsapp = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensagem)}`;      
+            window.open(urlWhatsapp, '_blank');      
+        }      
+
+        function enviarDenunciaWhatsapp(e) {      
+            e.preventDefault();      
+            const nomeJogo = document.getElementById('denunciaNome').value.trim();      
+            const motivo = document.getElementById('denunciaMotivo').value;      
+            const detalhes = document.getElementById('denunciaDetalhes').value.trim();      
+
+            let mensagem = `⚠️ *NOVA DENÚNCIA DE JOGO*\n\n🎮 *Jogo:* ${nomeJogo}\n🚨 *Motivo:* ${motivo}\n📝 *Detalhes:* ${detalhes}`;      
 
             const numeroWhatsApp = "258843843479";      
             const urlWhatsapp = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensagem)}`;      
