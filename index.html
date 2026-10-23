@@ -3,175 +3,205 @@
 <head>      
     <meta charset="UTF-8">      
     <meta name="viewport" content="width=device-width, initial-scale=1.0">      
-    <title>PSP GAMER MOBILE 2</title>      
+    <title>PSP GAMER STORE</title>      
     <style>      
         :root {      
-            --bg-color: #0b0b0f;      
-            --card-bg: #13131a;      
-            --text-color: #f1f1f6;      
-            --text-muted: #8e8e99;      
-            --primary: #00ff88;      
-            --primary-hover: #00cc6a;      
-            --accent-pink: #ff007f;      
-            --accent-cyan: #00f0ff;      
-            --danger: #ff3366;      
-            --warning: #ffaa00;      
+            --bg-color: #121212;      
+            --surface-color: #1f1f1f;      
+            --surface-variant: #28292c;
+            --card-bg: #1e1e1e;      
+            --text-main: #e8eaed;      
+            --text-sub: #9aa0a6;      
+            --play-green: #01875f;      
+            --play-green-hover: #007350;      
+            --play-blue: #8ab4f8;
+            --accent-pink: #ff3366;      
+            --border-color: rgba(255, 255, 255, 0.08);
         }  
         * {      
             margin: 0;      
             padding: 0;      
             box-sizing: border-box;      
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;      
+            font-family: 'Roboto', 'Segoe UI', Arial, sans-serif;      
         }    
         body {      
             background-color: var(--bg-color);      
-            color: var(--text-color);      
-            padding: 15px;      
-            background-image:       
-                radial-gradient(circle at 10% 20%, rgba(255, 0, 127, 0.08) 0%, transparent 40%),      
-                radial-gradient(circle at 90% 80%, rgba(0, 240, 255, 0.08) 0%, transparent 40%);      
-            background-attachment: fixed;
+            color: var(--text-main);      
+            padding-bottom: 30px;
         }
 
         .container {
-            max-width: 500px;
+            max-width: 520px;
             margin: 0 auto;
+            padding: 0 16px;
+        }
+
+        /* HEADER ESTILO PLAY STORE */
+        .play-header {
+            position: sticky;
+            top: 0;
+            background-color: var(--bg-color);
+            z-index: 900;
+            padding: 12px 0 8px 0;
+            border-bottom: 1px solid var(--border-color);
         }
 
         .top-bar {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 10px;
-            margin-bottom: 20px;
-            position: relative;
+            gap: 12px;
+            margin-bottom: 12px;
         }
 
-        .logo {
-            color: var(--accent-pink);
-            font-size: 1.1rem;
-            font-weight: 900;
-            text-shadow: 0 0 10px rgba(255, 0, 127, 0.5);
-            letter-spacing: 0.5px;
-            animation: pulseLogo 3s infinite alternate;
-            white-space: nowrap;
+        .brand-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
             cursor: pointer;
         }
 
-        @keyframes pulseLogo {
-            0% { text-shadow: 0 0 8px rgba(255, 0, 127, 0.4); }
-            100% { text-shadow: 0 0 16px rgba(255, 0, 127, 0.8), 0 0 20px rgba(0, 240, 255, 0.3); }
-        }
-
-        .search-container {
-            flex: 1;
-        }
-
-        .search-box {
-            width: 100%;
-            background-color: #1a1a24;
-            border: 1px solid rgba(0, 240, 255, 0.2);
-            border-radius: 20px;
-            padding: 9px 16px;
+        .play-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #00c6ff, #0072ff);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
             color: white;
-            font-size: 0.9rem;
-            outline: none;
-            transition: all 0.3s ease;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);
+            font-weight: bold;
+            box-shadow: 0 2px 8px rgba(0,114,255,0.4);
         }
 
-        .search-box:focus {
-            border-color: var(--accent-cyan);
-            box-shadow: 0 0 10px rgba(0, 240, 255, 0.4), inset 0 2px 4px rgba(0,0,0,0.5);
+        .logo {
+            color: var(--text-main);
+            font-size: 1.15rem;
+            font-weight: 700;
+            letter-spacing: 0.2px;
         }
 
         .top-icons {
             display: flex;
             align-items: center;
-            color: white;
-            font-size: 1.1rem;
-            cursor: pointer;
+            gap: 10px;
             position: relative;
         }
 
         .top-icons span {
-            background: #1a1a24;
-            padding: 8px 10px;
+            background: var(--surface-color);
+            width: 38px;
+            height: 38px;
             border-radius: 50%;
-            border: 1px solid rgba(255,255,255,0.05);
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.3s ease;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: background 0.2s;
         }
 
         .top-icons span:hover {
-            border-color: var(--accent-pink);
-            transform: scale(1.05);
+            background: var(--surface-variant);
+        }
+
+        .search-box-container {
+            margin-top: 4px;
+        }
+
+        .search-box {
+            width: 100%;
+            background-color: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 10px 18px;
+            color: var(--text-main);
+            font-size: 0.9rem;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .search-box:focus {
+            background-color: var(--surface-variant);
+            border-color: var(--play-blue);
         }
 
         .dropdown-menu {
             display: none;
             position: absolute;
             right: 0;
-            top: 45px;
-            background-color: var(--card-bg);
-            border: 1px solid rgba(0, 240, 255, 0.25);
+            top: 48px;
+            background-color: var(--surface-color);
+            border: 1px solid var(--border-color);
             border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.7), 0 0 15px rgba(0, 240, 255, 0.1);
-            width: 170px;
-            z-index: 100;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.6);
+            width: 180px;
+            z-index: 1000;
             overflow: hidden;
-            animation: fadeInMenu 0.2s ease forwards;
         }
 
-        @keyframes fadeInMenu {
-            from { opacity: 0; transform: translateY(-8px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .dropdown-menu.show {
-            display: block;
-        }
+        .dropdown-menu.show { display: block; }
 
         .dropdown-item {
-            padding: 12px 15px;
+            padding: 12px 16px;
             font-size: 0.85rem;
-            color: var(--text-color);
+            color: var(--text-main);
             cursor: pointer;
-            border-bottom: 1px solid rgba(255,255,255,0.04);
-            text-decoration: none;
-            display: block;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .dropdown-item:last-child { border-bottom: none; }
+        .dropdown-item:hover { background-color: var(--surface-variant); }
+
+        /* ABAS ESTILO CATEGORIA PLAY STORE */
+        .categories {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding: 12px 0 8px 0;
+            scrollbar-width: none;
+        }
+
+        .categories::-webkit-scrollbar { display: none; }
+
+        .cat-btn {
+            background-color: var(--surface-color);
+            color: var(--text-sub);
+            border: 1px solid var(--border-color);
+            padding: 7px 16px;
+            border-radius: 18px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            white-space: nowrap;
             transition: all 0.2s;
         }
 
-        .dropdown-item:last-child {
-            border-bottom: none;
+        .cat-btn.active {
+            background-color: #0e3e2e;
+            color: #5cdb95;
+            border-color: #5cdb95;
+            font-weight: 700;
         }
 
-        .dropdown-item:hover {
-            background-color: rgba(255, 0, 127, 0.15);
-            color: var(--accent-pink);
-            padding-left: 18px;
-        }
-
+        /* CARROSSEL DE DESTAQUES */
         .carousel-container {
             position: relative;
             width: 100%;
-            height: 180px;
-            border-radius: 16px;
+            height: 160px;
+            border-radius: 12px;
             overflow: hidden;
-            margin-bottom: 20px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.6), 0 0 15px rgba(0, 240, 255, 0.15);
-            border: 1px solid rgba(0, 240, 255, 0.25);
-            background: #13131a;
+            margin: 15px 0;
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
         }
 
         .carousel-track {
             display: flex;
             width: 100%;
             height: 100%;
-            transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+            transition: transform 0.5s ease-in-out;
         }
 
         .carousel-slide {
@@ -184,12 +214,6 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            filter: brightness(0.9);
-            transition: transform 0.6s ease;
-        }
-
-        .carousel-slide:hover img {
-            transform: scale(1.03);
         }
 
         .carousel-caption {
@@ -197,622 +221,282 @@
             bottom: 0;
             left: 0;
             right: 0;
-            background: linear-gradient(to top, rgba(11, 11, 15, 0.95), rgba(11, 11, 15, 0.2));
-            padding: 12px 15px;
-            font-size: 0.9rem;
-            font-weight: bold;
+            background: linear-gradient(to top, rgba(18, 18, 18, 0.95), transparent);
+            padding: 12px 14px;
+            font-size: 0.85rem;
+            font-weight: 600;
             color: white;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.8);
         }
 
         .carousel-indicators {
             position: absolute;
-            bottom: 10px;
-            right: 15px;
+            bottom: 8px;
+            right: 12px;
             display: flex;
-            gap: 6px;
+            gap: 5px;
             z-index: 10;
         }
 
         .indicator {
-            width: 8px;
-            height: 8px;
+            width: 6px;
+            height: 6px;
             border-radius: 50%;
             background: rgba(255, 255, 255, 0.4);
             cursor: pointer;
-            transition: all 0.3s;
         }
 
         .indicator.active {
-            background: var(--accent-pink);
-            width: 22px;
-            border-radius: 4px;
-            box-shadow: 0 0 8px var(--accent-pink);
+            background: var(--play-green);
+            width: 16px;
+            border-radius: 3px;
         }
 
-        .custom-modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(11, 11, 15, 0.8);
-            backdrop-filter: blur(5px);
-            z-index: 1000;
+        /* SEÇÃO DE TÍTULOS DE JOGOS */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
             align-items: center;
-            justify-content: center;
-            padding: 20px;
-            opacity: 0;
-            transition: opacity 0.3s ease;
+            margin: 18px 0 12px 0;
         }
 
-        .custom-modal-overlay.show {
-            display: flex;
-            opacity: 1;
+        .section-header h2 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-main);
         }
 
-        .custom-modal {
-            background: linear-gradient(145deg, #161622, #101017);
-            border: 1px solid rgba(0, 240, 255, 0.3);
-            border-radius: 16px;
-            padding: 22px;
-            width: 100%;
-            max-width: 380px;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.8), 0 0 20px rgba(0, 240, 255, 0.2);
-            transform: scale(0.8) translateY(20px);
-            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        .custom-modal-overlay.show .custom-modal {
-            transform: scale(1) translateY(0);
-        }
-
-        .custom-modal h3 {
-            color: var(--accent-cyan);
-            font-size: 1.2rem;
-            margin-bottom: 12px;
-            text-shadow: 0 0 8px rgba(0, 240, 255, 0.4);
-        }
-
-        .custom-modal p {
-            color: var(--text-color);
-            font-size: 0.9rem;
-            line-height: 1.5;
-            margin-bottom: 20px;
-            white-space: pre-wrap;
-        }
-
-        .custom-modal-btn {
-            background: linear-gradient(135deg, var(--accent-pink), #b00055);
-            color: white;
-            border: none;
-            padding: 10px;
-            border-radius: 10px;
-            font-size: 0.9rem;
-            font-weight: bold;
-            width: 100%;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(255, 0, 127, 0.4);
-            transition: all 0.2s;
-        }
-
-        .categories {
-            display: flex;
-            gap: 10px;
-            overflow-x: auto;
-            padding-bottom: 12px;
-            margin-bottom: 20px;
-            scrollbar-width: none;
-        }
-
-        .categories::-webkit-scrollbar {
-            display: none;
-        }
-
-        .cat-btn {
-            background: linear-gradient(135deg, #1a1a24, #121218);
-            color: var(--text-muted);
-            border: 1px solid rgba(255,255,255,0.06);
-            padding: 9px 20px;
-            border-radius: 25px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            cursor: pointer;
-            white-space: nowrap;
-            transition: all 0.3s;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-        }
-
-        .cat-btn:hover {
-            color: white;
-            border-color: rgba(0, 240, 255, 0.4);
-            transform: translateY(-2px);
-        }
-
-        .cat-btn.active {
-            background: linear-gradient(135deg, var(--accent-pink), #b00055);
-            color: white;
-            border-color: var(--accent-pink);
-            box-shadow: 0 0 15px rgba(255, 0, 127, 0.5);
-        }
-
-        .tab-content {
-            display: none;
-            animation: fadeInTab 0.3s ease;
-        }
-        @keyframes fadeInTab {
-            from { opacity: 0; transform: translateY(5px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .tab-content.active {
-            display: block;
-        }
-
-        .form-card {
-            background: linear-gradient(145deg, #161622, #101017);
-            padding: 22px;
-            border-radius: 16px;
-            margin-bottom: 20px;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.5);
-            border: 1px solid rgba(0, 240, 255, 0.15);
-        }
-
-        .form-card h2 {
-            margin-bottom: 18px;
-            font-size: 1.3rem;
-            color: var(--accent-cyan);
-            text-shadow: 0 0 8px rgba(0, 240, 255, 0.3);
-        }
-
-        .input-group {
-            margin-bottom: 14px;
-        }
-
-        .input-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            font-weight: 500;
-        }
-
-        .input-group input, .input-group select, .input-group textarea {
-            width: 100%;
-            padding: 11px;
-            border-radius: 10px;
-            border: 1px solid rgba(255,255,255,0.08);
-            background-color: #0b0b0f;
-            color: white;
-            font-size: 0.9rem;
-            outline: none;
-            transition: all 0.3s;
-        }
-
-        .form-row {
-            display: flex;
-            gap: 15px;
-        }
-
-        .form-row .input-group {
-            flex: 1;
-        }
-
-        button {
-            background: linear-gradient(135deg, var(--primary), #00aa5b);
-            color: #0b0b0f;
-            border: none;
-            padding: 12px 20px;
-            font-size: 1rem;
-            font-weight: 800;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.3s;
-            width: 100%;
-            box-shadow: 0 4px 15px rgba(0, 255, 136, 0.3);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 255, 136, 0.5);
-        }
-
+        /* GRADE DE JOGOS PLAY STORE */
         .games-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 14px;
-        }
-
-        @keyframes fadeInGame {
-            from { opacity: 0; transform: scale(0.9) translateY(15px); }
-            to { opacity: 1; transform: scale(1) translateY(0); }
+            gap: 12px;
         }
 
         .game-card {
-            background: linear-gradient(145deg, #15151f, #0f0f16);
-            border-radius: 14px;
+            background: var(--surface-color);
+            border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 6px 20px rgba(0,0,0,0.5);
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
-            position: relative;
+            border: 1px solid var(--border-color);
+            transition: transform 0.2s, background 0.2s;
             cursor: pointer;
-            border: 1px solid rgba(255, 255, 255, 0.04);
-            transition: all 0.35s;
-            animation: fadeInGame 0.4s forwards;
         }
 
         .game-card:hover {
-            transform: translateY(-5px) scale(1.02);
-            border-color: rgba(0, 240, 255, 0.5);
-            box-shadow: 0 12px 30px rgba(0,0,0,0.7), 0 0 15px rgba(0, 240, 255, 0.25);
+            transform: translateY(-3px);
+            background: var(--surface-variant);
         }
 
         .card-img-container {
             position: relative;
             width: 100%;
-            height: 140px;
-            overflow: hidden;
+            height: 125px;
         }
 
         .game-card img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: transform 0.5s ease;
         }
 
-        .game-card:hover img {
-            transform: scale(1.1);
-        }
-
-        .price-badge {
+        .category-tag {
             position: absolute;
-            top: 8px;
-            right: 8px;
-            background: rgba(11, 11, 15, 0.85);
-            backdrop-filter: blur(5px);
-            padding: 4px 10px;
-            border-radius: 12px;
-            font-size: 0.75rem;
-            font-weight: bold;
-            color: var(--primary);
-            border: 1px solid rgba(0, 255, 136, 0.3);
+            top: 6px;
+            left: 6px;
+            background: rgba(0, 0, 0, 0.75);
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-size: 0.68rem;
+            font-weight: 700;
+            color: var(--play-blue);
         }
 
         .game-info {
-            padding: 12px;
+            padding: 10px;
             display: flex;
             flex-direction: column;
             flex: 1;
         }
 
         .game-info h3 {
-            font-size: 0.95rem;
-            margin-bottom: 6px;
-            color: white;
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: var(--text-main);
+            margin-bottom: 4px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            font-weight: 700;
         }
 
-        .game-details {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            margin-bottom: 8px;
+        .game-meta {
+            font-size: 0.73rem;
+            color: var(--text-sub);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .play-install-btn {
+            background-color: var(--play-green);
+            color: white;
+            text-align: center;
+            padding: 7px 0;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin-top: auto;
+            border: none;
+            width: 100%;
+            display: block;
+        }
+
+        .play-install-btn:hover { background-color: var(--play-green-hover); }
+
+        /* TELA DE DETALHES DO JOGO */
+        .game-detail-card {
+            background: var(--surface-color);
+            border-radius: 16px;
+            padding: 16px;
+            border: 1px solid var(--border-color);
+        }
+
+        .detail-header {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .detail-header img {
+            width: 90px;
+            height: 90px;
+            border-radius: 16px;
+            object-fit: cover;
+        }
+
+        .detail-header-info {
+            flex: 1;
             display: flex;
             flex-direction: column;
-            gap: 3px;
+            justify-content: center;
         }
 
-        .download-btn {
-            display: block;
-            text-align: center;
-            background: linear-gradient(135deg, var(--accent-cyan), #0099ff);
-            color: #0b0b0f;
-            text-decoration: none;
-            padding: 9px;
-            border-radius: 20px;
+        .detail-header-info h2 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .detail-sub {
             font-size: 0.8rem;
-            font-weight: 800;
-            margin-top: auto;
-            box-shadow: 0 4px 12px rgba(0, 240, 255, 0.3);
+            color: var(--play-blue);
+            font-weight: 600;
+            margin-bottom: 6px;
         }
 
-        .delete-btn {
-            background: linear-gradient(135deg, var(--danger), #cc0033);
-            color: white;
-            margin-top: 6px;
-            padding: 7px;
-            font-size: 0.75rem;
-            width: 100%;
-            border-radius: 8px;
-            font-weight: bold;
-        }
-
-        .edit-btn {
-            background: linear-gradient(135deg, var(--warning), #cc8800);
-            color: #0b0b0f;
-            margin-top: 6px;
-            padding: 7px;
-            font-size: 0.75rem;
-            width: 100%;
-            border-radius: 8px;
-            font-weight: bold;
-        }
-
-        .empty-msg {
+        .detail-stats {
+            display: flex;
+            justify-content: space-around;
+            padding: 12px 0;
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 15px;
             text-align: center;
-            grid-column: 1 / -1;
-            color: var(--text-muted);
-            font-style: italic;
-            padding: 40px;
-            background: var(--card-bg);
-            border-radius: 12px;
         }
 
-        .game-detail-card {
-            background: linear-gradient(145deg, #161622, #101017);
-            border-radius: 16px;
-            overflow: hidden;
-            padding: 20px;
-            box-shadow: 0 10px 35px rgba(0,0,0,0.6);
-            border: 1px solid rgba(0, 240, 255, 0.2);
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
         }
 
-        .back-btn {
-            background: #1a1a24;
-            color: var(--text-color);
-            border: 1px solid rgba(255,255,255,0.08);
-            padding: 8px 16px;
-            border-radius: 10px;
+        .stat-value {
             font-size: 0.85rem;
-            cursor: pointer;
-            margin-bottom: 15px;
-            width: auto;
-            font-weight: bold;
+            font-weight: 700;
+            color: var(--text-main);
         }
 
-        .detail-img-container {
-            position: relative;
-            width: 100%;
-            height: 210px;
-            margin-bottom: 15px;
-        }
-
-        .detail-img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 12px;
+        .stat-label {
+            font-size: 0.7rem;
+            color: var(--text-sub);
         }
 
         .detail-desc {
-            font-size: 0.9rem;
-            color: var(--text-muted);
-            margin: 15px 0;
+            font-size: 0.85rem;
+            color: var(--text-sub);
             line-height: 1.5;
+            margin-bottom: 18px;
             white-space: pre-wrap;
-            background: #0b0b0f;
-            padding: 12px;
-            border-radius: 10px;
         }
 
-        .action-bar {
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
-            background: #0b0b0f;
-            padding: 10px 15px;
+        .back-btn {
+            background: var(--surface-color);
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
+            padding: 7px 14px;
+            border-radius: 8px;
+            font-size: 0.82rem;
+            cursor: pointer;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        /* FORMULÁRIOS & ADMIN */
+        .form-card {
+            background: var(--surface-color);
+            padding: 18px;
             border-radius: 12px;
-            margin-top: 15px;
+            margin-bottom: 15px;
+            border: 1px solid var(--border-color);
         }
 
-        .share-btn {
-            background: linear-gradient(135deg, var(--accent-pink), #b00055);
+        .form-card h2 {
+            margin-bottom: 14px;
+            font-size: 1.1rem;
+            color: var(--play-blue);
+        }
+
+        .input-group { margin-bottom: 12px; }
+        .input-group label {
+            display: block;
+            margin-bottom: 4px;
+            font-size: 0.8rem;
+            color: var(--text-sub);
+        }
+
+        .input-group input, .input-group select, .input-group textarea {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            background-color: var(--bg-color);
+            color: white;
+            font-size: 0.85rem;
+            outline: none;
+        }
+
+        button.btn-primary {
+            background-color: var(--play-green);
             color: white;
             border: none;
-            padding: 8px 14px;
-            border-radius: 8px;
-            font-size: 0.85rem;
-            font-weight: bold;
-            cursor: pointer;
-            width: auto;
-        }
-
-        .admin-login-area {
-            text-align: center;
-            margin-top: 40px;
-            padding-top: 20px;
-            border-top: 1px solid rgba(255,255,255,0.06);
-        }
-
-        .admin-link {
-            background: none;
-            border: none;
-            color: var(--text-muted);
-            font-size: 0.85rem;
-            line-height: 1.4;
-        }
-
-        #syncStatus {
-            position: fixed;
-            bottom: 10px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0, 255, 136, 0.9);
-            color: #0b0b0f;
-            padding: 6px 16px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: bold;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-            z-index: 9999;
-            display: none;
-        }
-
-        #whatsappFloatingBanner {
-            display: none;
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            left: 20px;
-            max-width: 460px;
-            margin: 0 auto;
-            background: linear-gradient(145deg, #161622, #101017);
-            border: 1px solid rgba(0, 255, 136, 0.4);
-            border-radius: 16px;
-            padding: 15px 18px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.8), 0 0 20px rgba(0, 255, 136, 0.2);
-            z-index: 99999;
-            animation: slideUpFloat 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-        }
-
-        @keyframes slideUpFloat {
-            from { opacity: 0; transform: translateY(30px) scale(0.95); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
-        }
-
-        @keyframes slideOutFloat {
-            0% { opacity: 1; transform: translateY(0) scale(1) rotate(0deg); }
-            100% { opacity: 0; transform: translateY(50px) scale(0.7) rotate(15deg); }
-        }
-
-        #whatsappFloatingBanner.closing {
-            animation: slideOutFloat 0.4s cubic-bezier(0.6, -0.28, 0.735, 0.045) forwards;
-        }
-
-        .wa-banner-content {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            position: relative;
-        }
-
-        .wa-icon {
-            font-size: 2rem;
-            background: rgba(0, 255, 136, 0.1);
-            padding: 8px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 1px solid rgba(0, 255, 136, 0.2);
-        }
-
-        .wa-text-area {
-            flex: 1;
-            padding-right: 15px;
-        }
-
-        .wa-text-area h4 {
-            color: var(--primary);
-            font-size: 0.95rem;
-            margin-bottom: 3px;
+            padding: 10px;
+            font-size: 0.9rem;
             font-weight: 700;
-        }
-
-        .wa-text-area p {
-            color: var(--text-color);
-            font-size: 0.8rem;
-            line-height: 1.3;
-            margin-bottom: 8px;
-        }
-
-        .wa-follow-btn {
-            display: inline-block;
-            background: linear-gradient(135deg, var(--primary), #00aa5b);
-            color: #0b0b0f;
-            text-decoration: none;
-            padding: 6px 14px;
             border-radius: 8px;
-            font-size: 0.75rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            box-shadow: 0 3px 10px rgba(0, 255, 136, 0.3);
-            transition: transform 0.2s;
-        }
-
-        .wa-follow-btn:hover {
-            transform: scale(1.05);
-        }
-
-        .wa-close-btn {
-            position: absolute;
-            top: -5px;
-            right: -5px;
-            background: #1a1a24;
-            color: var(--text-muted);
-            border: 1px solid rgba(255,255,255,0.1);
-            width: 22px;
-            height: 22px;
-            border-radius: 50%;
-            font-size: 0.75rem;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            justify-content: center;
             cursor: pointer;
-            transition: all 0.2s;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+            width: 100%;
         }
 
-        .wa-close-btn:hover {
-            background: var(--danger);
-            color: white;
-            border-color: var(--danger);
-        }
+        .delete-btn { background: #d93025; color: white; border: none; padding: 6px; border-radius: 6px; width: 100%; font-size: 0.75rem; font-weight: bold; margin-top: 4px;}
+        .edit-btn { background: #f2994a; color: black; border: none; padding: 6px; border-radius: 6px; width: 100%; font-size: 0.75rem; font-weight: bold; margin-top: 4px;}
 
-        /* Estilos do Ícone Flutuante Redondo do WhatsApp (Dançando Lento) */
-        .whatsapp-floating-icon {
-            position: fixed;
-            bottom: 25px;
-            left: 20px;
-            width: 58px;
-            height: 58px;
-            background: linear-gradient(135deg, #25d366, #128c7e);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 6px 20px rgba(37, 211, 102, 0.5);
-            z-index: 999998;
-            cursor: pointer;
-            text-decoration: none;
-            border: 2px solid rgba(255, 255, 136, 0.4);
-            animation: whatsappDanca 3s ease-in-out infinite;
-            transition: transform 0.2s ease;
-        }
-
-        .whatsapp-floating-icon:hover {
-            transform: scale(1.1);
-        }
-
-        .whatsapp-floating-icon svg {
-            width: 32px;
-            height: 32px;
-            fill: #ffffff;
-        }
-
-        @keyframes whatsappDanca {
-            0% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-8px) rotate(-3deg); }
-            100% { transform: translateY(0px) rotate(0deg); }
-        }
-
-        /* Estilos do Tela de Bloqueio por Compartilhamento */
+        /* MODAIS E FLOATING OVERLAYS */
         #shareLockOverlay {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(11, 11, 15, 0.96);
-            backdrop-filter: blur(8px);
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.92);
+            backdrop-filter: blur(6px);
             z-index: 999999;
             display: flex;
             align-items: center;
@@ -821,58 +505,75 @@
         }
 
         .share-lock-card {
-            background: linear-gradient(145deg, #161622, #101017);
-            border: 1px solid rgba(0, 255, 136, 0.3);
-            border-radius: 20px;
-            padding: 25px;
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 22px;
             width: 100%;
-            max-width: 400px;
+            max-width: 380px;
             text-align: center;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.9), 0 0 25px rgba(0, 255, 136, 0.15);
-        }
-
-        .share-lock-card h2 {
-            color: var(--primary);
-            font-size: 1.3rem;
-            margin-bottom: 12px;
-        }
-
-        .share-lock-card p {
-            color: var(--text-muted);
-            font-size: 0.85rem;
-            line-height: 1.4;
-            margin-bottom: 20px;
-        }
-
-        .share-progress-container {
-            background: #0b0b0f;
-            border-radius: 12px;
-            padding: 15px;
-            margin-bottom: 20px;
-            border: 1px solid rgba(255,255,255,0.06);
         }
 
         .share-counter {
-            font-size: 1.5rem;
-            font-weight: 900;
-            color: var(--accent-cyan);
-            margin-bottom: 10px;
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--play-blue);
+            margin-bottom: 8px;
         }
 
         .share-progress-bar-bg {
-            width: 100%;
-            height: 10px;
-            background: #1a1a24;
-            border-radius: 5px;
-            overflow: hidden;
+            width: 100%; height: 8px; background: var(--bg-color); border-radius: 4px; overflow: hidden; margin-bottom: 15px;
         }
 
         .share-progress-bar-fill {
-            width: 0%;
-            height: 100%;
-            background: linear-gradient(90deg, var(--accent-pink), var(--primary));
-            transition: width 0.3s ease;
+            width: 0%; height: 100%; background: var(--play-green); transition: width 0.3s;
         }
+
+        .whatsapp-floating-icon {
+            position: fixed;
+            bottom: 20px; left: 16px;
+            width: 52px; height: 52px;
+            background: #25d366;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+            z-index: 99999;
+        }
+
+        .whatsapp-floating-icon svg { width: 28px; height: 28px; fill: white; }
+
+        #whatsappFloatingBanner {
+            display: none;
+            position: fixed;
+            bottom: 20px; right: 16px; left: 16px;
+            max-width: 440px; margin: 0 auto;
+            background: var(--surface-color);
+            border: 1px solid var(--play-green);
+            border-radius: 12px;
+            padding: 12px 15px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.7);
+            z-index: 99998;
+        }
+
+        .wa-banner-content { display: flex; align-items: center; gap: 10px; position: relative; }
+        .wa-text-area h4 { color: var(--play-green); font-size: 0.9rem; }
+        .wa-text-area p { color: var(--text-sub); font-size: 0.78rem; margin-bottom: 6px; }
+        .wa-follow-btn {
+            background: var(--play-green); color: white; text-decoration: none; padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: bold;
+        }
+        .wa-close-btn { position: absolute; top: -2px; right: -2px; cursor: pointer; font-size: 0.8rem; color: var(--text-sub); }
+
+        #syncStatus {
+            position: fixed; bottom: 10px; left: 50%; transform: translateX(-50%);
+            background: var(--play-green); color: white; padding: 6px 16px; border-radius: 20px;
+            font-size: 0.8rem; font-weight: bold; z-index: 99999; display: none;
+        }
+
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .empty-msg { text-align: center; grid-column: 1 / -1; color: var(--text-sub); padding: 30px; font-size: 0.85rem;}
+        
+        .admin-login-area { text-align: center; margin-top: 30px; color: var(--text-sub); font-size: 0.8rem; cursor: pointer;}
     </style>  
 </head>
 
@@ -887,16 +588,16 @@
     <!-- TELA DE BLOQUEIO DE COMPARTILHAMENTO -->      
     <div id="shareLockOverlay">      
         <div class="share-lock-card">      
-            <h2>🔒 Acesso Bloqueado</h2>      
-            <p>Para desbloquear o site e acessar todos os jogos grátis, você precisa compartilhar o nosso canal do WhatsApp com amigos, grupos ou canais!</p>    
+            <h2 style="color: var(--text-main); font-size: 1.2rem; margin-bottom: 8px;">🔒 Acesso Bloqueado</h2>      
+            <p style="font-size: 0.82rem; color: var(--text-sub); margin-bottom: 15px;">Para desbloquear o site e acessar todos os jogos grátis, você precisa compartilhar o nosso canal do WhatsApp com amigos ou grupos!</p>    
             <div class="share-progress-container">      
                 <div class="share-counter" id="shareCounterText">0/5</div>      
                 <div class="share-progress-bar-bg">      
                     <div class="share-progress-bar-fill" id="shareProgressBar"></div>      
                 </div>      
             </div>      
-            <button onclick="realizarCompartilhamento()" style="background: linear-gradient(135deg, var(--primary), #00aa5b); color: #0b0b0f; margin-bottom: 10px;">Compartilhar no WhatsApp</button>      
-            <p id="shareMsgAviso" style="font-size: 0.75rem; color: var(--accent-pink); margin-top: 5px; margin-bottom: 0; min-height: 15px;"></p>
+            <button onclick="realizarCompartilhamento()" class="btn-primary" style="margin-bottom: 8px;">Compartilhar no WhatsApp</button>      
+            <p id="shareMsgAviso" style="font-size: 0.75rem; color: var(--accent-pink); min-height: 15px;"></p>
         </div>  
     </div>    
 
@@ -904,72 +605,72 @@
     
     <div id="whatsappFloatingBanner">      
         <div class="wa-banner-content">      
-            <div class="wa-icon">💬</div>      
+            <div style="font-size: 1.5rem;">💬</div>      
             <div class="wa-text-area">      
-                <h4>Canal Oficial!</h4>      
-                <p>Siga o nosso canal do WhatsApp para ficar por dentro das novidades.</p>      
-                <a href="https://whatsapp.com/channel/0029VbDVqMICBtx8ZZL1Vx3K" target="_blank" class="wa-follow-btn">Seguir</a>      
+                <h4>Canal Oficial PSP Gamer</h4>      
+                <p>Siga para receber os novos lançamentos em primeira mão.</p>      
+                <a href="https://whatsapp.com/channel/0029VbDVqMICBtx8ZZL1Vx3K" target="_blank" class="wa-follow-btn">Seguir Canal</a>      
             </div>      
-            <div class="wa-close-btn" onclick="fecharBannerWhatsapp()" title="Fechar">✕</div>      
+            <div class="wa-close-btn" onclick="fecharBannerWhatsapp()">✕</div>      
         </div>      
     </div>    
 
-    <div id="customModalOverlay" class="custom-modal-overlay">      
-        <div class="custom-modal">      
-            <h3 id="modalTitle">Título</h3>      
-            <p id="modalText">Mensagem</p>      
-            <button class="custom-modal-btn" onclick="fecharModalInfo()">OK</button>      
-        </div>      
-    </div>    
-
-    <div class="container">      
-        <div class="top-bar">      
-            <div class="logo" onclick="solicitarSenha()" title="Clique para Painel Admin">PSP GAMER MOBILE 2</div>      
-            <div class="search-container">      
-                <input type="text" class="search-box" id="searchInput" placeholder="Buscar jogos..." oninput="renderGames()">      
-            </div>      
-            <div class="top-icons">      
-                <span onclick="toggleMenu(event)" title="Menu">☰</span>      
-                <div id="dropdownMenu" class="dropdown-menu">      
-                    <div class="dropdown-item" onclick="abrirPaginaPedirJogo()">🎮 Pedir Jogo</div>
-                    <div class="dropdown-item" onclick="abrirPaginaDenunciarJogo()">⚠️ Denunciar Jogo</div>
-                    <div class="dropdown-item" onclick="abrirModalInfo('Suporte', 'Precisa de ajuda com algum jogo ou link quebrado? Entre em contato pelo canal.')">Suporte</div>      
-                    <div class="dropdown-item" onclick="abrirModalInfo('Ajuda', '1. Escolha o jogo.\n2. Clique para ver detalhes.\n3. Baixe direto.')">Ajuda</div>      
-                    <div class="dropdown-item" onclick="abrirModalInfo('Parceria', 'Divulgue seu canal ou site conosco!')">Parceria</div>      
+    <div class="container">
+        <!-- HEADER ESTILO PLAY STORE -->
+        <header class="play-header">
+            <div class="top-bar">      
+                <div class="brand-container" onclick="solicitarSenha()">
+                    <div class="play-icon">▶</div>
+                    <div class="logo">PSP Gamer</div>
                 </div>      
-            </div>      
-        </div>    
+                <div class="top-icons">      
+                    <span onclick="toggleMenu(event)" title="Menu">☰</span>      
+                    <div id="dropdownMenu" class="dropdown-menu">      
+                        <div class="dropdown-item" onclick="abrirPaginaPedirJogo()">🎮 Pedir Jogo</div>
+                        <div class="dropdown-item" onclick="abrirPaginaDenunciarJogo()">⚠️ Denunciar Jogo</div>
+                        <div class="dropdown-item" onclick="alert('Precisa de ajuda? Fale no nosso canal oficial!')">Suporte</div>      
+                        <div class="dropdown-item" onclick="alert('1. Selecione o jogo\n2. Clique em Instalar/Baixar\n3. Divirta-se!')">Ajuda</div>      
+                    </div>      
+                </div>      
+            </div> 
+            
+            <div class="search-box-container">
+                <input type="text" class="search-box" id="searchInput" placeholder="Pesquisar jogos e apps..." oninput="renderGames()">
+            </div>
 
+            <!-- NAVEGAÇÃO DE ABAS / CHIPS -->
+            <div class="categories">      
+                <button class="cat-btn active" onclick="filtrarCategoria('Todos', this)">Todos</button>      
+                <button class="cat-btn" onclick="filtrarCategoria('PSP', this)">PSP</button>      
+                <button class="cat-btn" onclick="filtrarCategoria('PS2', this)">PS2</button>      
+                <button class="cat-btn" onclick="filtrarCategoria('PC', this)">PC</button>      
+                <button class="cat-btn" onclick="filtrarCategoria('APK', this)">APK</button>      
+            </div> 
+        </header>
+
+        <!-- BANNER DE CARROSSEL EM DESTAQUE -->
         <div class="carousel-container" id="carouselContainer">      
             <div class="carousel-track" id="carouselTrack"></div>      
             <div class="carousel-indicators" id="carouselIndicators"></div>      
         </div>      
 
-        <div class="categories">      
-            <button class="cat-btn active" onclick="filtrarCategoria('Todos', this)">Todos</button>      
-            <button class="cat-btn" onclick="filtrarCategoria('PSP', this)">PSP</button>      
-            <button class="cat-btn" onclick="filtrarCategoria('PS2', this)">PS2</button>      
-            <button class="cat-btn" onclick="filtrarCategoria('PC', this)">PC</button>      
-            <button class="cat-btn" onclick="filtrarCategoria('APK', this)">APK</button>      
-        </div>      
-
+        <!-- PAINEL ADMIN RESTREITO -->
         <div id="inicio" class="tab-content">      
             <header style="margin-bottom: 15px;">      
-                <h1 id="panelTitle" style="font-size: 1.8rem; color: var(--accent-pink);">🔒 Painel Restrito</h1>      
-                <p id="panelSub" style="font-size: 0.85rem; color: var(--text-muted);">Adicione jogos e gere o código manual</p>      
+                <h1 style="font-size: 1.4rem; color: var(--play-blue);">🔒 Painel do Administrador</h1>      
+                <p style="font-size: 0.8rem; color: var(--text-sub);">Gerencie jogos e copie o código atualizado</p>      
             </header>      
 
-            <div class="form-card" style="border: 2px solid var(--accent-cyan); background: #12121b;">      
-                <h2 style="color: var(--accent-cyan);">📋 Copiar Código para o Seu Arquivo</h2>      
-                <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 10px;">Copie este bloco abaixo e cole no seu código HTML sempre que alterar os jogos ou banners:</p>      
-                <textarea id="codigoGeradoArea" rows="6" readonly style="width:100%; background:#050508; color:#00ff88; font-family:monospace; font-size:0.8rem; padding:10px; border-radius:8px; border:1px solid rgba(0,240,255,0.3); resize:none;"></textarea>      
-                <button type="button" onclick="copiarCodigoPainel()" style="background: linear-gradient(135deg, var(--accent-cyan), #0099ff); color: #0b0b0f; margin-top: 10px;">Copiar Código Atualizado</button>      
+            <div class="form-card">      
+                <h2>📋 Código HTML Atualizado</h2>      
+                <textarea id="codigoGeradoArea" rows="5" readonly style="width:100%; background:#000; color:#5cdb95; font-family:monospace; font-size:0.75rem; padding:8px; border-radius:6px; resize:none;"></textarea>      
+                <button type="button" class="btn-primary" onclick="copiarCodigoPainel()" style="margin-top: 8px;">Copiar Código</button>      
             </div>      
 
             <div class="form-card">      
-                <h2>Gerenciar Banners do Carrossel (Máx. 4)</h2>      
-                <div id="carouselFormList" style="margin-bottom: 15px;"></div>      
-                <button type="button" onclick="salvarBannersCarrossel()" style="background: linear-gradient(135deg, var(--accent-cyan), #0099ff); color: #0b0b0f; margin-bottom: 25px;">Atualizar Banners</button>      
+                <h2>Gerenciar Banners do Carrossel</h2>      
+                <div id="carouselFormList" style="margin-bottom: 10px;"></div>      
+                <button type="button" class="btn-primary" onclick="salvarBannersCarrossel()" style="margin-bottom: 20px;">Atualizar Banners</button>      
 
                 <h2 id="formTitle">Publicar Novo Jogo</h2>      
                 <form id="gameForm">      
@@ -980,23 +681,23 @@
                     </div>      
                     <div class="input-group">      
                         <label for="gameImage">Link da Imagem (URL):</label>      
-                        <input type="url" id="gameImage" required placeholder="Link direto da imagem">      
+                        <input type="url" id="gameImage" required placeholder="URL direto da imagem">      
                     </div>      
                     <div class="input-group">      
                         <label for="gameCategory">Categoria:</label>      
-                        <select id="gameCategory" style="width:150px;">      
+                        <select id="gameCategory">      
                             <option value="PSP">PSP</option>      
                             <option value="PS2">PS2</option>      
                             <option value="PC">PC</option>      
                             <option value="APK">APK</option>      
                         </select>      
                     </div>      
-                    <div class="form-row">      
-                        <div class="input-group">      
+                    <div style="display: flex; gap: 10px;">      
+                        <div class="input-group" style="flex:1;">      
                             <label for="gameSize">Tamanho:</label>      
                             <input type="text" id="gameSize" required placeholder="Ex: 1.2 GB">      
                         </div>      
-                        <div class="input-group">      
+                        <div class="input-group" style="flex:1;">      
                             <label for="gameFormat">Formato:</label>      
                             <input type="text" id="gameFormat" required placeholder="Ex: ISO / APK">      
                         </div>      
@@ -1015,29 +716,34 @@
                     </div>      
                     <div class="input-group">      
                         <label for="gameBtnText">Texto do Botão:</label>      
-                        <input type="text" id="gameBtnText" placeholder="Ex: Baixar Agora">      
+                        <input type="text" id="gameBtnText" placeholder="Ex: Baixar / Instalar">      
                     </div>      
-                    <button type="submit" id="submitBtn">Publicar Jogo</button>      
+                    <button type="submit" id="submitBtn" class="btn-primary">Publicar Jogo</button>      
                 </form>      
-                <div id="cancelEditContainer" style="display:none; margin-top: 10px;">      
-                    <button onclick="cancelarEdicao()" style="background: #555; color: white;">Cancelar Edição</button>      
+                <div id="cancelEditContainer" style="display:none; margin-top: 8px;">      
+                    <button onclick="cancelarEdicao()" style="background: #444; color: white; border:none; padding:8px; border-radius:6px; width:100%;">Cancelar Edição</button>      
                 </div>      
 
-                <button onclick="logoutAdmin()" style="background: var(--danger); color: white; margin-top: 25px;">Sair do Painel Admin</button>      
+                <button onclick="logoutAdmin()" class="delete-btn" style="margin-top: 20px; padding: 10px;">Sair do Painel Admin</button>      
             </div>
         </div>      
 
-        <div id="jogos" class="tab-content active">      
+        <!-- ABA DE EXIBIÇÃO DE JOGOS -->
+        <div id="jogos" class="tab-content active">     
+            <div class="section-header">
+                <h2>Recomendados para você</h2>
+            </div> 
             <div class="games-grid" id="gamesGrid">      
-                <p class="empty-msg">Carregando jogos...</p>      
+                <p class="empty-msg">Carregando catálogo Play Store...</p>      
             </div>      
         </div>      
 
+        <!-- ABA PEDIR JOGO -->
         <div id="pedirJogoTab" class="tab-content">      
             <button class="back-btn" onclick="switchTab('jogos')">← Voltar</button>
             <div class="form-card">      
                 <h2>🎮 Pedir um Jogo</h2>      
-                <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 18px;">Preencha os campos abaixo com o jogo que você deseja. Ao clicar em "Pedir Jogo", você será direcionado para o nosso WhatsApp com a mensagem pronta!</p>      
+                <p style="font-size: 0.8rem; color: var(--text-sub); margin-bottom: 12px;">Solicite um jogo e envie diretamente para o nosso WhatsApp!</p>      
                 <form id="pedirJogoForm" onsubmit="enviarPedidoWhatsapp(event)">      
                     <div class="input-group">      
                         <label for="pedidoNome">Nome do Jogo:</label>      
@@ -1045,7 +751,7 @@
                     </div>      
                     <div class="input-group">      
                         <label for="pedidoPlataforma">Plataforma:</label>      
-                        <select id="pedidoPlataforma" style="width:100%;">      
+                        <select id="pedidoPlataforma">      
                             <option value="PSP">PSP</option>      
                             <option value="PS2">PS2</option>      
                             <option value="PC">PC</option>      
@@ -1054,48 +760,50 @@
                     </div>      
                     <div class="input-group">      
                         <label for="pedidoObs">Observações (Opcional):</label>      
-                        <textarea id="pedidoObs" rows="3" placeholder="Ex: Versão em português, mod, etc..."></textarea>      
+                        <textarea id="pedidoObs" rows="3" placeholder="Ex: Versão em português, mod..."></textarea>      
                     </div>      
-                    <button type="submit" style="background: linear-gradient(135deg, var(--accent-pink), #b00055); color: white;">Pedir Jogo</button>      
+                    <button type="submit" class="btn-primary">Enviar Pedido</button>      
                 </form>      
             </div>      
         </div>      
 
+        <!-- ABA DENUNCIAR JOGO -->
         <div id="denunciarJogoTab" class="tab-content">      
             <button class="back-btn" onclick="switchTab('jogos')">← Voltar</button>
             <div class="form-card">      
                 <h2>⚠️ Denunciar um Jogo</h2>      
-                <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 18px;">Encontrou um erro, link quebrado ou arquivo corrompido? Preencha os detalhes abaixo para nos avisar via WhatsApp!</p>      
+                <p style="font-size: 0.8rem; color: var(--text-sub); margin-bottom: 12px;">Link quebrado ou arquivo com erro? Nos avise no WhatsApp.</p>      
                 <form id="denunciarJogoForm" onsubmit="enviarDenunciaWhatsapp(event)">      
                     <div class="input-group">      
                         <label for="denunciaNome">Nome do Jogo:</label>      
-                        <input type="text" id="denunciaNome" required placeholder="Ex: God of War, GTA...">      
+                        <input type="text" id="denunciaNome" required placeholder="Ex: God of War...">      
                     </div>      
                     <div class="input-group">      
                         <label for="denunciaMotivo">Motivo da Denúncia:</label>      
-                        <select id="denunciaMotivo" style="width:100%;">      
+                        <select id="denunciaMotivo">      
                             <option value="Link Off / Quebrado">Link Off / Quebrado</option>      
                             <option value="Arquivo Corrompido">Arquivo Corrompido</option>      
-                            <option value="Jogo Incorreto / Errado">Jogo Incorreto / Errado</option>      
+                            <option value="Jogo Incorreto">Jogo Incorreto</option>      
                             <option value="Outro Problema">Outro Problema</option>      
                         </select>      
                     </div>      
                     <div class="input-group">      
                         <label for="denunciaDetalhes">Detalhes do Problema:</label>      
-                        <textarea id="denunciaDetalhes" rows="3" required placeholder="Ex: O link do Google Drive não abre, o arquivo veio sem senha, etc..."></textarea>      
+                        <textarea id="denunciaDetalhes" rows="3" required placeholder="Ex: O link não abre..."></textarea>      
                     </div>      
-                    <button type="submit" style="background: linear-gradient(135deg, var(--danger), #cc0033); color: white;">Enviar Denúncia</button>      
+                    <button type="submit" class="delete-btn" style="padding: 10px;">Enviar Denúncia</button>      
                 </form>      
             </div>      
         </div>      
 
+        <!-- ABA DE DETALHES ESTILO PLAY STORE -->
         <div id="detalhes" class="tab-content">      
             <button class="back-btn" onclick="switchTab('jogos')">← Voltar</button>      
             <div id="gameDetailContent"></div>      
         </div>      
 
-        <div class="admin-login-area">      
-            <div class="admin-link">Bem-vindo ao PSP GAMER MOBILE 2. Divirta-se!</div>      
+        <div class="admin-login-area" onclick="solicitarSenha()">      
+            PSP GAMER STORE &copy; Play Store Edition    
         </div>  
     </div>    
 
@@ -1111,7 +819,7 @@
             "status": "Grátis",
             "description": "Luta, Ação e aventura",
             "link": "https://archive.org/download/god-of-war-chains-of-olympus-usa/God%20of%20War%20-%20Chains%20of%20Olympus%20%28USA%29.zip",
-            "btnText": "Baixar Agora (Download Direto)"
+            "btnText": "Instalar (Download Direto)"
           },
           {
             "id": 1790954010898,
@@ -1123,7 +831,7 @@
             "status": "Grátis",
             "description": "Luta, Ação",
             "link": "https://archive.org/download/god-of-war-ghost-of-sparta-usa-en-fr-es/God%20of%20War%20-%20Ghost%20of%20Sparta%20%28USA%29%20%28En%2CFr%2C%2CEs%2C.iso",
-            "btnText": "Baixar Agora (Download Direto)"
+            "btnText": "Instalar (Download Direto)"
           },
           {
             "id": 1790954322384,
@@ -1135,7 +843,7 @@
             "status": "Grátis",
             "description": "Luta, Ação",
             "link": "https://archive.org/download/GrandTheftAutoLibertyCityStoriesUSAEnFrDeEsItv3.00/Grand%20Theft%20Auto%20-%20Liberty%20City%20Stories%20%28USA%29%20%28En%2CFr%2CDe%2CEs%2CIt%29%20%28v3.00%29.iso",
-            "btnText": "Baixar Agora (Download Direto)"
+            "btnText": "Instalar (Download Direto)"
           },
           {
             "id": 1790954983808,
@@ -1147,7 +855,7 @@
             "status": "Grátis",
             "description": "Aventura e Ação RPG",
             "link": "https://archive.org/download/grand-theft-auto-vice-city-stories-usa/Grand%20Theft%20Auto%20-%20Vice%20City%20Stories%20%28USA%29.iso",
-            "btnText": "Baixar Agora (Download Direto)"
+            "btnText": "Instalar (Download Direto)"
           },
           {
             "id": 1790956761561,
@@ -1159,7 +867,7 @@
             "status": "Grátis",
             "description": "Luta",
             "link": "https://archive.org/download/naruto-shippuden-ultimate-ninja-heroes-3-usa_202601/Naruto%20Shippuden%20-%20Ultimate%20Ninja%20Heroes%203%20%28USA%29.zip",
-            "btnText": "Baixar Agora (Download Direto)"
+            "btnText": "Instalar (Download Direto)"
           },
           {
             "id": 1790956999349,
@@ -1171,7 +879,7 @@
             "status": "Grátis",
             "description": "Luta",
             "link": "https://archive.org/download/bleach-heat-the-soul-7/Bleach%20-%20Heat%20the%20Soul%207%20%28Asia%29.zip",
-            "btnText": "Baixar Agora (Download Direto)"
+            "btnText": "Instalar (Download Direto)"
           },
           {
             "id": 1790961002839,
@@ -1183,7 +891,7 @@
             "status": "Grátis",
             "description": "Luta",
             "link": "https://archive.org/download/playstation-portable-rom-def-jam-fight-for-ny-the-takeover/Def%20Jam%20-%20Fight%20for%20NY%20-%20The%20Takeover%20%28USA%29%20%28v1.01%29.zip",
-            "btnText": "Baixar Agora (Download Direto)"
+            "btnText": "Instalar (Download Direto)"
           },
           {
             "id": 1790961425208,
@@ -1195,7 +903,7 @@
             "status": "Grátis",
             "description": "Luta",
             "link": "https://archive.org/download/ufc-2010-undisputed-usa/UFC%202010%20Undisputed%20%28USA%29.zip",
-            "btnText": "Baixar Agora (Download Direto)"
+            "btnText": "Instalar (Download Direto)"
           },
           {
             "id": 1790963121413,
@@ -1207,7 +915,7 @@
             "status": "Grátis",
             "description": "RPG",
             "link": "https://archive.org/download/gta-sa-5play/gta-sa-2.11.277-mod-menu-5play.apk",
-            "btnText": "Baixar Agora (Download Direto)"
+            "btnText": "Instalar (Download Direto)"
           },
           {
             "id": 1790963352828,
@@ -1219,7 +927,7 @@
             "status": "Grátis",
             "description": "Luta",
             "link": "https://archive.org/download/tekken-dark-resurrection-usa-psp_202603_ver2/a-tekken.iso",
-            "btnText": "Baixar Agora (Download Direto)"
+            "btnText": "Instalar (Download Direto)"
           },
           {
             "id": 1790963815728,
@@ -1231,7 +939,7 @@
             "status": "Grátis",
             "description": "RPG mundo aberto",
             "link": "https://files.an1.co/red-dead-redemption-mods_1.58.63226194-an1.com.apk",
-            "btnText": "Baixar Agora (Download Direto)"
+            "btnText": "Instalar (Download Direto)"
           },
           {
             "id": 1791120442202,
@@ -1243,7 +951,7 @@
             "status": "Grátis ",
             "description": "Aventura ",
             "link": "https://www.google.com/url?q=https%3A%2F%2Farchive.org%2Fdownload%2Fminecraft-apkmodget.com%2FMinecraft-Free-Edition.apk&sa=D&sntz=1&usg=AOvVaw05urVVQJ6yu2Sa4SIHkjH8",
-            "btnText": "Baixar Agora (Download Direto)"
+            "btnText": "Instalar (Download Direto)"
           },
           {
             "id": 1791133142943,
@@ -1255,11 +963,11 @@
             "status": "Grátis ",
             "description": "Luta de rua ",
             "link": "https://archive.org/download/the-warriors-ps2/Warriors%2C%20The.iso",
-            "btnText": "Baixar Agora (Download Direto)"
+            "btnText": "Instalar (Download Direto)"
           },
           {
             "id": 1791144001710,
-            "name": "Midnight Club 3: DUB Edition / L.A. Remix",
+            "name": "Midnight Club 3: DUB Edition",
             "image": "https://i.ibb.co/sGMK8HX/a6d9cd56df8bea6c10a076d06c8a6e92.jpg",
             "category": "PSP",
             "size": "1.00GB",
@@ -1267,7 +975,7 @@
             "status": "Grátis ",
             "description": "Corrida ",
             "link": "https://archive.org/download/midnight-club-3-dub-edition-usa/Midnight%20Club%203%20-%20DUB%20Edition%20%28USA%29.zip",
-            "btnText": "Baixar Agora (Download Direto)"
+            "btnText": "Instalar (Download Direto)"
           },
           {
             "id": 1791178391721,
@@ -1279,7 +987,7 @@
             "status": "Grátis ",
             "description": "Luta , Ação ",
             "link": "https://archive.org/download/PSPStarWarsBattlefrontIIUSA/Star%20Wars%20-%20Battlefront%20II%20%28USA%29.iso",
-            "btnText": "Baixar Agora (Download Direto)"
+            "btnText": "Instalar (Download Direto)"
           },
           {
             "id": 1791180573894,
@@ -1291,7 +999,7 @@
             "status": "Grátis ",
             "description": "Corrida ",
             "link": "https://archive.org/download/burnout-legends-usa-en-fr-de-es-it-nl_202601/Burnout%20Legends%20%28USA%29%20%28En%2CFr%2CDe%2CEs%2CIt%2CNl%29.iso",
-            "btnText": "Baixar Agora (Download Direto)"
+            "btnText": "Instalar (Download Direto)"
           },
           {
             "id": 1791195972900,
@@ -1301,13 +1009,13 @@
             "size": "1.81GB",
             "format": "ISO",
             "status": "Grátis ",
-            "description": "Todos os androids \nRoda em 60FPS",
+            "description": "Todos os androids - Roda em 60FPS",
             "link": "https://archive.org/download/PSPDantesInfernoUSA/Dante%27s%20Inferno%20%28USA%29.iso",
-            "btnText": "Baixar Agora (Download Direto)"
+            "btnText": "Instalar (Download Direto)"
           },
           {
             "id": 1791304999123,
-            "name": "Need for Speed: Most Wanted Demo",
+            "name": "Need for Speed: Most Wanted",
             "image": "https://i.ibb.co/C5mNw5D4/21b0157f4b49a67599df0e38b399a9b9.jpg",
             "category": "PS2",
             "size": "2.47GB",
@@ -1315,7 +1023,7 @@
             "status": "Grátis ",
             "description": "Corrida ",
             "link": "https://dl2.cdromance.org/download.php?file=Need%20for%20Speed%20-%20Most%20Wanted%20%28Europe%29.7z&id=85170&platform=ps2-iso&key=10286066450",
-            "btnText": "Baixar Agora (Download Direto)"
+            "btnText": "Instalar (Download Direto)"
           },
           {
             "id": 1791314531080,
@@ -1327,7 +1035,7 @@
             "status": "Grátis ",
             "description": "Aventura e RPG",
             "link": "https://dl9a.cdromance.org/download.php?file=Monster_Hunter_Freedom_Unite_USA_PSP-BAHAMUT.7z&id=80547&platform=psp&key=9138381868",
-            "btnText": "Baixar Agora (Download Direto)"
+            "btnText": "Instalar (Download Direto)"
           },
           {
             "id": 1791395911016,
@@ -1339,7 +1047,7 @@
             "status": "Grátis ",
             "description": "Ação e aventura ",
             "link": "https://archive.org/download/spider-man-3_202311/Spider-Man%203.iso",
-            "btnText": "Baixar Agora (Download Direto)"
+            "btnText": "Instalar (Download Direto)"
           },
           {
             "id": 1791487309610,
@@ -1351,7 +1059,7 @@
             "status": "Grátis ",
             "description": "Ação e aventura ",
             "link": "https://dl5b.cdromance.org/download.php?file=Lord.of.the.Rings.Aragorns.Quest.EUR.PSP-WARG.7z&id=28472&platform=psp&key=6520439848",
-            "btnText": "Baixar Agora (Download Direto)"
+            "btnText": "Instalar (Download Direto)"
           },
           {
             "id": 1791488560025,
@@ -1363,7 +1071,7 @@
             "status": "Grátis ",
             "description": "Ação ",
             "link": "https://archive.org/download/PSPStarWarsTheForceUnleashedUSAEnFr/Star%20Wars%20-%20The%20Force%20Unleashed%20%28USA%29%20%28En%2CFr%29.iso",
-            "btnText": "Baixar Agora (Download Direto)"
+            "btnText": "Instalar (Download Direto)"
           },
           {
             "id": 1791489632368,
@@ -1375,7 +1083,7 @@
             "status": "Grátis ",
             "description": "Ação, luta e aventura ",
             "link": "https://archive.org/download/pspben10protectorofearthusa/Ben%2010%20-%20Protector%20of%20Earth%20%28USA%29.iso",
-            "btnText": "Baixar Agora (Download Direto)"
+            "btnText": "Instalar (Download Direto)"
           },
           {
             "id": 1791658481931,
@@ -1387,7 +1095,7 @@
             "status": "Grátis ",
             "description": "Corrida ",
             "link": "https://archive.org/download/wf-repack-t1coon/Wreckfest%20%5BMULTi-ENG-RUS%5D%20%5BR%5D%20%5TN%5D.rar",
-            "btnText": "Baixar Agora (Download Direto)"
+            "btnText": "Instalar (Download Direto)"
           },
           {
             "id": 1791661302767,
@@ -1399,7 +1107,7 @@
             "status": "Grátis ",
             "description": "Ação e luta ",
             "link": "https://archive.org/download/cyberpunk-2077_202607/Cyberpunk%202077.zip",
-            "btnText": "Baixar Agora (Download Direto)"
+            "btnText": "Instalar (Download Direto)"
           },
           {
             "id": 1791662789957,
@@ -1411,7 +1119,7 @@
             "status": "Grátis ",
             "description": "Guerra e Ação ",
             "link": "https://archive.org/download/metal-gear-solid-3-snake-eater-usa_202603/Metal%20Gear%20Solid%203%20-%20Snake%20Eater%20%28USA%29.zip",
-            "btnText": "Baixar Agora (Download Direto)"
+            "btnText": "Instalar (Download Direto)"
           },
           {
             "id": 1791666732197,
@@ -1423,7 +1131,7 @@
             "status": "Grátis ",
             "description": "Ação e aventura ",
             "link": "https://archive.org/download/grand-theft-auto-v_202508/Grand%20Theft%20Auto%20V.iso",
-            "btnText": "Baixar Agora (Download Direto)"
+            "btnText": "Instalar (Download Direto)"
           },
           {
             "id": 1791703758723,
@@ -1435,7 +1143,7 @@
             "status": "Grátis ",
             "description": "Ação, aventura e luta",
             "link": "https://archive.org/download/sles-537.02.-resident-evil-4/SLES_537.02.Resident%20Evil%204.iso",
-            "btnText": "Baixar Agora (Download Direto)"
+            "btnText": "Instalar (Download Direto)"
           },
           {
             "id": 1791704861354,
@@ -1447,11 +1155,11 @@
             "status": "Grátis ",
             "description": "Ação, luta e aventura ",
             "link": "https://archive.org/download/scus-974.72.-shadow-of-the-colossus/SCUS_974.72.Shadow%20of%20the%20Colossus.iso",
-            "btnText": "Baixar Agora (Download Direto)"
+            "btnText": "Instalar (Download Direto)"
           },
           {
             "id": 1791740685798,
-            "name": "Avatar: The Last Airbender - The Burning Earth",
+            "name": "Avatar: The Last Airbender",
             "image": "https://i.ibb.co/fzbMLFgB/7bb872fa0450bff644c1578b2e30962b.jpg",
             "category": "PS2",
             "size": "2.39GB",
@@ -1459,7 +1167,7 @@
             "status": "Grátis ",
             "description": "Luta e aventura ",
             "link": "https://archive.org/download/avatarburningearthps2ptbr/Avatar%3A%20The%20Last%20Airbender%20%E2%80%93%20The%20Burning%20Earth.iso",
-            "btnText": "Baixar Agora (Download Direto)"
+            "btnText": "Instalar (Download Direto)"
           },
           {
             "id": 1792003477949,
@@ -1471,7 +1179,7 @@
             "status": "Grátis ",
             "description": "Aventura e Ação ",
             "link": "https://a0375781bc284f28babebca5d9a9079b.r2.cloudflarestorage.com/5play/files/2026-04/little-nightmares-1.4-mod-t-5play.apk?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=08d4c964f7542f75db51096cf375d22b%2F20261014%2Fauto%2Fs3%2Faws4_request&X-Amz-Date=20261014T183946Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=0778535348f120f11258dfb9db0648492a10aaec12f1feaed13312e45f120c9f",
-            "btnText": "Baixar Agora (Download Direto)"
+            "btnText": "Instalar (Download Direto)"
           },
           {
             "id": 1792515873557,
@@ -1483,26 +1191,26 @@
             "status": "Grátis ",
             "description": "Luta ",
             "link": "https://archive.org/download/soulcalibur-iii-sced-53674/Soulcalibur%20III%20PS2%20EUR%20Demo.7z",
-            "btnText": "Baixar Agora (Download Direto)"
+            "btnText": "Instalar (Download Direto)"
           }
         ];
 
         let listaBannersCache = [
           {
             "image": "https://i.ibb.co/Hf9GsdxW/unnamed-4.jpg",
-            "title": "Bem-vindo ao PSP Gamer Mobile 2"
+            "title": "Os Melhores Jogos de PSP na Play Store"
           },
           {
             "image": "https://i.ibb.co/TDVGhzHB/8388323c59abc8fc8f5f2c270240d6ba.jpg",
-            "title": "Novos Jogos Adicionados Semanalmente"
+            "title": "Novidades Adicionadas Toda Semana"
           },
           {
             "image": "https://i.ibb.co/N6n6FHhs/unnamed-8.jpg",
-            "title": "Baixe com Links Diretos e Seguros"
+            "title": "Downloads Diretos e Sem Anúncios"
           },
           {
             "image": "https://i.ibb.co/whzq0NxW/unnamed-5.jpg",
-            "title": "Os melhores jogos so aqui"
+            "title": "Baixe ISOs e APKs de Graça"
           }
         ];      
 
@@ -1511,7 +1219,6 @@
         const SENHA_ADMIN = "Rodri2012";      
         let categoriaAtual = 'Todos';      
 
-        // Lógica do Bloqueio de Compartilhamento (0/5)      
         const LINK_CANAL_COMPARTILHAR = "https://whatsapp.com/channel/0029VbDVqMICBtx8ZZL1Vx3K";      
         let progressoCompartilhamento = 0;      
 
@@ -1531,55 +1238,39 @@
 
         function realizarCompartilhamento() {      
             if (progressoCompartilhamento >= 5) return;      
-
             progressoCompartilhamento++;      
             atualizarInterfaceBloqueio();      
 
             const aviso = document.getElementById('shareMsgAviso');      
             if (progressoCompartilhamento < 5) {      
-                if (aviso) aviso.innerText = `Faltam mais ${5 - progressoCompartilhamento} compartilhamentos!`;      
+                if (aviso) aviso.innerText = `Compartilhe mais ${5 - progressoCompartilhamento} vezes!`;      
             } else {      
-                if (aviso) aviso.innerText = "Desbloqueado com sucesso!";      
+                if (aviso) aviso.innerText = "Desbloqueado!";      
             }      
 
-            const textoMensagem = encodeURIComponent("🔥 Venha baixar vários jogos incríveis de PSP, PS2 e APK de graça na PSP GAMER MOBILE 2! Siga o canal oficial: " + LINK_CANAL_COMPARTILHAR);      
+            const textoMensagem = encodeURIComponent("🔥 Baixe os melhores jogos de PSP, PS2 e APK de graça no PSP GAMER STORE! Siga o canal oficial: " + LINK_CANAL_COMPARTILHAR);      
             window.open(`https://api.whatsapp.com/send?text=${textoMensagem}`, '_blank');      
         }      
 
-        function mostrarStatusSync(texto, cor = "rgba(0, 255, 136, 0.9)") {      
+        function mostrarStatusSync(texto) {      
             const status = document.getElementById('syncStatus');      
             if(status) {      
                 status.innerText = texto;      
-                status.style.background = cor;      
                 status.style.display = 'block';      
                 setTimeout(() => { status.style.display = 'none'; }, 4000);      
             }      
         }      
 
-        function mostrarBannerWhatsapp() {      
-            const banner = document.getElementById('whatsappFloatingBanner');      
-            if (banner) {      
-                banner.classList.remove('closing');      
-                banner.style.display = 'block';      
-            }      
-        }      
-
         function fecharBannerWhatsapp() {      
             const banner = document.getElementById('whatsappFloatingBanner');      
-            if (banner) {      
-                banner.classList.add('closing');      
-                setTimeout(() => {      
-                    banner.style.display = 'none';      
-                    banner.classList.remove('closing');      
-                }, 400);      
-            }      
+            if (banner) banner.style.display = 'none';      
         }      
 
         function iniciarLoopWhatsappBanner() {      
             setInterval(() => {      
                 const banner = document.getElementById('whatsappFloatingBanner');      
-                if (banner && banner.style.display !== 'block' && !banner.classList.contains('closing')) {      
-                    mostrarBannerWhatsapp();      
+                if (banner && banner.style.display !== 'block') {      
+                    banner.style.display = 'block';      
                 }      
             }, 20000);      
         }      
@@ -1587,11 +1278,7 @@
         function atualizarCaixaCodigoGerado() {      
             const textarea = document.getElementById('codigoGeradoArea');      
             if (!textarea) return;      
-
-            let codigoTexto = `let listaJogosCache = ` + JSON.stringify(listaJogosCache, null, 2) + `;\n\n`;      
-            codigoTexto += `let listaBannersCache = ` + JSON.stringify(listaBannersCache, null, 2) + `;`;      
-                  
-            textarea.value = codigoTexto;      
+            textarea.value = `let listaJogosCache = ` + JSON.stringify(listaJogosCache, null, 2) + `;\n\nlet listaBannersCache = ` + JSON.stringify(listaBannersCache, null, 2) + `;`;      
         }      
 
         function copiarCodigoPainel() {      
@@ -1599,7 +1286,7 @@
             if (!textarea) return;      
             textarea.select();      
             navigator.clipboard.writeText(textarea.value);      
-            mostrarStatusSync("Código copiado com sucesso! Cole no seu arquivo HTML.");      
+            mostrarStatusSync("Código copiado!");      
         }      
 
         window.addEventListener('DOMContentLoaded', () => {      
@@ -1627,8 +1314,7 @@
         function renderizarCarrossel() {      
             const track = document.getElementById('carouselTrack');      
             const indicators = document.getElementById('carouselIndicators');      
-            const container = document.getElementById('carouselContainer');      
-            if (!track || !indicators || !container) return;      
+            if (!track || !indicators) return;      
 
             track.innerHTML = '';      
             indicators.innerHTML = '';      
@@ -1637,7 +1323,7 @@
                 const slide = document.createElement('div');      
                 slide.className = 'carousel-slide';      
                 slide.innerHTML = `      
-                    <img src="${banner.image}" alt="${banner.title}" onerror="this.src='https://i.ibb.co/4nhr0dZz/unnamed.jpg'">      
+                    <img src="${banner.image}" alt="${banner.title}">      
                     <div class="carousel-caption">${banner.title}</div>      
                 `;      
                 track.appendChild(slide);      
@@ -1656,9 +1342,7 @@
             if (!track || listaBannersCache.length === 0) return;      
 
             track.style.transform = `translateX(-${indiceCarrosselAtual * 100}%)`;      
-            indicators.forEach((ind, i) => {      
-                ind.classList.toggle('active', i === indiceCarrosselAtual);      
-            });      
+            indicators.forEach((ind, i) => ind.classList.toggle('active', i === indiceCarrosselAtual));      
         }      
 
         function proximoSlide() {      
@@ -1686,19 +1370,10 @@
             for (let i = 0; i < 4; i++) {      
                 const banner = listaBannersCache[i] || { image: '', title: '' };      
                 const div = document.createElement('div');      
-                div.style.marginBottom = "12px";      
-                div.style.padding = "10px";      
-                div.style.background = "#0b0b0f";      
-                div.style.borderRadius = "10px";      
-                div.style.border = "1px solid rgba(255,255,255,0.06)";      
+                div.style.marginBottom = "8px";      
                 div.innerHTML = `      
-                    <p style="font-size: 0.8rem; color: var(--accent-cyan); margin-bottom: 6px; font-weight: bold;">Banner ${i + 1}</p>      
-                    <div style="margin-bottom: 8px;">      
-                        <input type="url" id="bannerImg_${i}" value="${banner.image}" placeholder="Link da imagem">      
-                    </div>      
-                    <div>      
-                        <input type="text" id="bannerTitle_${i}" value="${banner.title}" placeholder="Título do banner">      
-                    </div>      
+                    <input type="url" id="bannerImg_${i}" value="${banner.image}" placeholder="URL Imagem ${i+1}" style="margin-bottom:4px;">      
+                    <input type="text" id="bannerTitle_${i}" value="${banner.title}" placeholder="Título ${i+1}">      
                 `;      
                 container.appendChild(div);      
             }      
@@ -1712,35 +1387,21 @@
                 if (imgInput && imgInput.value.trim()) {      
                     novosBanners.push({       
                         image: imgInput.value.trim(),       
-                        title: (titleInput && titleInput.value.trim()) ? titleInput.value.trim() : 'Destaque'       
+                        title: titleInput.value.trim() || 'Destaque'       
                     });      
                 }      
             }      
-            if (novosBanners.length === 0) {      
-                alert("Adicione pelo menos 1 banner válido!");      
-                return;      
-            }      
+            if (novosBanners.length === 0) return alert("Adicione pelo menos 1 banner!");      
             listaBannersCache = novosBanners;      
             indiceCarrosselAtual = 0;      
             renderizarCarrossel();      
             atualizarCaixaCodigoGerado();      
-            mostrarStatusSync("Banners atualizados! Copie o código gerado acima.");      
+            mostrarStatusSync("Banners atualizados!");      
         }      
 
         function toggleMenu(event) {      
             event.stopPropagation();      
             document.getElementById('dropdownMenu').classList.toggle('show');      
-        }      
-
-        function abrirModalInfo(titulo, texto) {      
-            document.getElementById('modalTitle').innerText = titulo;      
-            document.getElementById('modalText').innerText = texto;      
-            document.getElementById('customModalOverlay').classList.add('show');      
-            document.getElementById('dropdownMenu').classList.remove('show');      
-        }      
-
-        function fecharModalInfo() {      
-            document.getElementById('customModalOverlay').classList.remove('show');      
         }      
 
         function abrirPaginaPedirJogo() {
@@ -1760,7 +1421,7 @@
                 atualizarCaixaCodigoGerado();      
                 return;      
             }      
-            let senha = prompt("Digite a senha de administrador:");      
+            let senha = prompt("Senha de administrador:");      
             if (senha === SENHA_ADMIN) {      
                 localStorage.setItem('isAdmin', 'true');      
                 switchTab('inicio');      
@@ -1778,7 +1439,7 @@
             cancelarEdicao();      
             switchTab('jogos');      
             renderGames();      
-            alert("Saiu do painel admin.");      
+            alert("Saiu do painel.");      
         }      
 
         function switchTab(tabId) {      
@@ -1802,13 +1463,9 @@
             const obs = document.getElementById('pedidoObs').value.trim();      
 
             let mensagem = `Olá! Quero pedir um jogo:\n\n🎮 *Jogo:* ${nomeJogo}\n💻 *Plataforma:* ${plataforma}`;      
-            if (obs) {      
-                mensagem += `\n📝 *Observações:* ${obs}`;      
-            }      
+            if (obs) mensagem += `\n📝 *Obs:* ${obs}`;      
 
-            const numeroWhatsApp = "258843843479";      
-            const urlWhatsapp = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensagem)}`;      
-            window.open(urlWhatsapp, '_blank');      
+            window.open(`https://wa.me/258843843479?text=${encodeURIComponent(mensagem)}`, '_blank');      
         }      
 
         function enviarDenunciaWhatsapp(e) {      
@@ -1817,11 +1474,8 @@
             const motivo = document.getElementById('denunciaMotivo').value;      
             const detalhes = document.getElementById('denunciaDetalhes').value.trim();      
 
-            let mensagem = `⚠️ *NOVA DENÚNCIA DE JOGO*\n\n🎮 *Jogo:* ${nomeJogo}\n🚨 *Motivo:* ${motivo}\n📝 *Detalhes:* ${detalhes}`;      
-
-            const numeroWhatsApp = "258843843479";      
-            const urlWhatsapp = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensagem)}`;      
-            window.open(urlWhatsapp, '_blank');      
+            let mensagem = `⚠️ *DENÚNCIA DE JOGO*\n\n🎮 *Jogo:* ${nomeJogo}\n🚨 *Motivo:* ${motivo}\n📝 *Detalhes:* ${detalhes}`;      
+            window.open(`https://wa.me/258843843479?text=${encodeURIComponent(mensagem)}`, '_blank');      
         }      
 
         const gameForm = document.getElementById('gameForm');      
@@ -1838,37 +1492,30 @@
                 const status = document.getElementById('gameStatus').value;      
                 const description = document.getElementById('gameDescription').value || 'Sem descrição.';      
                 const link = document.getElementById('gameLink').value;      
-                const btnText = document.getElementById('gameBtnText').value.trim() || 'Baixar Agora (Download Direto)';      
+                const btnText = document.getElementById('gameBtnText').value.trim() || 'Instalar (Download Direto)';      
 
                 if (editId) {      
-                    listaJogosCache = listaJogosCache.map(game => {      
-                        if (game.id == editId) {      
-                            return { ...game, name, image, category, size, format, status, description, link, btnText };      
-                        }      
-                        return game;      
-                    });      
+                    listaJogosCache = listaJogosCache.map(game => game.id == editId ? { ...game, name, image, category, size, format, status, description, link, btnText } : game);      
                     cancelarEdicao();      
                 } else {      
-                    const newGame = { id: Date.now(), name, image, category, size, format, status, description, link, btnText };      
-                    listaJogosCache.push(newGame);      
+                    listaJogosCache.push({ id: Date.now(), name, image, category, size, format, status, description, link, btnText });      
                 }      
 
                 renderGames();      
                 switchTab('inicio');      
                 atualizarCaixaCodigoGerado();      
                 gameForm.reset();      
-
-                mostrarStatusSync("Jogo salvo! Copie o código atualizado acima.");      
+                mostrarStatusSync("Jogo salvo!");      
             });      
         }      
 
         function deleteGame(id) {      
-            if (confirm("Tem certeza que deseja excluir este jogo?")) {      
+            if (confirm("Deseja excluir este jogo?")) {      
                 listaJogosCache = listaJogosCache.filter(game => game.id !== id);      
                 renderGames();      
                 switchTab('inicio');      
                 atualizarCaixaCodigoGerado();      
-                mostrarStatusSync("Jogo excluído! Copie o código atualizado acima.");      
+                mostrarStatusSync("Jogo excluído!");      
             }      
         }      
 
@@ -1904,16 +1551,6 @@
             document.getElementById('cancelEditContainer').style.display = "none";      
         }      
 
-        function compartilharJogo(id, nome) {      
-            const linkCompartilhamento = window.location.origin + window.location.pathname + '?jogo=' + id;      
-            if (navigator.share) {      
-                navigator.share({ title: nome, text: `Baixe ${nome} na PSP GAMER MOBILE 2!`, url: linkCompartilhamento }).catch(() => {});      
-            } else {      
-                navigator.clipboard.writeText(linkCompartilhamento);      
-                alert("Link copiado: " + linkCompartilhamento);      
-            }      
-        }      
-
         function verDetalhesDoJogo(id) {      
             const game = listaJogosCache.find(g => g.id === id);      
             if (!game) return;      
@@ -1921,36 +1558,44 @@
             let botoesAdminDetalhe = '';      
             if (localStorage.getItem('isAdmin') === 'true') {      
                 botoesAdminDetalhe = `      
-                    <div style="display: flex; gap: 10px; margin-top: 15px;">      
-                        <button class="edit-btn" onclick="prepararEdicao(${game.id})" style="margin-top:0;">Editar Jogo</button>      
-                        <button class="delete-btn" onclick="deleteGame(${game.id})" style="margin-top:0;">Excluir Jogo</button>      
+                    <div style="display: flex; gap: 8px; margin-top: 12px;">      
+                        <button class="edit-btn" onclick="prepararEdicao(${game.id})">Editar</button>      
+                        <button class="delete-btn" onclick="deleteGame(${game.id})">Excluir</button>      
                     </div>      
                 `;      
             }      
 
             document.getElementById('gameDetailContent').innerHTML = `      
                 <div class="game-detail-card">      
-                    <div class="detail-img-container">      
-                        <img src="${game.image}" class="detail-img" alt="${game.name}" onerror="this.src='https://i.ibb.co/4nhr0dZz/unnamed.jpg'">      
-                        <div class="price-badge">${game.status}</div>      
-                    </div>      
-                    <div class="detail-info">      
-                        <h2>${game.name}</h2>      
-                        <div class="game-details" style="font-size: 0.85rem; margin-bottom: 15px; gap: 6px;">      
-                            <span>📦 Tamanho: <strong>${game.size}</strong></span>      
-                            <span>📁 Formato: <strong>${game.format}</strong></span>      
-                            <span>📂 Categoria: <strong>${game.category}</strong></span>      
+                    <div class="detail-header">      
+                        <img src="${game.image}" alt="${game.name}">      
+                        <div class="detail-header-info">      
+                            <h2>${game.name}</h2>      
+                            <div class="detail-sub">${game.category} • ${game.status}</div>      
                         </div>      
-                        <h4 style="font-size: 0.95rem; color: white; margin-bottom: 5px;">Informações:</h4>      
-                        <p class="detail-desc">${game.description}</p>      
+                    </div>      
 
-                        <div class="action-bar">      
-                            <button class="share-btn" onclick="compartilharJogo(${game.id}, '${game.name.replace(/'/g, "\\'")}')">🔗 Compartilhar</button>      
-                        </div>      
-                              
-                        <a href="${game.link}" target="_blank" class="download-btn" style="padding: 12px; font-size: 0.95rem; margin-top: 15px;">${game.btnText}</a>      
-                        ${botoesAdminDetalhe}      
-                    </div>      
+                    <div class="detail-stats">
+                        <div class="stat-item">
+                            <span class="stat-value">4.8 ★</span>
+                            <span class="stat-label">Avaliação</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value">${game.size}</span>
+                            <span class="stat-label">Tamanho</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value">${game.format}</span>
+                            <span class="stat-label">Formato</span>
+                        </div>
+                    </div>
+
+                    <a href="${game.link}" target="_blank" class="play-install-btn" style="padding: 12px; font-size: 0.95rem; text-decoration:none;">${game.btnText || 'Instalar'}</a>      
+
+                    <h4 style="font-size: 0.9rem; color: var(--text-main); margin: 18px 0 6px 0;">Sobre este jogo</h4>      
+                    <p class="detail-desc">${game.description}</p>      
+
+                    ${botoesAdminDetalhe}      
                 </div>      
             `;      
             switchTab('detalhes');      
@@ -1975,16 +1620,15 @@
                 return;      
             }      
 
-            filtrados.forEach((game, index) => {      
+            filtrados.forEach(game => {      
                 const card = document.createElement('div');      
                 card.className = 'game-card';      
-                card.style.animationDelay = `${index * 0.03}s`;      
                 card.onclick = () => verDetalhesDoJogo(game.id);      
 
                 let botoesAdminHtml = '';      
                 if (localStorage.getItem('isAdmin') === 'true') {      
                     botoesAdminHtml = `      
-                        <div style="padding: 0 10px 10px 10px;" onclick="event.stopPropagation()">      
+                        <div style="padding: 0 8px 8px 8px;" onclick="event.stopPropagation()">      
                             <button class="edit-btn" onclick="prepararEdicao(${game.id})">Editar</button>      
                             <button class="delete-btn" onclick="deleteGame(${game.id})">Excluir</button>      
                         </div>      
@@ -1994,16 +1638,16 @@
                 card.innerHTML = `      
                     <div>      
                         <div class="card-img-container">      
-                            <img src="${game.image}" alt="${game.name}" onerror="this.src='https://i.ibb.co/4nhr0dZz/unnamed.jpg'">      
-                            <div class="price-badge">${game.status}</div>      
+                            <img src="${game.image}" alt="${game.name}">      
+                            <div class="category-tag">${game.category}</div>      
                         </div>      
                         <div class="game-info">      
                             <h3>${game.name}</h3>      
-                            <div class="game-details">      
-                                <span>📦 Tamanho: <strong>${game.size}</strong></span>      
-                                <span>📁 Formato: <strong>${game.format}</strong></span>      
+                            <div class="game-meta">      
+                                <span>📦 ${game.size}</span>      
+                                <span>• ${game.format}</span>      
                             </div>      
-                            <span class="download-btn" style="display: block;">Ver Detalhes / Baixar</span>      
+                            <button class="play-install-btn">Instalar</button>      
                         </div>      
                     </div>      
                     ${botoesAdminHtml}      
