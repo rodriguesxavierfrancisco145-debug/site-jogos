@@ -657,7 +657,7 @@
     <!-- TELA DE BLOQUEIO DE COMPARTILHAMENTO -->      
     <div id="shareLockOverlay">      
         <div class="share-lock-card">      
-            <h2 style="color: var(--text-main); font-size: 1.25rem; margin-bottom: 8px;">🔒 Acesso Bloqueado</h2>      
+            <h2 style="color: var(--text-main); font-size: 1.25rem; margin-bottom: 8px;">Acesso Bloqueado</h2>      
             <p style="font-size: 0.85rem; color: var(--text-sub); margin-bottom: 18px;">Para desbloquear o site e acessar todos os jogos grátis, você precisa compartilhar o nosso canal do WhatsApp com amigos ou grupos!</p>    
             <div class="share-progress-container">      
                 <div class="share-counter" id="shareCounterText">0/5</div>      
@@ -674,13 +674,13 @@
     
     <div id="whatsappFloatingBanner">      
         <div class="wa-banner-content">      
-            <div style="font-size: 1.6rem;">💬</div>      
+            <div style="font-size: 1.6rem; font-weight: bold; color: var(--play-green);">[i]</div>      
             <div class="wa-text-area">      
                 <h4>Canal Oficial PSP Gamer</h4>      
                 <p>Siga para receber os novos lançamentos em primeira mão.</p>      
                 <a href="https://whatsapp.com/channel/0029VbDVqMICBtx8ZZL1Vx3K" target="_blank" class="wa-follow-btn">Seguir Canal</a>      
             </div>      
-            <div class="wa-close-btn" onclick="fecharBannerWhatsapp()">✕</div>      
+            <div class="wa-close-btn" onclick="fecharBannerWhatsapp()">X</div>      
         </div>      
     </div>    
 
@@ -689,14 +689,14 @@
         <header class="play-header">
             <div class="top-bar">      
                 <div class="brand-container" onclick="solicitarSenha()">
-                    <div class="play-icon">▶</div>
+                    <div class="play-icon">P</div>
                     <div class="logo">PSP Gamer Store</div>
                 </div>      
                 <div class="top-icons">      
-                    <span onclick="toggleMenu(event)" title="Menu">☰</span>      
+                    <span onclick="toggleMenu(event)" title="Menu">Menu</span>      
                     <div id="dropdownMenu" class="dropdown-menu">      
-                        <div class="dropdown-item" onclick="abrirPaginaPedirJogo()">🎮 Pedir Jogo</div>
-                        <div class="dropdown-item" onclick="abrirPaginaDenunciarJogo()">⚠️ Denunciar Jogo</div>
+                        <div class="dropdown-item" onclick="abrirPaginaPedirJogo()">Pedir Jogo</div>
+                        <div class="dropdown-item" onclick="abrirPaginaDenunciarJogo()">Denunciar Jogo</div>
                         <div class="dropdown-item" onclick="alert('Precisa de ajuda? Fale no nosso canal oficial!')">Suporte</div>      
                         <div class="dropdown-item" onclick="alert('1. Selecione o jogo\n2. Clique em Instalar/Baixar\n3. Divirta-se!')">Ajuda</div>      
                     </div>      
@@ -726,12 +726,12 @@
         <!-- PAINEL ADMIN RESTREITO -->
         <div id="inicio" class="tab-content">      
             <header style="margin-bottom: 15px;">      
-                <h1 style="font-size: 1.4rem; color: var(--play-blue);">🔒 Painel do Administrador</h1>      
+                <h1 style="font-size: 1.4rem; color: var(--play-blue);">Painel do Administrador</h1>      
                 <p style="font-size: 0.8rem; color: var(--text-sub);">Gerencie jogos e copie o código atualizado</p>      
             </header>      
 
             <div class="form-card">      
-                <h2>📋 Código HTML Atualizado</h2>      
+                <h2>Código HTML Atualizado</h2>      
                 <textarea id="codigoGeradoArea" rows="5" readonly style="width:100%; background:#000; color:#5cdb95; font-family:monospace; font-size:0.75rem; padding:8px; border-radius:6px; resize:none;"></textarea>      
                 <button type="button" class="btn-primary" onclick="copiarCodigoPainel()" style="margin-top: 8px;">Copiar Código</button>      
             </div>      
@@ -809,9 +809,9 @@
 
         <!-- ABA PEDIR JOGO -->
         <div id="pedirJogoTab" class="tab-content">      
-            <button class="back-btn" onclick="switchTab('jogos')">← Voltar</button>
+            <button class="back-btn" onclick="switchTab('jogos')">Voltar</button>
             <div class="form-card">      
-                <h2>🎮 Pedir um Jogo</h2>      
+                <h2>Pedir um Jogo</h2>      
                 <p style="font-size: 0.8rem; color: var(--text-sub); margin-bottom: 12px;">Solicite um jogo e envie diretamente para o nosso WhatsApp!</p>      
                 <form id="pedirJogoForm" onsubmit="enviarPedidoWhatsapp(event)">      
                     <div class="input-group">      
@@ -838,9 +838,9 @@
 
         <!-- ABA DENUNCIAR JOGO -->
         <div id="denunciarJogoTab" class="tab-content">      
-            <button class="back-btn" onclick="switchTab('jogos')">← Voltar</button>
+            <button class="back-btn" onclick="switchTab('jogos')">Voltar</button>
             <div class="form-card">      
-                <h2>⚠️ Denunciar um Jogo</h2>      
+                <h2>Denunciar um Jogo</h2>      
                 <p style="font-size: 0.8rem; color: var(--text-sub); margin-bottom: 12px;">Link quebrado ou arquivo com erro? Nos avise no WhatsApp.</p>      
                 <form id="denunciarJogoForm" onsubmit="enviarDenunciaWhatsapp(event)">      
                     <div class="input-group">      
@@ -867,12 +867,12 @@
 
         <!-- ABA DE DETALHES ESTILO PLAY STORE -->
         <div id="detalhes" class="tab-content">      
-            <button class="back-btn" onclick="switchTab('jogos')">← Voltar</button>      
+            <button class="back-btn" onclick="switchTab('jogos')">Voltar</button>      
             <div id="gameDetailContent"></div>      
         </div>      
 
         <div class="admin-login-area" onclick="solicitarSenha()">      
-            PSP GAMER STORE &copy; Play Store Edition    
+            PSP GAMER STORE - Play Store Edition    
         </div>  
     </div>    
 
@@ -1317,7 +1317,7 @@
                 if (aviso) aviso.innerText = "Desbloqueado!";      
             }      
 
-            const textoMensagem = encodeURIComponent("🔥 Baixe os melhores jogos de PSP, PS2 e APK de graça no PSP GAMER STORE! Siga o canal oficial: " + LINK_CANAL_COMPARTILHAR);      
+            const textoMensagem = encodeURIComponent("Baixe os melhores jogos de PSP, PS2 e APK de graça no PSP GAMER STORE! Siga o canal oficial: " + LINK_CANAL_COMPARTILHAR);      
             window.open(`https://api.whatsapp.com/send?text=${textoMensagem}`, '_blank');      
         }      
 
@@ -1531,8 +1531,8 @@
             const plataforma = document.getElementById('pedidoPlataforma').value;      
             const obs = document.getElementById('pedidoObs').value.trim();      
 
-            let mensagem = `Olá! Quero pedir um jogo:\n\n🎮 *Jogo:* ${nomeJogo}\n💻 *Plataforma:* ${plataforma}`;      
-            if (obs) mensagem += `\n📝 *Obs:* ${obs}`;      
+            let mensagem = `Olá! Quero pedir um jogo:\n\n- Jogo: ${nomeJogo}\n- Plataforma: ${plataforma}`;      
+            if (obs) mensagem += `\n- Obs: ${obs}`;      
 
             window.open(`https://wa.me/258843843479?text=${encodeURIComponent(mensagem)}`, '_blank');      
         }      
@@ -1543,7 +1543,7 @@
             const motivo = document.getElementById('denunciaMotivo').value;      
             const detalhes = document.getElementById('denunciaDetalhes').value.trim();      
 
-            let mensagem = `⚠️ *DENÚNCIA DE JOGO*\n\n🎮 *Jogo:* ${nomeJogo}\n🚨 *Motivo:* ${motivo}\n📝 *Detalhes:* ${detalhes}`;      
+            let mensagem = `DENÚNCIA DE JOGO\n\n- Jogo: ${nomeJogo}\n- Motivo: ${motivo}\n- Detalhes: ${detalhes}`;      
             window.open(`https://wa.me/258843843479?text=${encodeURIComponent(mensagem)}`, '_blank');      
         }      
 
@@ -1640,13 +1640,13 @@
                         <img src="${game.image}" alt="${game.name}">      
                         <div class="detail-header-info">      
                             <h2>${game.name}</h2>      
-                            <div class="detail-sub">${game.category} • ${game.status}</div>      
+                            <div class="detail-sub">${game.category} - ${game.status}</div>      
                         </div>      
                     </div>      
 
                     <div class="detail-stats">
                         <div class="stat-item">
-                            <span class="stat-value">4.9 ★</span>
+                            <span class="stat-value">4.9 estrelas</span>
                             <span class="stat-label">Avaliação</span>
                         </div>
                         <div class="stat-item">
@@ -1692,7 +1692,7 @@
             filtrados.forEach((game, index) => {      
                 const card = document.createElement('div');      
                 card.className = 'game-card';      
-                card.style.animationDelay = `${index * 0.04}s`; // Animação sequencial suave ao buscar
+                card.style.animationDelay = `${index * 0.04}s`; 
                 card.onclick = () => verDetalhesDoJogo(game.id);      
 
                 let botoesAdminHtml = '';      
@@ -1714,8 +1714,8 @@
                         <div class="game-info">      
                             <h3>${game.name}</h3>      
                             <div class="game-meta">      
-                                <span>📦 ${game.size}</span>      
-                                <span>• ${game.format}</span>      
+                                <span>Tamanho: ${game.size}</span>      
+                                <span>- ${game.format}</span>      
                             </div>      
                             <button class="play-install-btn">Instalar</button>      
                         </div>      
