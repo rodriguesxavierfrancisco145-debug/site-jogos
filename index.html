@@ -727,13 +727,18 @@
         <div id="inicio" class="tab-content">      
             <header style="margin-bottom: 15px;">      
                 <h1 style="font-size: 1.4rem; color: var(--play-blue);">Painel do Administrador</h1>      
-                <p style="font-size: 0.8rem; color: var(--text-sub);">Gerencie jogos e copie o código atualizado</p>      
+                <p style="font-size: 0.8rem; color: var(--text-sub);">Gerencie jogos, altere o código do site e layout completo</p>      
             </header>      
 
-            <div class="form-card">      
-                <h2>Código HTML Atualizado</h2>      
-                <textarea id="codigoGeradoArea" rows="5" readonly style="width:100%; background:#000; color:#5cdb95; font-family:monospace; font-size:0.75rem; padding:8px; border-radius:6px; resize:none;"></textarea>      
-                <button type="button" class="btn-primary" onclick="copiarCodigoPainel()" style="margin-top: 8px;">Copiar Código</button>      
+            <!-- EDITOR COMPLETO DO SITE -->
+            <div class="form-card" style="border: 1px solid var(--play-green);">      
+                <h2 style="color: var(--play-green);">Editor Completo do Código do Site</h2>
+                <p style="font-size: 0.78rem; color: var(--text-sub); margin-bottom: 8px;">Edite qualquer parte do código (nome do site, cores CSS, layout, menus). Depois clique em "Aplicar Alterações e Gerar Código".</p>
+                <textarea id="codigoGeradoArea" rows="12" style="width:100%; background:#000; color:#5cdb95; font-family:monospace; font-size:0.75rem; padding:10px; border-radius:6px; resize:vertical; border: 1px solid var(--border-color);"></textarea>      
+                <div style="display: flex; gap: 8px; margin-top: 10px;">
+                    <button type="button" class="btn-primary" onclick="aplicarAlteracoesDoEditor()" style="flex: 1; background: linear-gradient(135deg, #38bdf8, #0072ff); color: white;">Aplicar Alterações</button>
+                    <button type="button" class="btn-primary" onclick="copiarCodigoPainel()" style="flex: 1;">Copiar Código</button>
+                </div>
             </div>      
 
             <div class="form-card">      
@@ -1347,15 +1352,41 @@
         function atualizarCaixaCodigoGerado() {      
             const textarea = document.getElementById('codigoGeradoArea');      
             if (!textarea) return;      
-            textarea.value = `let listaJogosCache = ` + JSON.stringify(listaJogosCache, null, 2) + `;\n\nlet listaBannersCache = ` + JSON.stringify(listaBannersCache, null, 2) + `;`;      
+            
+            let htmlCompleto = document.documentElement.outerHTML;
+            
+            const regexJogos = /let listaJogosCache\s*=\s*\[[\s\S]*?\];/;
+            const regexBanners = /let listaBannersCache\s*=\s*\[[\s\S]*?\];/;
+            
+            let novoArrayJogosStr = `let listaJogosCache = ` + JSON.stringify(listaJogosCache, null, 2) + `;`;
+            let novoArrayBannersStr = `let listaBannersCache = ` + JSON.stringify(listaBannersCache, null, 2) + `;`;
+            
+            htmlCompleto = htmlCompleto.replace(regexJogos, novoArrayJogosStr);
+            htmlCompleto = htmlCompleto.replace(regexBanners, novoArrayBannersStr);
+            
+            textarea.value = "<!DOCTYPE html>\n<html lang=\"pt-BR\">\n" + htmlCompleto + "\n</html>";      
         }      
+
+        function aplicarAlteracoesDoEditor() {
+            const textarea = document.getElementById('codigoGeradoArea');
+            if (!textarea || !textarea.value.trim()) return;
+
+            try {
+                document.open();
+                document.write(textarea.value);
+                document.close();
+                mostrarStatusSync("Alterações do site aplicadas!");
+            } catch (err) {
+                alert("Erro ao aplicar as alterações do código. Verifique se o HTML está correto.");
+            }
+        }
 
         function copiarCodigoPainel() {      
             const textarea = document.getElementById('codigoGeradoArea');      
             if (!textarea) return;      
             textarea.select();      
             navigator.clipboard.writeText(textarea.value);      
-            mostrarStatusSync("Código copiado!");      
+            mostrarStatusSync("Código completo copiado!");      
         }      
 
         window.addEventListener('DOMContentLoaded', () => {      
@@ -1574,7 +1605,7 @@
                 switchTab('inicio');      
                 atualizarCaixaCodigoGerado();      
                 gameForm.reset();      
-                mostrarStatusSync("Jogo salvo!");      
+                mostrarStatusSync("Jogo salvo e código atualizado!");      
             });      
         }      
 
@@ -1584,7 +1615,7 @@
                 renderGames();      
                 switchTab('inicio');      
                 atualizarCaixaCodigoGerado();      
-                mostrarStatusSync("Jogo excluído!");      
+                mostrarStatusSync("Jogo excluído e código atualizado!");      
             }      
         }      
 
