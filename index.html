@@ -1513,7 +1513,7 @@
 
         // Lógica do Bloqueio de Compartilhamento (0/5)      
         const LINK_CANAL_COMPARTILHAR = "https://whatsapp.com/channel/0029VbDVqMICBtx8ZZL1Vx3K";      
-        let progressoCompartilhamento = parseInt(localStorage.getItem('psp_share_count') || '0');      
+        let progressoCompartilhamento = 0;      
 
         function atualizarInterfaceBloqueio() {      
             const contadorText = document.getElementById('shareCounterText');      
@@ -1533,7 +1533,6 @@
             if (progressoCompartilhamento >= 5) return;      
 
             progressoCompartilhamento++;      
-            localStorage.setItem('psp_share_count', progressoCompartilhamento);      
             atualizarInterfaceBloqueio();      
 
             const aviso = document.getElementById('shareMsgAviso');      
