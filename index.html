@@ -36,7 +36,6 @@
             padding: 0 16px;
         }
 
-        /* HEADER ESTILO PLAY STORE */
         .play-header {
             position: sticky;
             top: 0;
@@ -161,7 +160,6 @@
         .dropdown-item:last-child { border-bottom: none; }
         .dropdown-item:hover { background-color: var(--surface-variant); color: var(--play-blue); }
 
-        /* ABAS ESTILO CATEGORIA PLAY STORE */
         .categories {
             display: flex;
             gap: 8px;
@@ -198,7 +196,6 @@
             box-shadow: 0 0 12px rgba(0,255,136,0.3);
         }
 
-        /* CARROSSEL DE DESTAQUES */
         .carousel-container {
             position: relative;
             width: 100%;
@@ -268,7 +265,6 @@
             box-shadow: 0 0 8px var(--play-green);
         }
 
-        /* SEÇÃO DE TÍTULOS DE JOGOS */
         .section-header {
             display: flex;
             justify-content: space-between;
@@ -283,7 +279,6 @@
             letter-spacing: 0.3px;
         }
 
-        /* GRADE DE JOGOS & ANIMAÇÕES DE BUSCA */
         .games-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -387,6 +382,7 @@
             display: block;
             box-shadow: 0 4px 12px rgba(0, 255, 136, 0.3);
             transition: all 0.2s;
+            text-decoration: none;
         }
 
         .play-install-btn:hover { 
@@ -394,7 +390,6 @@
             box-shadow: 0 6px 16px rgba(0, 255, 136, 0.5); 
         }
 
-        /* TELA DE DETALHES DO JOGO */
         .game-detail-card {
             background: var(--surface-color);
             border-radius: 16px;
@@ -492,7 +487,6 @@
 
         .back-btn:hover { background: var(--surface-variant); }
 
-        /* FORMULÁRIOS & ADMIN */
         .form-card {
             background: var(--surface-color);
             padding: 20px;
@@ -551,7 +545,6 @@
         .delete-btn { background: linear-gradient(135deg, #f43f5e, #cc0033); color: white; border: none; padding: 8px; border-radius: 8px; width: 100%; font-size: 0.78rem; font-weight: bold; margin-top: 6px; cursor: pointer;}
         .edit-btn { background: linear-gradient(135deg, #fbbf24, #d97706); color: #0d0e12; border: none; padding: 8px; border-radius: 8px; width: 100%; font-size: 0.78rem; font-weight: bold; margin-top: 6px; cursor: pointer;}
 
-        /* MODAIS E FLOATING OVERLAYS */
         #shareLockOverlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -647,14 +640,12 @@
 </head>
 
 <body>  
-    <!-- ÍCONE FLUTUANTE DO WHATSAPP -->
     <a href="https://whatsapp.com/channel/0029VbDVqMICBtx8ZZL1Vx3K" target="_blank" class="whatsapp-floating-icon" title="Siga nosso canal no WhatsApp">
         <svg viewBox="0 0 24 24">
             <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.124-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
         </svg>
     </a>
 
-    <!-- TELA DE BLOQUEIO DE COMPARTILHAMENTO -->      
     <div id="shareLockOverlay">      
         <div class="share-lock-card">      
             <h2 style="color: var(--text-main); font-size: 1.25rem; margin-bottom: 8px;">Acesso Bloqueado</h2>      
@@ -670,7 +661,7 @@
         </div>  
     </div>    
 
-    <div id="syncStatus">Código gerado com sucesso!</div>    
+    <div id="syncStatus">Sincronizado com sucesso!</div>    
     
     <div id="whatsappFloatingBanner">      
         <div class="wa-banner-content">      
@@ -685,7 +676,6 @@
     </div>    
 
     <div class="container">
-        <!-- HEADER ESTILO PLAY STORE -->
         <header class="play-header">
             <div class="top-bar">      
                 <div class="brand-container" onclick="solicitarSenha()">
@@ -707,7 +697,6 @@
                 <input type="text" class="search-box" id="searchInput" placeholder="Pesquisar jogos e apps..." oninput="renderGames()">
             </div>
 
-            <!-- NAVEGAÇÃO DE ABAS / CHIPS -->
             <div class="categories">      
                 <button class="cat-btn active" onclick="filtrarCategoria('Todos', this)">Todos</button>      
                 <button class="cat-btn" onclick="filtrarCategoria('PSP', this)">PSP</button>      
@@ -717,30 +706,18 @@
             </div> 
         </header>
 
-        <!-- BANNER DE CARROSSEL EM DESTAQUE -->
         <div class="carousel-container" id="carouselContainer">      
             <div class="carousel-track" id="carouselTrack"></div>      
             <div class="carousel-indicators" id="carouselIndicators"></div>      
         </div>      
 
-        <!-- PAINEL ADMIN RESTREITO -->
         <div id="inicio" class="tab-content">      
             <header style="margin-bottom: 15px;">      
                 <h1 style="font-size: 1.4rem; color: var(--play-blue);">Painel do Administrador</h1>      
-                <p style="font-size: 0.8rem; color: var(--text-sub);">Gerencie jogos e copie o código atualizado</p>      
+                <p style="font-size: 0.8rem; color: var(--text-sub);">Gerencie jogos na Nuvem (Banco de Dados)</p>      
             </header>      
 
             <div class="form-card">      
-                <h2>Código HTML Atualizado</h2>      
-                <textarea id="codigoGeradoArea" rows="5" readonly style="width:100%; background:#000; color:#5cdb95; font-family:monospace; font-size:0.75rem; padding:8px; border-radius:6px; resize:none;"></textarea>      
-                <button type="button" class="btn-primary" onclick="copiarCodigoPainel()" style="margin-top: 8px;">Copiar Código</button>      
-            </div>      
-
-            <div class="form-card">      
-                <h2>Gerenciar Banners do Carrossel</h2>      
-                <div id="carouselFormList" style="margin-bottom: 10px;"></div>      
-                <button type="button" class="btn-primary" onclick="salvarBannersCarrossel()" style="margin-bottom: 20px;">Atualizar Banners</button>      
-
                 <h2 id="formTitle">Publicar Novo Jogo</h2>      
                 <form id="gameForm">      
                     <input type="hidden" id="editGameId">      
@@ -797,17 +774,15 @@
             </div>
         </div>      
 
-        <!-- ABA DE EXIBIÇÃO DE JOGOS -->
         <div id="jogos" class="tab-content active">     
             <div class="section-header">
                 <h2>Recomendados para você</h2>
             </div> 
             <div class="games-grid" id="gamesGrid">      
-                <p class="empty-msg">Carregando catálogo Play Store...</p>      
+                <p class="empty-msg">Carregando jogos da nuvem...</p>      
             </div>      
         </div>      
 
-        <!-- ABA PEDIR JOGO -->
         <div id="pedirJogoTab" class="tab-content">      
             <button class="back-btn" onclick="switchTab('jogos')">Voltar</button>
             <div class="form-card">      
@@ -836,7 +811,6 @@
             </div>      
         </div>      
 
-        <!-- ABA DENUNCIAR JOGO -->
         <div id="denunciarJogoTab" class="tab-content">      
             <button class="back-btn" onclick="switchTab('jogos')">Voltar</button>
             <div class="form-card">      
@@ -865,525 +839,22 @@
             </div>      
         </div>      
 
-        <!-- ABA DE DETALHES ESTILO PLAY STORE -->
         <div id="detalhes" class="tab-content">      
             <button class="back-btn" onclick="switchTab('jogos')">Voltar</button>      
             <div id="gameDetailContent"></div>      
         </div>      
 
         <div class="admin-login-area" onclick="solicitarSenha()">      
-            PSP GAMER STORE - Play Store Edition    
+            PSP GAMER STORE - Cloud Database Edition    
         </div>  
     </div>    
 
     <script>      
-        let listaJogosCache = [
-          {
-            "id": 1790937103530,
-            "name": "God of War: Chains of Olympus",
-            "image": "https://i.ibb.co/4nhr0dZz/unnamed.jpg",
-            "category": "PSP",
-            "size": "1.20GB",
-            "format": "ISO",
-            "status": "Grátis",
-            "description": "Luta, Ação e aventura",
-            "link": "https://archive.org/download/god-of-war-chains-of-olympus-usa/God%20of%20War%20-%20Chains%20of%20Olympus%20%28USA%29.zip",
-            "btnText": "Instalar (Download Direto)"
-          },
-          {
-            "id": 1790954010898,
-            "name": "God of War: Ghost of Sparta",
-            "image": "https://i.ibb.co/TxBqvzhs/unnamed-1.jpg",
-            "category": "PSP",
-            "size": "1.75GB",
-            "format": "ISO",
-            "status": "Grátis",
-            "description": "Luta, Ação",
-            "link": "https://archive.org/download/god-of-war-ghost-of-sparta-usa-en-fr-es/God%20of%20War%20-%20Ghost%20of%20Sparta%20%28USA%29%20%28En%2CFr%2C%2CEs%2C.iso",
-            "btnText": "Instalar (Download Direto)"
-          },
-          {
-            "id": 1790954322384,
-            "name": "Grand Theft Auto: Liberty City Stories",
-            "image": "https://i.ibb.co/Cp1mQ9zx/unnamed-2.jpg",
-            "category": "PSP",
-            "size": "1.26GB",
-            "format": "ISO",
-            "status": "Grátis",
-            "description": "Luta, Ação",
-            "link": "https://archive.org/download/GrandTheftAutoLibertyCityStoriesUSAEnFrDeEsItv3.00/Grand%20Theft%20Auto%20-%20Liberty%20City%20Stories%20%28USA%29%20%28En%2CFr%2CDe%2CEs%2CIt%29%20%28v3.00%29.iso",
-            "btnText": "Instalar (Download Direto)"
-          },
-          {
-            "id": 1790954983808,
-            "name": "Grand Theft Auto: Vice City Stories",
-            "image": "https://i.ibb.co/sJjVVbZc/unnamed-3.jpg",
-            "category": "PSP",
-            "size": "1.70GB",
-            "format": "ISO",
-            "status": "Grátis",
-            "description": "Aventura e Ação RPG",
-            "link": "https://archive.org/download/grand-theft-auto-vice-city-stories-usa/Grand%20Theft%20Auto%20-%20Vice%20City%20Stories%20%28USA%29.iso",
-            "btnText": "Instalar (Download Direto)"
-          },
-          {
-            "id": 1790956761561,
-            "name": "Naruto: Ultimate Ninja 3",
-            "image": "https://i.ibb.co/xVC8GL6/unnamed-4.jpg",
-            "category": "PSP",
-            "size": "1.21GB",
-            "format": "ZIP",
-            "status": "Grátis",
-            "description": "Luta",
-            "link": "https://archive.org/download/naruto-shippuden-ultimate-ninja-heroes-3-usa_202601/Naruto%20Shippuden%20-%20Ultimate%20Ninja%20Heroes%203%20%28USA%29.zip",
-            "btnText": "Instalar (Download Direto)"
-          },
-          {
-            "id": 1790956999349,
-            "name": "Bleach: Heat the Soul 7",
-            "image": "https://i.ibb.co/DfRP19jH/unnamed-5.jpg",
-            "category": "PSP",
-            "size": "424.89MB",
-            "format": "ZIP",
-            "status": "Grátis",
-            "description": "Luta",
-            "link": "https://archive.org/download/bleach-heat-the-soul-7/Bleach%20-%20Heat%20the%20Soul%207%20%28Asia%29.zip",
-            "btnText": "Instalar (Download Direto)"
-          },
-          {
-            "id": 1790961002839,
-            "name": "Def jam: Fight for NY-The Takeover",
-            "image": "https://i.ibb.co/yBFQHRxp/unnamed-6.jpg",
-            "category": "PSP",
-            "size": "502.20MB",
-            "format": "ZIP",
-            "status": "Grátis",
-            "description": "Luta",
-            "link": "https://archive.org/download/playstation-portable-rom-def-jam-fight-for-ny-the-takeover/Def%20Jam%20-%20Fight%20for%20NY%20-%20The%20Takeover%20%28USA%29%20%28v1.01%29.zip",
-            "btnText": "Instalar (Download Direto)"
-          },
-          {
-            "id": 1790961425208,
-            "name": "UFC: Undisputed 2010",
-            "image": "https://i.ibb.co/vxTRHhHp/unnamed-7.jpg",
-            "category": "PSP",
-            "size": "1.43GB",
-            "format": "ZIP",
-            "status": "Grátis",
-            "description": "Luta",
-            "link": "https://archive.org/download/ufc-2010-undisputed-usa/UFC%202010%20Undisputed%20%28USA%29.zip",
-            "btnText": "Instalar (Download Direto)"
-          },
-          {
-            "id": 1790963121413,
-            "name": "Grand Theft: Auto Sanandreas",
-            "image": "https://i.ibb.co/Rp9gRCt1/unnamed-8.jpg",
-            "category": "APK",
-            "size": "2.62GB",
-            "format": "APK",
-            "status": "Grátis",
-            "description": "RPG",
-            "link": "https://archive.org/download/gta-sa-5play/gta-sa-2.11.277-mod-menu-5play.apk",
-            "btnText": "Instalar (Download Direto)"
-          },
-          {
-            "id": 1790963352828,
-            "name": "Tekken: Dark Resurrection",
-            "image": "https://i.ibb.co/hFZ6wpMd/unnamed-9.jpg",
-            "category": "PSP",
-            "size": "1.75GB",
-            "format": "ISO",
-            "status": "Grátis",
-            "description": "Luta",
-            "link": "https://archive.org/download/tekken-dark-resurrection-usa-psp_202603_ver2/a-tekken.iso",
-            "btnText": "Instalar (Download Direto)"
-          },
-          {
-            "id": 1790963815728,
-            "name": "Red Dead Redemption",
-            "image": "https://i.ibb.co/JjnRPKMK/58b6e9bc7801b5a60410a7f75ec6b890.jpg",
-            "category": "APK",
-            "size": "2.89GB",
-            "format": "APK",
-            "status": "Grátis",
-            "description": "RPG mundo aberto",
-            "link": "https://files.an1.co/red-dead-redemption-mods_1.58.63226194-an1.com.apk",
-            "btnText": "Instalar (Download Direto)"
-          },
-          {
-            "id": 1791120442202,
-            "name": "Minecraft",
-            "image": "https://i.ibb.co/RpCzK4Bb/unnamed.jpg",
-            "category": "APK",
-            "size": "127.15MB",
-            "format": "APK",
-            "status": "Grátis ",
-            "description": "Aventura ",
-            "link": "https://www.google.com/url?q=https%3A%2F%2Farchive.org%2Fdownload%2Fminecraft-apkmodget.com%2FMinecraft-Free-Edition.apk&sa=D&sntz=1&usg=AOvVaw05urVVQJ6yu2Sa4SIHkjH8",
-            "btnText": "Instalar (Download Direto)"
-          },
-          {
-            "id": 1791133142943,
-            "name": "The Warriors",
-            "image": "https://i.ibb.co/xS27F8PZ/e9e8c0e73e59222e7eefd102ee1bba21.jpg",
-            "category": "PS2",
-            "size": "4.30GB",
-            "format": "ISO",
-            "status": "Grátis ",
-            "description": "Luta de rua ",
-            "link": "https://archive.org/download/the-warriors-ps2/Warriors%2C%20The.iso",
-            "btnText": "Instalar (Download Direto)"
-          },
-          {
-            "id": 1791144001710,
-            "name": "Midnight Club 3: DUB Edition",
-            "image": "https://i.ibb.co/sGMK8HX/a6d9cd56df8bea6c10a076d06c8a6e92.jpg",
-            "category": "PSP",
-            "size": "1.00GB",
-            "format": "ZIP",
-            "status": "Grátis ",
-            "description": "Corrida ",
-            "link": "https://archive.org/download/midnight-club-3-dub-edition-usa/Midnight%20Club%203%20-%20DUB%20Edition%20%28USA%29.zip",
-            "btnText": "Instalar (Download Direto)"
-          },
-          {
-            "id": 1791178391721,
-            "name": "Star Wars: Battlefront II",
-            "image": "https://i.ibb.co/KcyHRrnr/0363bb2b91ddf7be38f5b3219f701f26.jpg",
-            "category": "PSP",
-            "size": "738.66MB",
-            "format": "ISO",
-            "status": "Grátis ",
-            "description": "Luta , Ação ",
-            "link": "https://archive.org/download/PSPStarWarsBattlefrontIIUSA/Star%20Wars%20-%20Battlefront%20II%20%28USA%29.iso",
-            "btnText": "Instalar (Download Direto)"
-          },
-          {
-            "id": 1791180573894,
-            "name": "Burnout Legends",
-            "image": "https://i.ibb.co/rRJvBhQm/fa9969b247a3366e4e05665e14268249.jpg",
-            "category": "PSP",
-            "size": "500.30MB",
-            "format": "ISO",
-            "status": "Grátis ",
-            "description": "Corrida ",
-            "link": "https://archive.org/download/burnout-legends-usa-en-fr-de-es-it-nl_202601/Burnout%20Legends%20%28USA%29%20%28En%2CFr%2CDe%2CEs%2CIt%2CNl%29.iso",
-            "btnText": "Instalar (Download Direto)"
-          },
-          {
-            "id": 1791195972900,
-            "name": "Dante’s Inferno",
-            "image": "https://i.ibb.co/YFfh4rCg/c76a3af0efa710daacca3d47fe3067ac.jpg",
-            "category": "PSP",
-            "size": "1.81GB",
-            "format": "ISO",
-            "status": "Grátis ",
-            "description": "Todos os androids - Roda em 60FPS",
-            "link": "https://archive.org/download/PSPDantesInfernoUSA/Dante%27s%20Inferno%20%28USA%29.iso",
-            "btnText": "Instalar (Download Direto)"
-          },
-          {
-            "id": 1791304999123,
-            "name": "Need for Speed: Most Wanted",
-            "image": "https://i.ibb.co/C5mNw5D4/21b0157f4b49a67599df0e38b399a9b9.jpg",
-            "category": "PS2",
-            "size": "2.47GB",
-            "format": "7Z",
-            "status": "Grátis ",
-            "description": "Corrida ",
-            "link": "https://dl2.cdromance.org/download.php?file=Need%20for%20Speed%20-%20Most%20Wanted%20%28Europe%29.7z&id=85170&platform=ps2-iso&key=10286066450",
-            "btnText": "Instalar (Download Direto)"
-          },
-          {
-            "id": 1791314531080,
-            "name": "Monster Hunter Freedom Unite",
-            "image": "https://i.ibb.co/pvxTV1tz/96d314d0788c45f04838db4872575f67.jpg",
-            "category": "PSP",
-            "size": "783.98MB",
-            "format": "7Z",
-            "status": "Grátis ",
-            "description": "Aventura e RPG",
-            "link": "https://dl9a.cdromance.org/download.php?file=Monster_Hunter_Freedom_Unite_USA_PSP-BAHAMUT.7z&id=80547&platform=psp&key=9138381868",
-            "btnText": "Instalar (Download Direto)"
-          },
-          {
-            "id": 1791395911016,
-            "name": "Spider-Man 3",
-            "image": "https://i.ibb.co/39S4CBdt/5cc5503d87d00c95c6e87b9f3082348b.jpg",
-            "category": "PSP",
-            "size": "1.68GB",
-            "format": "ISO",
-            "status": "Grátis ",
-            "description": "Ação e aventura ",
-            "link": "https://archive.org/download/spider-man-3_202311/Spider-Man%203.iso",
-            "btnText": "Instalar (Download Direto)"
-          },
-          {
-            "id": 1791487309610,
-            "name": "Lord of the Rings: Aragorn's Quest ",
-            "image": "https://i.ibb.co/Q7TBTxpz/d5d177097533e08815b09a0a79a89abc.jpg",
-            "category": "PSP",
-            "size": "263.77MB",
-            "format": "7Z",
-            "status": "Grátis ",
-            "description": "Ação e aventura ",
-            "link": "https://dl5b.cdromance.org/download.php?file=Lord.of.the.Rings.Aragorns.Quest.EUR.PSP-WARG.7z&id=28472&platform=psp&key=6520439848",
-            "btnText": "Instalar (Download Direto)"
-          },
-          {
-            "id": 1791488560025,
-            "name": "Star Wars: The Force Unleashed",
-            "image": "https://i.ibb.co/GQfPcmN9/d6d64793ea32025bcd382ccbdf419c1c.jpg",
-            "category": "PSP",
-            "size": "1.11GB",
-            "format": "ISO",
-            "status": "Grátis ",
-            "description": "Ação ",
-            "link": "https://archive.org/download/PSPStarWarsTheForceUnleashedUSAEnFr/Star%20Wars%20-%20The%20Force%20Unleashed%20%28USA%29%20%28En%2CFr%29.iso",
-            "btnText": "Instalar (Download Direto)"
-          },
-          {
-            "id": 1791489632368,
-            "name": "​Ben 10: Protector of Earth ",
-            "image": "https://i.ibb.co/p6hML9R6/bc5c5312b2dab98c670ac13d0a40308e.jpg",
-            "category": "PSP",
-            "size": "685.21MB",
-            "format": "ISO",
-            "status": "Grátis ",
-            "description": "Ação, luta e aventura ",
-            "link": "https://archive.org/download/pspben10protectorofearthusa/Ben%2010%20-%20Protector%20of%20Earth%20%28USA%29.iso",
-            "btnText": "Instalar (Download Direto)"
-          },
-          {
-            "id": 1791658481931,
-            "name": "Wreckfest",
-            "image": "https://i.ibb.co/M5BZdB8K/0e2014ed07940eaebd5a64de9a07bac7.jpg",
-            "category": "PC",
-            "size": "22.41GB",
-            "format": "RAR",
-            "status": "Grátis ",
-            "description": "Corrida ",
-            "link": "https://archive.org/download/wf-repack-t1coon/Wreckfest%20%5BMULTi-ENG-RUS%5D%20%5BR%5D%20%5TN%5D.rar",
-            "btnText": "Instalar (Download Direto)"
-          },
-          {
-            "id": 1791661302767,
-            "name": "Cyberpunk 2077",
-            "image": "https://i.ibb.co/PG8zTZHC/ab171c6614207dec109bebc90213fd73.jpg",
-            "category": "PC",
-            "size": "88.74GB",
-            "format": "ZIP",
-            "status": "Grátis ",
-            "description": "Ação e luta ",
-            "link": "https://archive.org/download/cyberpunk-2077_202607/Cyberpunk%202077.zip",
-            "btnText": "Instalar (Download Direto)"
-          },
-          {
-            "id": 1791662789957,
-            "name": "Metal Gear Solid 3: Snake Eater",
-            "image": "https://i.ibb.co/4ZWpx34K/b54cb81a69f13c4e56984d74ef4f6624.jpg",
-            "category": "PS2",
-            "size": "3.61GB",
-            "format": "ZIP",
-            "status": "Grátis ",
-            "description": "Guerra e Ação ",
-            "link": "https://archive.org/download/metal-gear-solid-3-snake-eater-usa_202603/Metal%20Gear%20Solid%203%20-%20Snake%20Eater%20%28USA%29.zip",
-            "btnText": "Instalar (Download Direto)"
-          },
-          {
-            "id": 1791666732197,
-            "name": "Grand Theft Auto V",
-            "image": "https://i.ibb.co/JRjQDknk/8388323c59abc8fc8f5f2c270240d6ba.jpg",
-            "category": "PC",
-            "size": "114.31GB",
-            "format": "ISO",
-            "status": "Grátis ",
-            "description": "Ação e aventura ",
-            "link": "https://archive.org/download/grand-theft-auto-v_202508/Grand%20Theft%20Auto%20V.iso",
-            "btnText": "Instalar (Download Direto)"
-          },
-          {
-            "id": 1791703758723,
-            "name": "Resident Evil 4",
-            "image": "https://i.ibb.co/KxCLDZff/30045efd9ccdb405be54e1126d0ea0a9.jpg",
-            "category": "PS2",
-            "size": "3.16GB",
-            "format": "ISO",
-            "status": "Grátis ",
-            "description": "Ação, aventura e luta",
-            "link": "https://archive.org/download/sles-537.02.-resident-evil-4/SLES_537.02.Resident%20Evil%204.iso",
-            "btnText": "Instalar (Download Direto)"
-          },
-          {
-            "id": 1791704861354,
-            "name": "Shadow of the Colossus",
-            "image": "https://i.ibb.co/d41p0RWL/915a04402096b8da3ea1b8a9d92b1e4d.jpg",
-            "category": "PS2",
-            "size": "2.69GB",
-            "format": "ISO",
-            "status": "Grátis ",
-            "description": "Ação, luta e aventura ",
-            "link": "https://archive.org/download/scus-974.72.-shadow-of-the-colossus/SCUS_974.72.Shadow%20of%20the%20Colossus.iso",
-            "btnText": "Instalar (Download Direto)"
-          },
-          {
-            "id": 1791740685798,
-            "name": "Avatar: The Last Airbender",
-            "image": "https://i.ibb.co/fzbMLFgB/7bb872fa0450bff644c1578b2e30962b.jpg",
-            "category": "PS2",
-            "size": "2.39GB",
-            "format": "ISO",
-            "status": "Grátis ",
-            "description": "Luta e aventura ",
-            "link": "https://archive.org/download/avatarburningearthps2ptbr/Avatar%3A%20The%20Last%20Airbender%20%E2%80%93%20The%20Burning%20Earth.iso",
-            "btnText": "Instalar (Download Direto)"
-          },
-          {
-            "id": 1792003477949,
-            "name": "Little Nightmares 2 ",
-            "image": "https://i.ibb.co/xKtwCW19/5a2bc820d13d7174758abc814e0ebb8a.jpg",
-            "category": "APK",
-            "size": "1.13GB",
-            "format": "APK",
-            "status": "Grátis ",
-            "description": "Aventura e Ação ",
-            "link": "https://a0375781bc284f28babebca5d9a9079b.r2.cloudflarestorage.com/5play/files/2026-04/little-nightmares-1.4-mod-t-5play.apk?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=08d4c964f7542f75db51096cf375d22b%2F20261014%2Fauto%2Fs3%2Faws4_request&X-Amz-Date=20261014T183946Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=0778535348f120f11258dfb9db0648492a10aaec12f1feaed13312e45f120c9f",
-            "btnText": "Instalar (Download Direto)"
-          },
-          {
-            "id": 1792515873557,
-            "name": "Soulcalibur III",
-            "image": "https://i.ibb.co/Y4msKyfZ/7c66f8dc6821c010ff04bba8d1df3648.jpg",
-            "category": "PS2",
-            "size": "370.45MB",
-            "format": "7Z",
-            "status": "Grátis ",
-            "description": "Luta ",
-            "link": "https://archive.org/download/soulcalibur-iii-sced-53674/Soulcalibur%20III%20PS2%20EUR%20Demo.7z",
-            "btnText": "Instalar (Download Direto)"
-          },
-          {
-            "id": 1793000000001,
-            "name": "Dragon Ball Z: Shin Budokai - Another Road",
-            "image": "https://i.ibb.co/v4m3Py4R/8951e4ad16684926513633741f3cd24d.jpg",
-            "category": "PSP",
-            "size": "529.43MB",
-            "format": "ISO",
-            "status": "Grátis",
-            "description": "Luta em arena 3D com guerreiros Z e transformações incríveis",
-            "link": "https://archive.org/download/pspdragonballzshinbudokaianotherroadusa/Dragon%20Ball%20Z%20-%20Shin%20Budokai%20-%20Another%20Road%20%28USA%29.iso",
-            "btnText": "Instalar (Download Direto)"
-          },
-          {
-            "id": 1793000000002,
-            "name": "Dragon Ball Z: Tenkaichi Tag Team",
-            "image": "https://i.ibb.co/mr3mpRWx/3815cf78c52813e61210b137081fb642.jpg",
-            "category": "PSP",
-            "size": "1.37GB",
-            "format": "ISO",
-            "status": "Grátis",
-            "description": "Batalhas épicas em equipe 2vs2 estilo Budokai Tenkaichi",
-            "link": "https://archive.org/download/pspdragonballztenkaichitagteamusaenfres/Dragon%20Ball%20Z%20-%20Tenkaichi%20Tag%20Team%20%28USA%29%20%28En%2CFr%2CEs%29.iso",
-            "btnText": "Instalar (Download Direto)"
-          },
-          {
-            "id": 1793000000003,
-            "name": "Naruto Shippuden: Ultimate Ninja Impact",
-            "image": "https://i.ibb.co/pj1d3p9j/0efcfb53310295b2ed138af13e7df064.jpg",
-            "category": "PSP",
-            "size": "1.06GB",
-            "format": "ISO",
-            "status": "Grátis",
-            "description": "Luta no estilo Musou com centenas de inimigos simultâneos",
-            "link": "https://archive.org/download/naruto-shippuden-ultimate-ninja-impact-usa-en-fr-es/Naruto%20Shippuden%20-%20Ultimate%20Ninja%20Impact%20%28USA%29%20%28En%2CFr%2CEs%29.iso",
-            "btnText": "Instalar (Download Direto)"
-          },
-          {
-            "id": 1793000000004,
-            "name": "Tekken 6",
-            "image": "https://i.ibb.co/K2sYJmM/tekken-6-psp.jpg",
-            "category": "PSP",
-            "size": "728.50MB",
-            "format": "ISO",
-            "status": "Grátis",
-            "description": "O clássico jogo de luta arcade em 3D completo no PSP",
-            "link": "https://archive.org/download/tekken-6-usa-psp/Tekken%206%20%28USA%29.iso",
-            "btnText": "Instalar (Download Direto)"
-          },
-          {
-            "id": 1793000000005,
-            "name": "Mortal Kombat: Unchained",
-            "image": "https://i.ibb.co/SvtQd6B/mk-unchained.jpg",
-            "category": "PSP",
-            "size": "935.20MB",
-            "format": "ISO",
-            "status": "Grátis",
-            "description": "Luta visceral com Fatalities, personagens e arenas exclusivas",
-            "link": "https://archive.org/download/mortal-kombat-unchained-usa/Mortal%20Kombat%20-%20Unchained%20%28USA%29.iso",
-            "btnText": "Instalar (Download Direto)"
-          },
-          {
-            "id": 1793000000006,
-            "name": "Street Fighter Alpha 3 MAX",
-            "image": "https://i.ibb.co/sKk2kLN/sf-alpha-3-max.jpg",
-            "category": "PSP",
-            "size": "120.40MB",
-            "format": "ISO",
-            "status": "Grátis",
-            "description": "A versão definitiva de Street Fighter Alpha em 2D com mais de 35 lutadores",
-            "link": "https://archive.org/download/street-fighter-alpha-3-max-usa/Street%20Fighter%20Alpha%203%20MAX%20%28USA%29.iso",
-            "btnText": "Instalar (Download Direto)"
-          },
-          {
-            "id": 1793000000007,
-            "name": "BlazBlue: Calamity Trigger Portable",
-            "image": "https://i.ibb.co/tCg9ZzM/blazblue-ct.jpg",
-            "category": "PSP",
-            "size": "1.12GB",
-            "format": "ISO",
-            "status": "Grátis",
-            "description": "Luta anime 2D de ritmo acelerado com gráficos impecáveis e combos rápidos",
-            "link": "https://archive.org/download/blazblue-calamity-trigger-portable-usa/BlazBlue%20-%20Calamity%20Trigger%20Portable%20%28USA%29.iso",
-            "btnText": "Instalar (Download Direto)"
-          },
-          {
-            "id": 1793000000008,
-            "name": "Guilty Gear XX Accent Core Plus",
-            "image": "https://i.ibb.co/gJt3XmD/guilty-gear-xx.jpg",
-            "category": "PSP",
-            "size": "580.30MB",
-            "format": "ISO",
-            "status": "Grátis",
-            "description": "Combates rápidos em 2D com trilha sonora rock/metal e animações incríveis",
-            "link": "https://archive.org/download/guilty-gear-xx-accent-core-plus-usa/Guilty%20Gear%20XX%20Accent%20Core%20Plus%20%28USA%29.iso",
-            "btnText": "Instalar (Download Direto)"
-          },
-          {
-            "id": 1793000000009,
-            "name": "Soulcalibur: Broken Destiny",
-            "image": "https://i.ibb.co/zXp94Yv/soulcalibur-bd.jpg",
-            "category": "PSP",
-            "size": "375.80MB",
-            "format": "ISO",
-            "status": "Grátis",
-            "description": "Luta 3D com armas brancas com participação de Kratos (God of War)",
-            "link": "https://archive.org/download/soulcalibur-broken-destiny-usa/Soulcalibur%20-%20Broken%20Destiny%20%28USA%29.iso",
-            "btnText": "Instalar (Download Direto)"
-          },
-          {
-            "id": 1793000000010,
-            "name": "Fate/Unlimited Codes",
-            "image": "https://i.ibb.co/c8k10M4/fate-unlimited-codes.jpg",
-            "category": "PSP",
-            "size": "480.60MB",
-            "format": "ISO",
-            "status": "Grátis",
-            "description": "Luta 3D frenética inspirada no universo Fate/Stay Night",
-            "link": "https://archive.org/download/fate-unlimited-codes-usa/Fate%20-%20Unlimited%20Codes%20%28USA%29.iso",
-            "btnText": "Instalar (Download Direto)"
-          }
-        ];
+        // SEU BIN ID E CHAVES DO JSONBIN CONFIGURADOS DIRETAMENTE:
+        const BIN_ID = "6ac14773ac6210605a105749";
+        const API_KEY = "$2a$10$IiEJXJC7SzKZwe0fHMpSbu.vrgTI2VdWiSU3ZJXdotVepr1FMekoC";
 
+        let listaJogosCache = [];
         let listaBannersCache = [
           {
             "image": "https://i.ibb.co/Hf9GsdxW/unnamed-4.jpg",
@@ -1410,6 +881,44 @@
 
         const LINK_CANAL_COMPARTILHAR = "https://whatsapp.com/channel/0029VbDVqMICBtx8ZZL1Vx3K";      
         let progressoCompartilhamento = 0;      
+
+        async function carregarDadosDaNuvem() {
+            try {
+                const response = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
+                    headers: { 'X-Master-Key': API_KEY }
+                });
+                const data = await response.json();
+                if (data.record && data.record.jogos) {
+                    listaJogosCache = data.record.jogos;
+                }
+                if (data.record && data.record.banners) {
+                    listaBannersCache = data.record.banners;
+                }
+                renderGames();
+                renderizarCarrossel();
+            } catch (error) {
+                console.error("Erro ao carregar dados da nuvem:", error);
+                document.getElementById('gamesGrid').innerHTML = '<p class="empty-msg">Erro ao carregar jogos da nuvem.</p>';
+            }
+        }
+
+        async function salvarDadosNaNuvem() {
+            try {
+                mostrarStatusSync("Salvando na nuvem...");
+                await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Master-Key': API_KEY
+                    },
+                    body: JSON.stringify({ jogos: listaJogosCache, banners: listaBannersCache })
+                });
+                mostrarStatusSync("Publicado com sucesso para todos!");
+            } catch (error) {
+                console.error("Erro ao salvar:", error);
+                alert("Erro ao salvar no banco de dados.");
+            }
+        }
 
         function atualizarInterfaceBloqueio() {      
             const contadorText = document.getElementById('shareCounterText');      
@@ -1464,24 +973,9 @@
             }, 20000);      
         }      
 
-        function atualizarCaixaCodigoGerado() {      
-            const textarea = document.getElementById('codigoGeradoArea');      
-            if (!textarea) return;      
-            textarea.value = `let listaJogosCache = ` + JSON.stringify(listaJogosCache, null, 2) + `;\n\nlet listaBannersCache = ` + JSON.stringify(listaBannersCache, null, 2) + `;`;      
-        }      
-
-        function copiarCodigoPainel() {      
-            const textarea = document.getElementById('codigoGeradoArea');      
-            if (!textarea) return;      
-            textarea.select();      
-            navigator.clipboard.writeText(textarea.value);      
-            mostrarStatusSync("Código copiado!");      
-        }      
-
         window.addEventListener('DOMContentLoaded', () => {      
             atualizarInterfaceBloqueio();      
-            renderGames();      
-            renderizarCarrossel();      
+            carregarDadosDaNuvem();
             iniciarAutoplayCarrossel();      
             iniciarLoopWhatsappBanner();      
             switchTab('jogos');      
@@ -1568,7 +1062,7 @@
             }      
         }      
 
-        function salvarBannersCarrossel() {      
+        async function salvarBannersCarrossel() {      
             let novosBanners = [];      
             for (let i = 0; i < 4; i++) {      
                 const imgInput = document.getElementById(`bannerImg_${i}`);      
@@ -1584,8 +1078,7 @@
             listaBannersCache = novosBanners;      
             indiceCarrosselAtual = 0;      
             renderizarCarrossel();      
-            atualizarCaixaCodigoGerado();      
-            mostrarStatusSync("Banners atualizados!");      
+            await salvarDadosNaNuvem();
         }      
 
         function toggleMenu(event) {      
@@ -1607,7 +1100,6 @@
             if (localStorage.getItem('isAdmin') === 'true') {      
                 switchTab('inicio');      
                 renderizarInputsAdminBanners();      
-                atualizarCaixaCodigoGerado();      
                 return;      
             }      
             let senha = prompt("Senha de administrador:");      
@@ -1615,7 +1107,6 @@
                 localStorage.setItem('isAdmin', 'true');      
                 switchTab('inicio');      
                 renderizarInputsAdminBanners();      
-                atualizarCaixaCodigoGerado();      
                 renderGames();      
                 alert("Painel liberado!");      
             } else if (senha !== null) {      
@@ -1669,7 +1160,7 @@
 
         const gameForm = document.getElementById('gameForm');      
         if(gameForm) {      
-            gameForm.addEventListener('submit', function(e) {      
+            gameForm.addEventListener('submit', async function(e) {      
                 e.preventDefault();      
 
                 const editId = document.getElementById('editGameId').value;      
@@ -1687,24 +1178,22 @@
                     listaJogosCache = listaJogosCache.map(game => game.id == editId ? { ...game, name, image, category, size, format, status, description, link, btnText } : game);      
                     cancelarEdicao();      
                 } else {      
-                    listaJogosCache.push({ id: Date.now(), name, image, category, size, format, status, description, link, btnText });      
+                    listaJogosCache.unshift({ id: Date.now(), name, image, category, size, format, status, description, link, btnText });      
                 }      
 
+                await salvarDadosNaNuvem();
                 renderGames();      
-                switchTab('inicio');      
-                atualizarCaixaCodigoGerado();      
+                switchTab('jogos');      
                 gameForm.reset();      
-                mostrarStatusSync("Jogo salvo!");      
             });      
         }      
 
-        function deleteGame(id) {      
+        async function deleteGame(id) {      
             if (confirm("Deseja excluir este jogo?")) {      
                 listaJogosCache = listaJogosCache.filter(game => game.id !== id);      
+                await salvarDadosNaNuvem();
                 renderGames();      
-                switchTab('inicio');      
-                atualizarCaixaCodigoGerado();      
-                mostrarStatusSync("Jogo excluído!");      
+                switchTab('jogos');      
             }      
         }      
 
@@ -1729,7 +1218,6 @@
 
             switchTab('inicio');      
             renderizarInputsAdminBanners();      
-            atualizarCaixaCodigoGerado();      
         }      
 
         function cancelarEdicao() {      
