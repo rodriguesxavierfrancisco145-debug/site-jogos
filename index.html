@@ -717,10 +717,10 @@
                 <p style="font-size: 0.8rem; color: var(--text-sub);">Gerencie jogos na Nuvem (Banco de Dados)</p>      
             </header>      
 
-            <!-- NOVO: GERADOR AUTOMÁTICO DO ARCHIVE.ORG -->
+            <!-- GERADOR AUTOMÁTICO DO ARCHIVE.ORG CORRIGIDO -->
             <div class="form-card" style="border-color: var(--play-green); background: rgba(0,255,136,0.03);">
                 <h2 style="color: var(--play-green);">Gerador Automático (Archive.org)</h2>
-                <p style="font-size: 0.8rem; color: var(--text-sub); margin-bottom: 12px;">Digite o nome do jogo para puxar automaticamente capa, tamanho, formato e link do Archive.org:</p>
+                <p style="font-size: 0.8rem; color: var(--text-sub); margin-bottom: 12px;">Digite o nome exato ou termo do jogo para puxar capa, tamanho, formato e link direto do Archive.org:</p>
                 <div class="input-group">
                     <label for="autoGameName">Nome do Jogo para Buscar:</label>
                     <input type="text" id="autoGameName" placeholder="Ex: God of War Chains of Olympus">
@@ -862,7 +862,6 @@
     </div>    
 
     <script>      
-        // SEU BIN ID E CHAVES DO JSONBIN CONFIGURADOS DIRETAMENTE:
         const BIN_ID = "6ac14773ac6210605a105749";
         const API_KEY = "$2a$10$IiEJXJC7SzKZwe0fHMpSbu.vrgTI2VdWiSU3ZJXdotVepr1FMekoC";
 
@@ -932,7 +931,7 @@
             }
         }
 
-        // NOVO: BUSCA AUTOMÁTICA DE DADOS DO ARCHIVE.ORG
+        // BUSCA AUTOMÁTICA ROBUSTA DO ARCHIVE.ORG
         async function buscarJogoArchiveOrg() {
             const nomeInput = document.getElementById('autoGameName').value.trim();
             const statusMsg = document.getElementById('autoStatusMsg');
@@ -941,68 +940,69 @@
                 return;
             }
 
-            statusMsg.innerText = "Buscando no Archive.org...";
+            statusMsg.innerText = "Buscando jogo oficial no Archive.org...";
 
             try {
-                // Consulta a API pública do Archive.org por metadados e arquivos de jogos PSP/consoles
-                const query = encodeURIComponent(`title:(${nomeInput}) AND (mediatype:software OR mediatype:movies)`);
-                const response = await fetch(`https://archive.org/advancedsearch.php?q=${query}&rows=1&page=1&output=json`);
-                const data = await response.json();
+                const query = encodeURIComponent(`title:(${nomeInput}) AND (collection:psp OR collection:ps2 OR subject:psp OR subject:playstation OR mediatype:software)`);
+                const searchRes = await fetch(`https://archive.org/advancedsearch.php?q=${query}&rows=5&page=1&output=json`);
+                const searchData = await searchRes.json();
                 
-                if (data.response && data.response.docs && data.response.docs.length > 0) {
-                    const doc = data.response.docs[0];
-                    const identifier = doc.identifier;
-                    const title = doc.title || nomeInput;
-                    const description = doc.description ? (typeof doc.description === 'string' ? doc.description : doc.description[0]) : `Jogo clássico ${title} disponível para download direto e emulação.`;
+                if (!searchData.response || searchData.response.docs.length === 0) {
+                    statusMsg.innerText = "Nenhum resultado encontrado. Tente refinar o nome.";
+                    return;
+                }
 
-                    // Monta link da capa original do Archive.org
-                    const imageUrl = `https://archive.org/services/img/${identifier}`;
+                let doc = searchData.response.docs[0];
+                const identifier = doc.identifier;
+                const title = doc.title || nomeInput;
+                const description = doc.description ? (typeof doc.description === 'string' ? doc.description : doc.description[0]) : `Jogo clássico ${title} disponível para download e emulação via Archive.org.`;
+                const imageUrl = `https://archive.org/services/img/${identifier}`;
 
-                    // Busca detalhes dos arquivos internos (tamanho e link da ISO)
-                    const filesRes = await fetch(`https://archive.org/metadata/${identifier}`);
-                    const filesData = await filesRes.json();
-                    
-                    let downloadLink = `https://archive.org/download/${identifier}/${identifier}.iso`;
-                    let formato = "ISO";
-                    let tamanhoFormatado = "850 MB";
+                statusMsg.innerText = "Encontrado! Obtendo metadados e arquivos...";
 
-                    if (filesData && filesData.files) {
-                        const arquivoIso = filesData.files.find(f => f.name.endsWith('.iso') || f.name.endsWith('.zip') || f.name.endsWith('.rar') || f.name.endsWith('.apk'));
-                        if (arquivoIso) {
-                            downloadLink = `https://archive.org/download/${identifier}/${arquivoIso.name}`;
-                            if (arquivoIso.name.endsWith('.iso')) formato = "ISO";
-                            else if (arquivoIso.name.endsWith('.apk')) formato = "APK";
-                            else formato = "ZIP";
+                const metaRes = await fetch(`https://archive.org/metadata/${identifier}`);
+                const metaData = await metaRes.json();
 
-                            if (arquivoIso.size) {
-                                let tamMb = (arquivoIso.size / (1024 * 1024)).toFixed(1);
-                                if (tamMb >= 1024) {
-                                    tamanhoFormatado = (tamMb / 1024).toFixed(2) + " GB";
-                                } else {
-                                    tamanhoFormatado = tamMb + " MB";
-                                }
+                let downloadLink = `https://archive.org/download/${identifier}/${identifier}.iso`;
+                let formato = "ISO";
+                let tamanhoFormatado = "850 MB";
+
+                if (metaData && metaData.files) {
+                    const validFile = metaData.files.find(f => {
+                        const name = f.name.toLowerCase();
+                        return name.endsWith('.iso') || name.endsWith('.cso') || name.endsWith('.zip') || name.endsWith('.rar') || name.endsWith('.apk');
+                    });
+
+                    if (validFile) {
+                        downloadLink = `https://archive.org/download/${identifier}/${validFile.name}`;
+                        const ext = validFile.name.split('.').pop().toUpperCase();
+                        formato = ext;
+
+                        if (validFile.size) {
+                            let tamMb = (validFile.size / (1024 * 1024));
+                            if (tamMb >= 1024) {
+                                tamanhoFormatado = (tamMb / 1024).toFixed(2) + " GB";
+                            } else {
+                                tamanhoFormatado = tamMb.toFixed(1) + " MB";
                             }
                         }
                     }
-
-                    // Preenche o formulário automaticamente
-                    document.getElementById('gameName').value = title;
-                    document.getElementById('gameImage').value = imageUrl;
-                    document.getElementById('gameCategory').value = title.toLowerCase().includes('ps2') ? 'PS2' : 'PSP';
-                    document.getElementById('gameSize').value = tamanhoFormatado;
-                    document.getElementById('gameFormat').value = formato;
-                    document.getElementById('gameStatus').value = "Grátis";
-                    document.getElementById('gameDescription').value = description.replace(/<[^>]*>?/gm, '').substring(0, 300) + "...";
-                    document.getElementById('gameLink').value = downloadLink;
-                    document.getElementById('gameBtnText').value = "Instalar (Download Direto)";
-
-                    statusMsg.innerText = "Sucesso! Dados preenchidos do Archive.org.";
-                } else {
-                    statusMsg.innerText = "Nenhum resultado exato encontrado. Preencha manualmente ou tente outro termo.";
                 }
+
+                document.getElementById('gameName').value = title;
+                document.getElementById('gameImage').value = imageUrl;
+                document.getElementById('gameCategory').value = title.toLowerCase().includes('ps2') ? 'PS2' : 'PSP';
+                document.getElementById('gameSize').value = tamanhoFormatado;
+                document.getElementById('gameFormat').value = formato;
+                document.getElementById('gameStatus').value = "Grátis";
+                document.getElementById('gameDescription').value = description.replace(/<[^>]*>?/gm, '').substring(0, 350) + "...";
+                document.getElementById('gameLink').value = downloadLink;
+                document.getElementById('gameBtnText').value = "Instalar (Download Direto)";
+
+                statusMsg.innerText = "Sucesso! Todos os dados originais foram preenchidos.";
             } catch (err) {
                 console.error(err);
-                statusMsg.innerText = "Erro ao buscar. Verifique a conexão.";
+                statusMsg.innerText = "Erro ao conectar com o Archive.org.";
             }
         }
 
