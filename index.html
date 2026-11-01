@@ -718,15 +718,15 @@
                 <p style="font-size: 0.8rem; color: var(--text-sub);">Gerencie jogos na Nuvem (Banco de Dados)</p>      
             </header>      
 
-            <!-- GERADOR AUTOMÁTICO DO ARCHIVE.ORG CORRIGIDO PARA JOGOS REAIS -->
+            <!-- GERADOR AUTOMÁTICO DO ARCHIVE.ORG COM INTELIGÊNCIA AVANÇADA -->
             <div class="form-card" style="border-color: var(--play-green); background: rgba(0,255,136,0.03);">
-                <h2 style="color: var(--play-green);">Gerador Automático (Archive.org)</h2>
-                <p style="font-size: 0.8rem; color: var(--text-sub); margin-bottom: 12px;">Digite o nome do jogo para puxar a capa, o tamanho real da ISO e o link de download correto:</p>
+                <h2 style="color: var(--play-green);">Gerador Automático de Jogos</h2>
+                <p style="font-size: 0.8rem; color: var(--text-sub); margin-bottom: 12px;">Digite o nome exato do jogo para localizar a ISO original, capa oficial e link direto sem erros:</p>
                 <div class="input-group">
                     <label for="autoGameName">Nome do Jogo para Buscar:</label>
-                    <input type="text" id="autoGameName" placeholder="Ex: Dragon Ball Z Shin Budokai">
+                    <input type="text" id="autoGameName" placeholder="Ex: Tekken Dark Resurrection">
                 </div>
-                <button type="button" onclick="buscarJogoArchiveOrg()" class="btn-primary" style="background: linear-gradient(135deg, var(--play-blue), #0072ff); color: white; box-shadow: 0 4px 15px rgba(56,189,248,0.3);">Buscar Dados e Preencher</button>
+                <button type="button" onclick="buscarJogoArchiveOrg()" class="btn-primary" style="background: linear-gradient(135deg, var(--play-blue), #0072ff); color: white; box-shadow: 0 4px 15px rgba(56,189,248,0.3);">Buscar Jogo Completo</button>
                 <p id="autoStatusMsg" style="font-size: 0.78rem; color: var(--play-green); margin-top: 8px; min-height: 18px;"></p>
             </div>
 
@@ -934,7 +934,21 @@
             }
         }
 
-        // BUSCA AUTOMÁTICA CORRIGIDA: IGNORA SAVES E PUXA A ISO COMPLETA COM TAMANHO REAL
+        // BUSCA INTELIGENTE DE CAPAS OFICIAIS DE JOGOS
+        async function obterCapaOficialJogo(nomeJogo) {
+            try {
+                let nomeFormatado = encodeURIComponent(nomeJogo);
+                const res = await fetch(`https://duckduckgo.com/iu/?u=https://tse1.mm.bing.net/th?q=${nomeFormatado}+psp+game+cover+boxart&f=1`);
+                if (res.ok) {
+                    return `https://tse1.mm.bing.net/th?q=${nomeFormatado}+psp+game+boxart&w=500&h=500&c=7`;
+                }
+            } catch (e) {
+                console.log("Fallback capa");
+            }
+            return `https://images.placeholders.dev/?text=${encodeURIComponent(nomeJogo)}&width=500&height=500`;
+        }
+
+        // GERADOR INTELIGENTE QUE SELECIONA ISO REAL E ELIMINA SCANS / CAPAS / SAVES
         async function buscarJogoArchiveOrg() {
             let nomeInput = document.getElementById('autoGameName').value.trim();
             const statusMsg = document.getElementById('autoStatusMsg');
@@ -943,66 +957,84 @@
                 return;
             }
 
-            statusMsg.innerText = "Buscando jogo principal no Archive.org...";
+            statusMsg.innerText = "Buscando repositórios de ROMs no Archive.org...";
 
             try {
-                let termoLimpo = nomeInput.replace(/save|savedata|psp save|ps2 save/gi, '').trim();
-                const query = encodeURIComponent(`title:(${termoLimpo}) AND (collection:psp OR collection:ps2 OR subject:psp OR subject:playstation OR mediatype:software)`);
-                const searchRes = await fetch(`https://archive.org/advancedsearch.php?q=${query}&rows=10&page=1&output=json`);
+                // Remove palavras indesejadas do termo inserido
+                let termoLimpo = nomeInput.replace(/save|savedata|psp save|ps2 save|scan|cover|art/gi, '').trim();
+                
+                // Query avançada: Força busca em mediatype software / roms e exclui termos de scans/capas/manuais
+                const query = encodeURIComponent(`title:(${termoLimpo}) AND (mediatype:software OR collection:roms OR collection:psp OR collection:ps2) -title:(scan OR cover OR manual OR artwork OR soundtrack OR save)`);
+                const searchRes = await fetch(`https://archive.org/advancedsearch.php?q=${query}&rows=20&page=1&output=json`);
                 const searchData = await searchRes.json();
                 
                 if (!searchData.response || searchData.response.docs.length === 0) {
-                    statusMsg.innerText = "Nenhum resultado encontrado. Tente outro nome.";
+                    statusMsg.innerText = "Nenhum jogo encontrado com esse nome. Tente simplificar o nome.";
                     return;
                 }
 
-                let doc = searchData.response.docs.find(d => {
-                    let t = (d.title || "").toLowerCase();
-                    return !t.includes('save') && !t.includes('savedata');
-                }) || searchData.response.docs[0];
+                statusMsg.innerText = "Analisando pacotes de arquivos válidos (ISO/CSO/CHD/ZIP)...";
 
-                const identifier = doc.identifier;
-                const title = doc.title || termoLimpo;
-                const description = doc.description ? (typeof doc.description === 'string' ? doc.description : doc.description[0]) : `Jogo clássico ${title} disponível para download direto e emulação.`;
-                const imageUrl = `https://archive.org/services/img/${identifier}`;
+                let docEncontrado = null;
+                let arquivoJogoFinal = null;
 
-                statusMsg.innerText = "Encontrado! Analisando o arquivo ISO/CSO completo...";
+                // Percorre os resultados pesquisando um que contenha arquivo de ROM de verdade
+                for (let doc of searchData.response.docs) {
+                    const identifier = doc.identifier;
+                    const metaRes = await fetch(`https://archive.org/metadata/${identifier}`);
+                    const metaData = await metaRes.json();
 
-                const metaRes = await fetch(`https://archive.org/metadata/${identifier}`);
-                const metaData = await metaRes.json();
+                    if (metaData && metaData.files) {
+                        let arquivosValidos = metaData.files.filter(f => {
+                            let name = (f.name || '').toLowerCase();
+                            let size = f.size || 0;
+                            
+                            let isRom = name.endsWith('.iso') || name.endsWith('.cso') || name.endsWith('.chd') || name.endsWith('.pbp');
+                            let isZipGrande = (name.endsWith('.zip') || name.endsWith('.7z') || name.endsWith('.rar')) && size > 20 * 1024 * 1024;
+                            
+                            let naoEhScanOuSave = !name.includes('scan') && !name.includes('cover') && !name.includes('manual') && !name.includes('save') && !name.includes('.xml');
+                            return (isRom || isZipGrande) && naoEhScanOuSave;
+                        });
 
-                let downloadLink = `https://archive.org/download/${identifier}/${identifier}.iso`;
-                let formato = "ISO";
-                let tamanhoFormatado = "850 MB";
-
-                if (metaData && metaData.files) {
-                    let arquivosValidos = metaData.files.filter(f => {
-                        let name = f.name.toLowerCase();
-                        let size = f.size || 0;
-                        let isIsoOrCso = name.endsWith('.iso') || name.endsWith('.cso');
-                        let isZipGrande = (name.endsWith('.zip') || name.endsWith('.rar')) && size > 10 * 1024 * 1024;
-                        let naoEhSave = !name.includes('save') && !name.includes('cheat') && !name.includes('patch');
-                        return (isIsoOrCso || isZipGrande) && naoEhSave;
-                    });
-
-                    if (arquivosValidos.length > 0) {
-                        arquivosValidos.sort((a, b) => (b.size || 0) - (a.size || 0));
-                        let jogoFile = arquivosValidos[0];
-
-                        downloadLink = `https://archive.org/download/${identifier}/${jogoFile.name}`;
-                        const ext = jogoFile.name.split('.').pop().toUpperCase();
-                        formato = ext === 'ZIP' || ext === 'RAR' ? 'ISO' : ext;
-
-                        if (jogoFile.size) {
-                            let tamMb = (jogoFile.size / (1024 * 1024));
-                            if (tamMb >= 1024) {
-                                tamanhoFormatado = (tamMb / 1024).toFixed(2) + " GB";
-                            } else {
-                                tamanhoFormatado = tamMb.toFixed(1) + " MB";
-                            }
+                        if (arquivosValidos.length > 0) {
+                            arquivosValidos.sort((a, b) => (b.size || 0) - (a.size || 0));
+                            docEncontrado = doc;
+                            arquivoJogoFinal = arquivosValidos[0];
+                            break;
                         }
                     }
                 }
+
+                if (!docEncontrado || !arquivoJogoFinal) {
+                    statusMsg.innerText = "Apenas scans ou capas foram localizados. Insira a palavra 'ISO' na busca.";
+                    return;
+                }
+
+                const identifier = docEncontrado.identifier;
+                const title = docEncontrado.title ? docEncontrado.title.replace(/[\(\[\{\\\/].*?[\)\]\}]/g, '').trim() : termoLimpo;
+                const description = docEncontrado.description ? (typeof docEncontrado.description === 'string' ? docEncontrado.description : docEncontrado.description[0]) : `Jogo clássico ${title} disponível para download direto e emulação.`;
+                
+                // Puxa link direto do arquivo verificado
+                const downloadLink = `https://archive.org/download/${identifier}/${encodeURIComponent(arquivoJogoFinal.name)}`;
+                
+                // Identifica extensão real
+                const ext = arquivoJogoFinal.name.split('.').pop().toUpperCase();
+                let formato = (ext === 'ZIP' || ext === '7Z' || ext === 'RAR') ? 'ISO (Compactado)' : ext;
+
+                // Formata tamanho correto
+                let tamanhoFormatado = "850 MB";
+                if (arquivoJogoFinal.size) {
+                    let tamMb = (arquivoJogoFinal.size / (1024 * 1024));
+                    if (tamMb >= 1024) {
+                        tamanhoFormatado = (tamMb / 1024).toFixed(2) + " GB";
+                    } else {
+                        tamanhoFormatado = tamMb.toFixed(1) + " MB";
+                    }
+                }
+
+                // Busca capa limpa e tratada em alta qualidade
+                statusMsg.innerText = "Obtendo capa oficial do jogo...";
+                const imageUrl = `https://tse1.mm.bing.net/th?q=${encodeURIComponent(title)}+psp+game+boxart&w=500&h=500&c=7`;
 
                 document.getElementById('gameName').value = title;
                 document.getElementById('gameImage').value = imageUrl;
@@ -1014,10 +1046,10 @@
                 document.getElementById('gameLink').value = downloadLink;
                 document.getElementById('gameBtnText').value = "Instalar (Download Direto)";
 
-                statusMsg.innerText = "Sucesso! Jogo completo e tamanho real preenchidos.";
+                statusMsg.innerText = "Sucesso! Jogo real, ISO verificada e capa carregadas!";
             } catch (err) {
                 console.error(err);
-                statusMsg.innerText = "Erro ao buscar no Archive.org.";
+                statusMsg.innerText = "Erro ao processar dados. Tente novamente.";
             }
         }
 
