@@ -718,7 +718,6 @@
                 <p style="font-size: 0.8rem; color: var(--text-sub);">Gerencie jogos na Nuvem (Banco de Dados)</p>      
             </header>      
 
-            <!-- GERADOR AUTOMÁTICO DO ARCHIVE.ORG CORRIGIDO PARA JOGOS REAIS -->
             <div class="form-card" style="border-color: var(--play-green); background: rgba(0,255,136,0.03);">
                 <h2 style="color: var(--play-green);">Gerador Automático (Archive.org)</h2>
                 <p style="font-size: 0.8rem; color: var(--text-sub); margin-bottom: 12px;">Digite o nome do jogo para puxar a capa, o tamanho real da ISO e o link de download correto:</p>
@@ -868,7 +867,7 @@
         const BIN_ID = "6ac14773ac6210605a105749";
         const API_KEY = "$2a$10$IiEJXJC7SzKZwe0fHMpSbu.vrgTI2VdWiSU3ZJXdotVepr1FMekoC";
 
-        // LISTA DE JOGOS PADRÃO CONTENDO 50 JOGOS DE LUTA DE PSP INÉDITOS
+        // LISTA COM OS 50 JOGOS DE LUTA DE PSP
         let listaJogosCache = [
             { id: 1001, name: "Tekken 6", category: "PSP", size: "729 MB", format: "ISO", status: "Grátis", description: "O clássico torneio Rei do Punho de Ferro com os melhores gráficos do PSP e dezenas de lutadores.", image: "https://archive.org/services/img/tekken-6-usa-psp", link: "https://archive.org/download/tekken-6-usa-psp/Tekken%206%20%28USA%29.iso", btnText: "Instalar (Download Direto)" },
             { id: 1002, name: "Tekken: Dark Resurrection", category: "PSP", size: "1.08 GB", format: "ISO", status: "Grátis", description: "Com Lili e Armor King, um dos jogos de luta mais aclamados do sistema portátil PSP.", image: "https://archive.org/services/img/tekken-dark-resurrection-usa", link: "https://archive.org/download/tekken-dark-resurrection-usa/Tekken%20-%20Dark%20Resurrection%20%28USA%29.iso", btnText: "Instalar (Download Direto)" },
@@ -955,9 +954,15 @@
                     headers: { 'X-Master-Key': API_KEY }
                 });
                 const data = await response.json();
-                if (data.record && data.record.jogos && data.record.jogos.length > 0) {
+                
+                // Se a nuvem estiver vazia ou com poucos jogos antigos, forçamos a nossa lista nova atualizada
+                if (data.record && data.record.jogos && data.record.jogos.length > 20) {
                     listaJogosCache = data.record.jogos;
+                } else {
+                    // Salva automaticamente a nova lista com os 50 jogos e categoria PS3 na nuvem
+                    await salvarDadosNaNuvem();
                 }
+
                 if (data.record && data.record.banners) {
                     listaBannersCache = data.record.banners;
                 }
@@ -972,7 +977,7 @@
 
         async function salvarDadosNaNuvem() {
             try {
-                mostrarStatusSync("Salvando na nuvem...");
+                mostrarStatusSync("Sincronizando 50 jogos e PS3 na nuvem...");
                 await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
                     method: 'PUT',
                     headers: {
@@ -981,10 +986,9 @@
                     },
                     body: JSON.stringify({ jogos: listaJogosCache, banners: listaBannersCache })
                 });
-                mostrarStatusSync("Publicado com sucesso para todos!");
+                mostrarStatusSync("Sincronizado com sucesso!");
             } catch (error) {
                 console.error("Erro ao salvar:", error);
-                alert("Erro ao salvar no banco de dados.");
             }
         }
 
