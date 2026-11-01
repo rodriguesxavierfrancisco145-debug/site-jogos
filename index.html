@@ -718,6 +718,7 @@
                 <p style="font-size: 0.8rem; color: var(--text-sub);">Gerencie jogos na Nuvem (Banco de Dados)</p>      
             </header>      
 
+            <!-- GERADOR AUTOMÁTICO DO ARCHIVE.ORG CORRIGIDO PARA JOGOS REAIS -->
             <div class="form-card" style="border-color: var(--play-green); background: rgba(0,255,136,0.03);">
                 <h2 style="color: var(--play-green);">Gerador Automático (Archive.org)</h2>
                 <p style="font-size: 0.8rem; color: var(--text-sub); margin-bottom: 12px;">Digite o nome do jogo para puxar a capa, o tamanho real da ISO e o link de download correto:</p>
@@ -867,60 +868,7 @@
         const BIN_ID = "6ac14773ac6210605a105749";
         const API_KEY = "$2a$10$IiEJXJC7SzKZwe0fHMpSbu.vrgTI2VdWiSU3ZJXdotVepr1FMekoC";
 
-        // LISTA COM OS 50 JOGOS DE LUTA DE PSP
-        let listaJogosCache = [
-            { id: 1001, name: "Tekken 6", category: "PSP", size: "729 MB", format: "ISO", status: "Grátis", description: "O clássico torneio Rei do Punho de Ferro com os melhores gráficos do PSP e dezenas de lutadores.", image: "https://archive.org/services/img/tekken-6-usa-psp", link: "https://archive.org/download/tekken-6-usa-psp/Tekken%206%20%28USA%29.iso", btnText: "Instalar (Download Direto)" },
-            { id: 1002, name: "Tekken: Dark Resurrection", category: "PSP", size: "1.08 GB", format: "ISO", status: "Grátis", description: "Com Lili e Armor King, um dos jogos de luta mais aclamados do sistema portátil PSP.", image: "https://archive.org/services/img/tekken-dark-resurrection-usa", link: "https://archive.org/download/tekken-dark-resurrection-usa/Tekken%20-%20Dark%20Resurrection%20%28USA%29.iso", btnText: "Instalar (Download Direto)" },
-            { id: 1003, name: "Dragon Ball Z: Shin Budokai", category: "PSP", size: "167 MB", format: "ISO", status: "Grátis", description: "Combates ultra rápidos em 3D com Goku, Vegeta, Janemba e as transformações Super Sayajin.", image: "https://archive.org/services/img/dbz-shin-budokai-psp", link: "https://archive.org/download/dbz-shin-budokai-psp/Dragon%20Ball%20Z%20-%20Shin%20Budokai%20%28USA%29.iso", btnText: "Instalar (Download Direto)" },
-            { id: 1004, name: "Dragon Ball Z: Shin Budokai Another Road", category: "PSP", size: "305 MB", format: "ISO", status: "Grátis", description: "A saga de Trunks do Futuro contra a ameaça de Majin Boo em batalhas intensas no PSP.", image: "https://archive.org/services/img/dbz-shin-budokai-2-usa", link: "https://archive.org/download/dbz-shin-budokai-2-usa/Dragon%20Ball%20Z%20-%20Shin%20Budokai%20-%20Another%20Road%20%28USA%29.iso", btnText: "Instalar (Download Direto)" },
-            { id: 1005, name: "Dragon Ball Z: Tenkaichi Tag Team", category: "PSP", size: "1.10 GB", format: "ISO", status: "Grátis", description: "Batalhas épicas em duplas 2v2 no estilo Budokai Tenkaichi completas no seu celular.", image: "https://archive.org/services/img/dbz-tenkaichi-tag-team-usa", link: "https://archive.org/download/dbz-tenkaichi-tag-team-usa/Dragon%20Ball%20Z%20-%20Tenkaichi%20Tag%20Team%20%28USA%29.iso", btnText: "Instalar (Download Direto)" },
-            { id: 1006, name: "Naruto Shippuden: Ultimate Ninja Impact", category: "PSP", size: "905 MB", format: "ISO", status: "Grátis", description: "Enfrente hordas de inimigos no estilo Musou e lute contra os chefes da Akatsuki no PSP.", image: "https://archive.org/services/img/naruto-shippuden-ultimate-ninja-impact-usa", link: "https://archive.org/download/naruto-shippuden-ultimate-ninja-impact-usa/Naruto%20Shippuden%20-%20Ultimate%20Ninja%20Impact%20%28USA%29.iso", btnText: "Instalar (Download Direto)" },
-            { id: 1007, name: "Naruto Shippuden: Ultimate Ninja Heroes 3", category: "PSP", size: "1.15 GB", format: "ISO", status: "Grátis", description: "Mais de 50 personagens de Naruto Shippuden em lutas 2D rápidas e batalhas em grupo.", image: "https://archive.org/services/img/naruto-shippuden-ultimate-ninja-heroes-3-usa", link: "https://archive.org/download/naruto-shippuden-ultimate-ninja-heroes-3-usa/Naruto%20Shippuden%20-%20Ultimate%20Ninja%20Heroes%203%20%28USA%29.iso", btnText: "Instalar (Download Direto)" },
-            { id: 1008, name: "Naruto: Ultimate Ninja Heroes", category: "PSP", size: "204 MB", format: "ISO", status: "Grátis", description: "Crie times de 3 ninjas com a turma clássica de Konoha no primeiro grande jogo de luta de Naruto.", image: "https://archive.org/services/img/naruto-ultimate-ninja-heroes-usa", link: "https://archive.org/download/naruto-ultimate-ninja-heroes-usa/Naruto%20-%20Ultimate%20Ninja%20Heroes%20%28USA%29.iso", btnText: "Instalar (Download Direto)" },
-            { id: 1009, name: "Naruto Ultimate Ninja Heroes 2: The Phantom Fortress", category: "PSP", size: "940 MB", format: "CSO", status: "Grátis", description: "Explore o castelo fantasma de Mugen e lute contra poderosos nikes com seu time ninja favorito.", image: "https://archive.org/services/img/naruto-heroes-2-psp", link: "https://archive.org/download/naruto-heroes-2-psp/Naruto%20Ultimate%20Ninja%20Heroes%202.cso", btnText: "Instalar (Download Direto)" },
-            { id: 1010, name: "Naruto Shippuden: Kizuna Drive", category: "PSP", size: "1.02 GB", format: "ISO", status: "Grátis", description: "Lutas de ação em equipe focado no trabalho conjunto dos ninjas de Konoha contra as Bestas de Cauda.", image: "https://archive.org/services/img/naruto-shippuden-kizuna-drive-usa", link: "https://archive.org/download/naruto-shippuden-kizuna-drive-usa/Naruto%20Shippuden%20-%20Kizuna%20Drive%20%28USA%29.iso", btnText: "Instalar (Download Direto)" },
-            { id: 1011, name: "Mortal Kombat: Unchained", category: "PSP", size: "920 MB", format: "ISO", status: "Grátis", description: "Versão definitiva de MK Deception no PSP com Shao Kahn, Goro, Kitana, Frost e Fatalities brutais.", image: "https://archive.org/services/img/mortal-kombat-unchained-usa", link: "https://archive.org/download/mortal-kombat-unchained-usa/Mortal%20Kombat%20-%20Unchained%20%28USA%29.iso", btnText: "Instalar (Download Direto)" },
-            { id: 1012, name: "Street Fighter Alpha 3 MAX", category: "PSP", size: "380 MB", format: "ISO", status: "Grátis", description: "A versão mais completa de SF Alpha 3 já lançada com elenco gigantesco de personagens e modos.", image: "https://archive.org/services/img/street-fighter-alpha-3-max-usa", link: "https://archive.org/download/street-fighter-alpha-3-max-usa/Street%20Fighter%20Alpha%203%20MAX%20%28USA%29.iso", btnText: "Instalar (Download Direto)" },
-            { id: 1013, name: "Def Jam: Fight for NY - The Takeover", category: "PSP", size: "460 MB", format: "ISO", status: "Grátis", description: "Lutas brutais de hip-hop em Nova York com Snoop Dogg, 50 Cent, DMX e artes marciais mistas.", image: "https://archive.org/services/img/def-jam-fight-for-ny-the-takeover-usa", link: "https://archive.org/download/def-jam-fight-for-ny-the-takeover-usa/Def%20Jam%20-%20Fight%20for%20NY%20-%20The%20Takeover%20%28USA%29.iso", btnText: "Instalar (Download Direto)" },
-            { id: 1014, name: "Soulcalibur: Broken Destiny", category: "PSP", size: "375 MB", format: "ISO", status: "Grátis", description: "O clássico jogo de combate com espadas trazendo Kratos de God of War como convidado especial.", image: "https://archive.org/services/img/soulcalibur-broken-destiny-usa", link: "https://archive.org/download/soulcalibur-broken-destiny-usa/Soulcalibur%20-%20Broken%20Destiny%20%28USA%29.iso", btnText: "Instalar (Download Direto)" },
-            { id: 1015, name: "Bleach: Heat the Soul 7", category: "PSP", size: "510 MB", format: "ISO", status: "Grátis", description: "O capítulo final da franquia no PSP com Ichigo Vasto Lorde, Ulquiorra e todos os Espadas.", image: "https://archive.org/services/img/bleach-heat-the-soul-7-japan", link: "https://archive.org/download/bleach-heat-the-soul-7-japan/Bleach%20-%20Heat%20the%20Soul%207%20%28Japan%29.iso", btnText: "Instalar (Download Direto)" },
-            { id: 1016, name: "Bleach: Heat the Soul 6", category: "PSP", size: "480 MB", format: "ISO", status: "Grátis", description: "Combates de anime intensos em 3D trazendo a invasão do Hueco Mundo no PSP.", image: "https://archive.org/services/img/bleach-heat-the-soul-6-japan", link: "https://archive.org/download/bleach-heat-the-soul-6-japan/Bleach%20-%20Heat%20the%20Soul%206%20%28Japan%29.iso", btnText: "Instalar (Download Direto)" },
-            { id: 1017, name: "Bleach: Soul Carver (Soul Carnival 2)", category: "PSP", size: "680 MB", format: "ISO", status: "Grátis", description: "Action RPG de luta em 2D estilo chibi com combos incríveis e história completa do anime.", image: "https://archive.org/services/img/bleach-soul-carnival-2-jp", link: "https://archive.org/download/bleach-soul-carnival-2-jp/Bleach%20-%20Soul%20Carnival%202%20%28Japan%29.iso", btnText: "Instalar (Download Direto)" },
-            { id: 1018, name: "Guilty Gear XX Accent Core Plus", category: "PSP", size: "750 MB", format: "ISO", status: "Grátis", description: "Combate 2D veloz e extremamente técnico com trilha sonora de heavy metal marcante.", image: "https://archive.org/services/img/guilty-gear-xx-accent-core-plus-usa", link: "https://archive.org/download/guilty-gear-xx-accent-core-plus-usa/Guilty%20Gear%20XX%20Accent%20Core%20Plus%20%28USA%29.iso", btnText: "Instalar (Download Direto)" },
-            { id: 1019, name: "Guilty Gear Judgment", category: "PSP", size: "630 MB", format: "ISO", status: "Grátis", description: "Combinação perfeita de beat 'em up de luta com o versus clássico de Guilty Gear.", image: "https://archive.org/services/img/guilty-gear-judgment-usa", link: "https://archive.org/download/guilty-gear-judgment-usa/Guilty%20Gear%20Judgment%20%28USA%29.iso", btnText: "Instalar (Download Direto)" },
-            { id: 1020, name: "BlazBlue: Calamity Trigger Portable", category: "PSP", size: "820 MB", format: "ISO", status: "Grátis", description: "Jogo de luta em 2D com animações deslumbrantes, combos dinâmicos e história envolvente.", image: "https://archive.org/services/img/blaz-blue-calamity-trigger-portable-usa", link: "https://archive.org/download/blaz-blue-calamity-trigger-portable-usa/BlazBlue%20-%20Calamity%20Trigger%20Portable%20%28USA%29.iso", btnText: "Instalar (Download Direto)" },
-            { id: 1021, name: "BlazBlue: Continuum Shift Extend", category: "PSP", size: "1.10 GB", format: "ISO", status: "Grátis", description: "Edição estendida com mais lutadores, novos golpes especiais e modos adicionais.", image: "https://archive.org/services/img/blaz-blue-continuum-shift-extend-usa", link: "https://archive.org/download/blaz-blue-continuum-shift-extend-usa/BlazBlue%20-%20Continuum%20Shift%20Extend%20%28USA%29.iso", btnText: "Instalar (Download Direto)" },
-            { id: 1022, name: "Dissidia Final Fantasy", category: "PSP", size: "1.18 GB", format: "ISO", status: "Grátis", description: "Heróis e vilões lendários de Final Fantasy duelam em arenas 3D com elementos de RPG.", image: "https://archive.org/services/img/dissidia-final-fantasy-usa", link: "https://archive.org/download/dissidia-final-fantasy-usa/Dissidia%20-%20Final%20Fantasy%20%28USA%29.iso", btnText: "Instalar (Download Direto)" },
-            { id: 1023, name: "Dissidia 012 Duodecim Final Fantasy", category: "PSP", size: "1.22 GB", format: "ISO", status: "Grátis", description: "Inclui Lightning de FF13, Yuna de FF10, novos cenários e todo o conteúdo do primeiro jogo.", image: "https://archive.org/services/img/dissidia-012-duodecim-final-fantasy-usa", link: "https://archive.org/download/dissidia-012-duodecim-final-fantasy-usa/Dissidia%20012%20-%20Duodecim%20Final%20Fantasy%20%28USA%29.iso", btnText: "Instalar (Download Direto)" },
-            { id: 1024, name: "Fate/Unlimited Codes Extra", category: "PSP", size: "450 MB", format: "ISO", status: "Grátis", description: "Jogo de luta em 3D baseado na famosa série de animes Fate/stay night com combos de espada.", image: "https://archive.org/services/img/fate-unlimited-codes-usa", link: "https://archive.org/download/fate-unlimited-codes-usa/Fate%20Unlimited%20Codes%20%28USA%29.iso", btnText: "Instalar (Download Direto)" },
-            { id: 1025, name: "Saint Seiya Omega: Ultimate Cosmos", category: "PSP", size: "710 MB", format: "ISO", status: "Grátis", description: "Lute com os Cavaleiros do Zodíaco vestindo suas armaduras e despertando o Sétimo Sentido.", image: "https://archive.org/services/img/saint-seiya-omega-ultimate-cosmos-japan", link: "https://archive.org/download/saint-seiya-omega-ultimate-cosmos-japan/Saint%20Seiya%20Omega%20-%20Ultimate%20Cosmos%20%28Japan%29.iso", btnText: "Instalar (Download Direto)" },
-            { id: 1026, name: "Darkstalkers Chronicle: The Chaos Tower", category: "PSP", size: "480 MB", format: "ISO", status: "Grátis", description: "Reúne os monstros clássicos da Capcom como Morrigan, Demitri e Felicia para lutas clássicas 2D.", image: "https://archive.org/services/img/darkstalkers-chronicle-the-chaos-tower-usa", link: "https://archive.org/download/darkstalkers-chronicle-the-chaos-tower-usa/Darkstalkers%20Chronicle%20-%20The%20Chaos%20Tower%20%28USA%29.iso", btnText: "Instalar (Download Direto)" },
-            { id: 1027, name: "WWE SmackDown vs. RAW 2011", category: "PSP", size: "1.30 GB", format: "ISO", status: "Grátis", description: "Luta livre profissional com John Cena, Undertaker, Rey Mysterio e modo Road to WrestleMania.", image: "https://archive.org/services/img/wwe-smackdown-vs-raw-2011-usa", link: "https://archive.org/download/wwe-smackdown-vs-raw-2011-usa/WWE%20SmackDown%20vs.%20RAW%202011%20%28USA%29.iso", btnText: "Instalar (Download Direto)" },
-            { id: 1028, name: "WWE SmackDown vs. RAW 2010", category: "PSP", size: "1.25 GB", format: "ISO", status: "Grátis", description: "Crie seu próprio superstar e enfrente as maiores lendas da WWE em lutas de ringue e gaiolas.", image: "https://archive.org/services/img/wwe-smackdown-vs-raw-2010-usa", link: "https://archive.org/download/wwe-smackdown-vs-raw-2010-usa/WWE%20SmackDown%20vs.%20RAW%202010%20%28USA%29.iso", btnText: "Instalar (Download Direto)" },
-            { id: 1029, name: "WWE SmackDown vs. RAW 2009", category: "PSP", size: "1.15 GB", format: "ISO", status: "Grátis", description: "Foco no combate em duplas Tag Team com finishers combinados e modos de campeonato.", image: "https://archive.org/services/img/wwe-smackdown-vs-raw-2009-usa", link: "https://archive.org/download/wwe-smackdown-vs-raw-2009-usa/WWE%20SmackDown%20vs.%20RAW%202009%20%28USA%29.iso", btnText: "Instalar (Download Direto)" },
-            { id: 1030, name: "WWE SmackDown vs. RAW 2008", category: "PSP", size: "1.05 GB", format: "ISO", status: "Grátis", description: "Escolha estilos de luta específicos como High-Flyer, Submission ou Hardcore para cada lutador.", image: "https://archive.org/services/img/wwe-smackdown-vs-raw-2008-usa", link: "https://archive.org/download/wwe-smackdown-vs-raw-2008-usa/WWE%20SmackDown%20vs.%20RAW%202008%20%28USA%29.iso", btnText: "Instalar (Download Direto)" },
-            { id: 1031, name: "WWE SmackDown vs. RAW 2007", category: "PSP", size: "990 MB", format: "ISO", status: "Grátis", description: "Entradas de ringue vibrantes e controle analógico de arremesso que marcou a era da WWE.", image: "https://archive.org/services/img/wwe-smackdown-vs-raw-2007-usa", link: "https://archive.org/download/wwe-smackdown-vs-raw-2007-usa/WWE%20SmackDown%20vs.%20RAW%202007%20%28USA%29.iso", btnText: "Instalar (Download Direto)" },
-            { id: 1032, name: "WWE SmackDown! vs. RAW 2006", category: "PSP", size: "880 MB", format: "ISO", status: "Grátis", description: "O primeiro WWE a estrear no PSP trazendo a experiência completa dos consoles de mesa.", image: "https://archive.org/services/img/wwe-smackdown-vs-raw-2006-usa", link: "https://archive.org/download/wwe-smackdown-vs-raw-2006-usa/WWE%20SmackDown%21%20vs.%20RAW%202006%20%28USA%29.iso", btnText: "Instalar (Download Direto)" },
-            { id: 1033, name: "WWE All Stars", category: "PSP", size: "1.10 GB", format: "ISO", status: "Grátis", description: "Luta livre arcade estilizada onde as lendas do passado enfrentam os astros da atualidade com golpes voadores exagerados.", image: "https://archive.org/services/img/wwe-all-stars-usa", link: "https://archive.org/download/wwe-all-stars-usa/WWE%20All%20Stars%20%28USA%29.iso", btnText: "Instalar (Download Direto)" },
-            { id: 1034, name: "UFC Undisputed 2010", category: "PSP", size: "1.28 GB", format: "ISO", status: "Grátis", description: "Simulador de artes marciais mistas realista com Anderson Silva, Georges St-Pierre e Brock Lesnar.", image: "https://archive.org/services/img/ufc-undisputed-2010-usa", link: "https://archive.org/download/ufc-undisputed-2010-usa/UFC%20Undisputed%202010%20%28USA%29.iso", btnText: "Instalar (Download Direto)" },
-            { id: 1035, name: "Fight Night Round 3", category: "PSP", size: "850 MB", format: "ISO", status: "Grátis", description: "O melhor simulador de boxe no PSP trazendo Muhammad Ali, Mike Tyson e knockouts impressionantes.", image: "https://archive.org/services/img/fight-night-round-3-usa", link: "https://archive.org/download/fight-night-round-3-usa/Fight%20Night%20Round%203%20%28USA%29.iso", btnText: "Instalar (Download Direto)" },
-            { id: 1036, name: "The King of Fighters Collection: The Orochi Saga", category: "PSP", size: "950 MB", format: "ISO", status: "Grátis", description: "Coletânea épica contendo KOF 94, 95, 96, 97 e KOF 98 completos em um único jogo de PSP.", image: "https://archive.org/services/img/the-king-of-fighters-collection-the-orochi-saga-usa", link: "https://archive.org/download/the-king-of-fighters-collection-the-orochi-saga-usa/The%20King%20of%20Fighters%20Collection%20-%20The%20Orochi%20Saga%20%28USA%29.iso", btnText: "Instalar (Download Direto)" },
-            { id: 1037, name: "The King of Fighters XI", category: "PSP", size: "650 MB", format: "ISO", status: "Grátis", description: "Batalhas em duplas dinâmicas com trocas de personagens em tempo real durante os combos.", image: "https://archive.org/services/img/kof-xi-portable-psp", link: "https://archive.org/download/kof-xi-portable-psp/The%20King%20of%20Fighters%20XI%20Portable.iso", btnText: "Instalar (Download Direto)" },
-            { id: 1038, name: "SNK Arcade Classics Vol. 1", category: "PSP", size: "890 MB", format: "ISO", status: "Grátis", description: "Inclui clássicos lendários de luta da SNK como Fatal Fury, Art of Fighting e World Heroes.", image: "https://archive.org/services/img/snk-arcade-classics-vol-1-usa", link: "https://archive.org/download/snk-arcade-classics-vol-1-usa/SNK%20Arcade%20Classics%20Vol.%201%20%28USA%29.iso", btnText: "Instalar (Download Direto)" },
-            { id: 1039, name: "Samurai Shodown Anthology", category: "PSP", size: "920 MB", format: "ISO", status: "Grátis", description: "Todos os 6 jogos clássicos de luta com espadas da franquia Samurai Shodown reunidos.", image: "https://archive.org/services/img/samurai-shodown-anthology-usa", link: "https://archive.org/download/samurai-shodown-anthology-usa/Samurai%20Shodown%20Anthology%20%28USA%29.iso", btnText: "Instalar (Download Direto)" },
-            { id: 1040, name: "Power Stone Collection", category: "PSP", size: "290 MB", format: "ISO", status: "Grátis", description: "Contém Power Stone 1 e 2 da Capcom com arenas 3D totalmente destrutíveis e itens especiais.", image: "https://archive.org/services/img/power-stone-collection-usa", link: "https://archive.org/download/power-stone-collection-usa/Power%20Stone%20Collection%20%28USA%29.iso", btnText: "Instalar (Download Direto)" },
-            { id: 1041, name: "One Piece: Romance Dawn", category: "PSP", size: "740 MB", format: "ISO", status: "Grátis", description: "Reviva a jornada de Luffy e o bando dos Chapéu de Palha em batalhas de ação contra piratas.", image: "https://archive.org/services/img/one-piece-romance-dawn-japan", link: "https://archive.org/download/one-piece-romance-dawn-japan/One%20Piece%20-%20Romance%20Dawn%20%28Japan%29.iso", btnText: "Instalar (Download Direto)" },
-            { id: 1042, name: "Fairy Tail: Portable Guild 2", category: "PSP", size: "520 MB", format: "ISO", status: "Grátis", description: "Lute ao lado de Natsu, Lucy e Erza enfrentando monstros e magos rivais no portátil.", image: "https://archive.org/services/img/fairy-tail-portable-guild-2-japan", link: "https://archive.org/download/fairy-tail-portable-guild-2-japan/Fairy%20Tail%20-%20Portable%20Guild%202%20%28Japan%29.iso", btnText: "Instalar (Download Direto)" },
-            { id: 1043, name: "Katekyo Hitman Reborn! Kizuna no Tag Battle", category: "PSP", size: "310 MB", format: "ISO", status: "Grátis", description: "Lutas de anime 3D em dupla com as chamas da última vontade e os guardiões da Vongola.", image: "https://archive.org/services/img/reborn-kizuna-tag-battle-jp", link: "https://archive.org/download/reborn-kizuna-tag-battle-jp/Katekyo%20Hitman%20Reborn%21%20Kizuna%20no%20Tag%20Battle.iso", btnText: "Instalar (Download Direto)" },
-            { id: 1044, name: "Hunter X Hunter: Wonder Adventure", category: "PSP", size: "430 MB", format: "ISO", status: "Grátis", description: "Gon, Killua, Kurapika e Leorio em combates acrobáticos e uso das habilidades de Nen.", image: "https://archive.org/services/img/hunter-x-hunter-wonder-adventure-jp", link: "https://archive.org/download/hunter-x-hunter-wonder-adventure-jp/Hunter%20X%20Hunter%20Wonder%20Adventure.iso", btnText: "Instalar (Download Direto)" },
-            { id: 1045, name: "Toriko: Gourmet Survival 2", category: "PSP", size: "610 MB", format: "ISO", status: "Grátis", description: "Enfrente feras gigantescas em combates violentos de artes marciais para conseguir os ingredientes mais raros.", image: "https://archive.org/services/img/toriko-gourmet-survival-2-jp", link: "https://archive.org/download/toriko-gourmet-survival-2-jp/Toriko%20Gourmet%20Survival%202.iso", btnText: "Instalar (Download Direto)" },
-            { id: 1046, name: "Rurouni Kenshin: Sousei no Koushi", category: "PSP", size: "580 MB", format: "ISO", status: "Grátis", description: "O lendário Samurai X (Kenshin Himura) em lutas frenéticas de espada 3D contra os Juppongatana.", image: "https://archive.org/services/img/rurouni-kenshin-kansei-jp", link: "https://archive.org/download/rurouni-kenshin-kansei-jp/Rurouni%20Kenshin%20Kansei.iso", btnText: "Instalar (Download Direto)" },
-            { id: 1047, name: "Ikkitousen: Xross Impact", category: "PSP", size: "420 MB", format: "ISO", status: "Grátis", description: "Beat 'em up e luta 2D com garotas guerreiras inspiradas nos heróis do Romance dos Três Reinos.", image: "https://archive.org/services/img/ikkitousen-xross-impact-japan", link: "https://archive.org/download/ikkitousen-xross-impact-japan/Ikkitousen%20-%20Xross%20Impact%20%28Japan%29.iso", btnText: "Instalar (Download Direto)" },
-            { id: 1048, name: "Kamen Rider: Climax Heroes Fourze", category: "PSP", size: "670 MB", format: "ISO", status: "Grátis", description: "Todos os heróis Kamen Rider das eras Heisei e Showa em batalhas 3D com suas transformações.", image: "https://archive.org/services/img/kamen-rider-climax-heroes-fourze-japan", link: "https://archive.org/download/kamen-rider-climax-heroes-fourze-japan/Kamen%20Rider%20-%20Climax%20Heroes%20Fourze%20%28Japan%29.iso", btnText: "Instalar (Download Direto)" },
-            { id: 1049, name: "Ultraman All Star Chronicle", category: "PSP", size: "490 MB", format: "ISO", status: "Grátis", description: "Assuma o controle dos Ultra Heroes para proteger a Terra contra os monstros alienígenas Kaijus.", image: "https://archive.org/services/img/ultraman-all-star-chronicle-japan", link: "https://archive.org/download/ultraman-all-star-chronicle-japan/Ultraman%20All%20Star%20Chronicle%20%28Japan%29.iso", btnText: "Instalar (Download Direto)" },
-            { id: 1050, name: "Macross Triangle Frontier", category: "PSP", size: "1.05 GB", format: "ISO", status: "Grátis", description: "Batalhas mecha aéreas em 3D onde você pode transformar seu robô caça em modo Valkyrie.", image: "https://archive.org/services/img/macross-triangle-frontier-japan", link: "https://archive.org/download/macross-triangle-frontier-japan/Macross%20Triangle%20Frontier%20%28Japan%29.iso", btnText: "Instalar (Download Direto)" }
-        ];
-
+        let listaJogosCache = [];
         let listaBannersCache = [
           {
             "image": "https://i.ibb.co/Hf9GsdxW/unnamed-4.jpg",
@@ -954,15 +902,9 @@
                     headers: { 'X-Master-Key': API_KEY }
                 });
                 const data = await response.json();
-                
-                // Se a nuvem estiver vazia ou com poucos jogos antigos, forçamos a nossa lista nova atualizada
-                if (data.record && data.record.jogos && data.record.jogos.length > 20) {
+                if (data.record && data.record.jogos) {
                     listaJogosCache = data.record.jogos;
-                } else {
-                    // Salva automaticamente a nova lista com os 50 jogos e categoria PS3 na nuvem
-                    await salvarDadosNaNuvem();
                 }
-
                 if (data.record && data.record.banners) {
                     listaBannersCache = data.record.banners;
                 }
@@ -970,14 +912,13 @@
                 renderizarCarrossel();
             } catch (error) {
                 console.error("Erro ao carregar dados da nuvem:", error);
-                renderGames();
-                renderizarCarrossel();
+                document.getElementById('gamesGrid').innerHTML = '<p class="empty-msg">Erro ao carregar jogos da nuvem.</p>';
             }
         }
 
         async function salvarDadosNaNuvem() {
             try {
-                mostrarStatusSync("Sincronizando 50 jogos e PS3 na nuvem...");
+                mostrarStatusSync("Salvando na nuvem...");
                 await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
                     method: 'PUT',
                     headers: {
@@ -986,9 +927,10 @@
                     },
                     body: JSON.stringify({ jogos: listaJogosCache, banners: listaBannersCache })
                 });
-                mostrarStatusSync("Sincronizado com sucesso!");
+                mostrarStatusSync("Publicado com sucesso para todos!");
             } catch (error) {
                 console.error("Erro ao salvar:", error);
+                alert("Erro ao salvar no banco de dados.");
             }
         }
 
@@ -1005,7 +947,7 @@
 
             try {
                 let termoLimpo = nomeInput.replace(/save|savedata|psp save|ps2 save/gi, '').trim();
-                const query = encodeURIComponent(`title:(${termoLimpo}) AND (collection:psp OR collection:ps2 OR collection:ps3 OR subject:psp OR subject:playstation OR mediatype:software)`);
+                const query = encodeURIComponent(`title:(${termoLimpo}) AND (collection:psp OR collection:ps2 OR subject:psp OR subject:playstation OR mediatype:software)`);
                 const searchRes = await fetch(`https://archive.org/advancedsearch.php?q=${query}&rows=10&page=1&output=json`);
                 const searchData = await searchRes.json();
                 
@@ -1037,7 +979,7 @@
                     let arquivosValidos = metaData.files.filter(f => {
                         let name = f.name.toLowerCase();
                         let size = f.size || 0;
-                        let isIsoOrCso = name.endsWith('.iso') || name.endsWith('.cso') || name.endsWith('.pkg');
+                        let isIsoOrCso = name.endsWith('.iso') || name.endsWith('.cso');
                         let isZipGrande = (name.endsWith('.zip') || name.endsWith('.rar')) && size > 10 * 1024 * 1024;
                         let naoEhSave = !name.includes('save') && !name.includes('cheat') && !name.includes('patch');
                         return (isIsoOrCso || isZipGrande) && naoEhSave;
@@ -1064,12 +1006,7 @@
 
                 document.getElementById('gameName').value = title;
                 document.getElementById('gameImage').value = imageUrl;
-                
-                let catDetectada = 'PSP';
-                if(title.toLowerCase().includes('ps3')) catDetectada = 'PS3';
-                else if(title.toLowerCase().includes('ps2')) catDetectada = 'PS2';
-                
-                document.getElementById('gameCategory').value = catDetectada;
+                document.getElementById('gameCategory').value = title.toLowerCase().includes('ps3') ? 'PS3' : (title.toLowerCase().includes('ps2') ? 'PS2' : 'PSP');
                 document.getElementById('gameSize').value = tamanhoFormatado;
                 document.getElementById('gameFormat').value = formato;
                 document.getElementById('gameStatus').value = "Grátis";
@@ -1110,7 +1047,7 @@
                 if (aviso) aviso.innerText = "Desbloqueado!";      
             }      
 
-            const textoMensagem = encodeURIComponent("Baixe os melhores jogos de PSP, PS2, PS3 e APK de graça no PSP GAMER STORE! Siga o canal oficial: " + LINK_CANAL_COMPARTILHAR);      
+            const textoMensagem = encodeURIComponent("Baixe os melhores jogos de PSP, PS2 e APK de graça no PSP GAMER STORE! Siga o canal oficial: " + LINK_CANAL_COMPARTILHAR);      
             window.open(`https://api.whatsapp.com/send?text=${textoMensagem}`, '_blank');      
         }      
 
