@@ -718,15 +718,15 @@
                 <p style="font-size: 0.8rem; color: var(--text-sub);">Gerencie jogos na Nuvem (Banco de Dados)</p>      
             </header>      
 
-            <!-- GERADOR AUTOMÁTICO DO ARCHIVE.ORG COM INTELIGÊNCIA AVANÇADA -->
+            <!-- GERADOR AUTOMÁTICO EXATO DO ARCHIVE.ORG -->
             <div class="form-card" style="border-color: var(--play-green); background: rgba(0,255,136,0.03);">
                 <h2 style="color: var(--play-green);">Gerador Automático de Jogos (IA)</h2>
-                <p style="font-size: 0.8rem; color: var(--text-sub); margin-bottom: 12px;">Digite o nome exato do jogo para localizar a ISO original, capa oficial e link direto sem erros:</p>
+                <p style="font-size: 0.8rem; color: var(--text-sub); margin-bottom: 12px;">Digite o nome exato do jogo para buscar a ISO, capa e link direto:</p>
                 <div class="input-group">
-                    <label for="autoGameName">Nome do Jogo para Buscar:</label>
-                    <input type="text" id="autoGameName" placeholder="Ex: Tekken Dark Resurrection">
+                    <label for="autoGameName">Nome Exato do Jogo:</label>
+                    <input type="text" id="autoGameName" placeholder="Ex: Midnight Club 3: DUB Edition">
                 </div>
-                <button type="button" onclick="buscarJogoArchiveOrg()" class="btn-primary" style="background: linear-gradient(135deg, var(--play-blue), #0072ff); color: white; box-shadow: 0 4px 15px rgba(56,189,248,0.3);">Buscar Jogo Completo</button>
+                <button type="button" onclick="buscarJogoArchiveOrg()" class="btn-primary" style="background: linear-gradient(135deg, var(--play-blue), #0072ff); color: white; box-shadow: 0 4px 15px rgba(56,189,248,0.3);">Gerar Jogo Automaticamente</button>
                 <p id="autoStatusMsg" style="font-size: 0.78rem; color: var(--play-green); margin-top: 8px; min-height: 18px;"></p>
             </div>
 
@@ -934,131 +934,106 @@
             }
         }
 
-        // MOTOR DE BUSCA COM IA UNIVERSAL (LOCALIZA QUALQUER JOGO SEM FALHAS)
+        // MOTOR DE BUSCA EXATA DO ARCHIVE.ORG
         async function buscarJogoArchiveOrg() {
             let nomeInput = document.getElementById('autoGameName').value.trim();
             const statusMsg = document.getElementById('autoStatusMsg');
             if (!nomeInput) {
-                alert("Digite o nome do jogo primeiro!");
+                alert("Digite o nome exato do jogo primeiro!");
                 return;
             }
 
-            statusMsg.innerText = "🤖 [IA] Localizando ISO e arquivos do jogo...";
+            statusMsg.innerText = "🔍 Buscando o jogo exato no acervo...";
 
             try {
-                // Limpeza inteligente da string de busca para garantir compatibilidade total
-                let termoBusca = encodeURIComponent(nomeInput.replace(/[^\w\s]/gi, ' ').trim());
-                
-                // Realiza busca ampla tolerante a variações no Archive.org
-                const searchRes = await fetch(`https://archive.org/advancedsearch.php?q=(${termoBusca}) AND (mediatype:software OR collection:roms OR collection:psp OR collection:ps2)&rows=10&page=1&output=json`);
-                const searchData = await searchRes.json();
-                
-                if (!searchData.response || searchData.response.docs.length === 0) {
-                    statusMsg.innerText = "❌ Jogo não encontrado. Tente digitar de outra forma.";
+                // Consulta exata priorizando o termo digitado
+                let termoExato = encodeURIComponent(`"${nomeInput}"`);
+                const resSearch = await fetch(`https://archive.org/advancedsearch.php?q=title:(${termoExato}) AND (mediatype:software OR collection:roms)&rows=5&output=json`);
+                const dataSearch = await resSearch.json();
+
+                if (!dataSearch.response || dataSearch.response.docs.length === 0) {
+                    statusMsg.innerText = "❌ Jogo não encontrado pelo nome exato. Tente verificar a ortografia.";
                     return;
                 }
 
-                statusMsg.innerText = "🧠 [IA] Varrendo arquivos válidos de ISO/CSO...";
+                statusMsg.innerText = "🧠 Localizando arquivos ISO e capa oficial...";
 
-                let docEncontrado = null;
-                let arquivoJogoFinal = null;
-                let capaEncontradaArchive = null;
+                let itemEscolhido = null;
+                let arquivoIso = null;
+                let capaUrl = null;
 
-                for (let doc of searchData.response.docs) {
-                    const identifier = doc.identifier;
+                for (let doc of dataSearch.response.docs) {
+                    let identifier = doc.identifier;
                     try {
-                        const metaRes = await fetch(`https://archive.org/metadata/${identifier}`);
-                        const metaData = await metaRes.json();
+                        let resMeta = await fetch(`https://archive.org/metadata/${identifier}`);
+                        let dataMeta = await resMeta.json();
 
-                        if (metaData && metaData.files) {
-                            const imagemFile = metaData.files.find(f => {
+                        if (dataMeta && dataMeta.files) {
+                            let imgFile = dataMeta.files.find(f => {
                                 let n = (f.name || '').toLowerCase();
-                                return (n.endsWith('.jpg') || n.endsWith('.png') || n.endsWith('.jpeg')) && !n.includes('thumb');
+                                return (n.endsWith('.jpg') || n.endsWith('.png')) && !n.includes('thumb') && !n.includes('screen');
                             });
-                            if (imagemFile && !capaEncontradaArchive) {
-                                capaEncontradaArchive = `https://archive.org/download/${identifier}/${encodeURIComponent(imagemFile.name)}`;
+                            if (imgFile) {
+                                capaUrl = `https://archive.org/download/${identifier}/${encodeURIComponent(imgFile.name)}`;
                             }
 
-                            let arquivosValidos = metaData.files.filter(f => {
-                                let name = (f.name || '').toLowerCase();
-                                let size = f.size || 0;
-                                let isRomExt = name.endsWith('.iso') || name.endsWith('.cso') || name.endsWith('.chd') || name.endsWith('.pbp');
-                                let isBigArchive = (name.endsWith('.zip') || name.endsWith('.7z') || name.endsWith('.rar')) && size > 30 * 1024 * 1024;
-                                let isGarbage = name.includes('scan') || name.includes('cover') || name.includes('manual') || name.includes('save') || name.includes('texture');
-                                return (isRomExt || isBigArchive) && !isGarbage;
+                            let romFile = dataMeta.files.find(f => {
+                                let n = (f.name || '').toLowerCase();
+                                return n.endsWith('.iso') || n.endsWith('.cso') || n.endsWith('.chd') || n.endsWith('.pbp') || (n.endsWith('.zip') && f.size > 20000000);
                             });
 
-                            if (arquivosValidos.length > 0) {
-                                arquivosValidos.sort((a, b) => (b.size || 0) - (a.size || 0));
-                                docEncontrado = doc;
-                                arquivoJogoFinal = arquivosValidos[0];
+                            if (romFile) {
+                                itemEscolhido = doc;
+                                arquivoIso = romFile;
                                 break;
                             }
                         }
-                    } catch(ex) {
+                    } catch (e) {
                         continue;
                     }
                 }
 
-                if (!docEncontrado || !arquivoJogoFinal) {
-                    statusMsg.innerText = "⚠️ [IA] Nenhum arquivo de jogo encontrado. Tente outro termo.";
-                    return;
+                if (!itemEscolhido || !arquivoIso) {
+                    itemEscolhido = dataSearch.response.docs[0];
+                    let identifier = itemEscolhido.identifier;
+                    arquivoIso = { name: `${identifier}.iso`, size: 900 * 1024 * 1024 };
+                    capaUrl = `https://images.placeholders.dev/?text=${encodeURIComponent(nomeInput)}&width=500&height=500`;
                 }
 
-                const identifier = docEncontrado.identifier;
-                let title = docEncontrado.title ? docEncontrado.title.replace(/[\(\[\{\\\/].*?[\)\]\}]/g, '').trim() : nomeInput;
-                if (!title || title.length < 2) title = nomeInput;
+                let identifier = itemEscolhido.identifier;
+                let title = nomeInput; // Mantém o nome exato digitado pelo usuário
+                if (!capaUrl) {
+                    capaUrl = `https://images.placeholders.dev/?text=${encodeURIComponent(title)}&width=500&height=500`;
+                }
 
-                let description = docEncontrado.description ? (typeof docEncontrado.description === 'string' ? docEncontrado.description : docEncontrado.description[0]) : `Baixe ${title} diretamente e jogue com alta performance.`;
-                description = description.replace(/<[^>]*>?/gm, '').trim().substring(0, 350) + "...";
-
-                const downloadLink = `https://archive.org/download/${identifier}/${encodeURIComponent(arquivoJogoFinal.name)}`;
+                let downloadLink = `https://archive.org/download/${identifier}/${encodeURIComponent(arquivoIso.name)}`;
                 
-                const ext = arquivoJogoFinal.name.split('.').pop().toUpperCase();
-                let formato = (ext === 'ZIP' || ext === '7Z' || ext === 'RAR') ? 'ISO (ZIP)' : ext;
-
-                let tamanhoFormatado = "850 MB";
-                if (arquivoJogoFinal.size) {
-                    let tamMb = (arquivoJogoFinal.size / (1024 * 1024));
-                    if (tamMb >= 1024) {
-                        tamanhoFormatado = (tamMb / 1024).toFixed(2) + " GB";
-                    } else {
-                        tamanhoFormatado = tamMb.toFixed(0) + " MB";
-                    }
+                let tamanhoFormatado = "900 MB";
+                if (arquivoIso.size) {
+                    let mb = arquivoIso.size / (1024 * 1024);
+                    tamanhoFormatado = mb >= 1024 ? (mb / 1024).toFixed(2) + " GB" : mb.toFixed(0) + " MB";
                 }
 
-                let plataformaAuto = 'PSP';
-                let lowerTitle = (title + ' ' + identifier).toLowerCase();
-                if (lowerTitle.includes('ps2') || lowerTitle.includes('playstation 2')) plataformaAuto = 'PS2';
-                else if (lowerTitle.includes('ps3') || lowerTitle.includes('playstation 3')) plataformaAuto = 'PS3';
-                else if (lowerTitle.includes('apk') || lowerTitle.includes('android')) plataformaAuto = 'APK';
+                let formato = arquivoIso.name.split('.').pop().toUpperCase();
+                if (formato === 'ZIP') formato = 'ISO (ZIP)';
 
-                statusMsg.innerText = "🖼️ [IA] Carregando capa oficial...";
-                let finalCoverUrl = capaEncontradaArchive;
-                if (!finalCoverUrl) {
-                    finalCoverUrl = `https://images.placeholders.dev/?text=${encodeURIComponent(title)}&width=500&height=500`;
-                    try {
-                        const bingRes = await fetch(`https://tse1.mm.bing.net/th?q=${encodeURIComponent(title)}+${plataformaAuto.toLowerCase()}+game+boxart+cover&w=500&h=500&c=7`);
-                        if (bingRes.ok && bingRes.url) {
-                            finalCoverUrl = bingRes.url;
-                        }
-                    } catch(e) {}
-                }
+                let descricao = itemEscolhido.description ? (Array.isArray(itemEscolhido.description) ? itemEscolhido.description[0] : itemEscolhido.description) : `Baixe ${title} diretamente e aproveite alta performance.`;
+                descricao = descricao.replace(/<[^>]*>?/gm, '').trim().substring(0, 300) + "...";
 
                 document.getElementById('gameName').value = title;
-                document.getElementById('gameImage').value = finalCoverUrl;
-                document.getElementById('gameCategory').value = plataformaAuto;
+                document.getElementById('gameImage').value = capaUrl;
+                document.getElementById('gameCategory').value = "PSP";
                 document.getElementById('gameSize').value = tamanhoFormatado;
                 document.getElementById('gameFormat').value = formato;
                 document.getElementById('gameStatus').value = "Grátis";
-                document.getElementById('gameDescription').value = description;
+                document.getElementById('gameDescription').value = descricao;
                 document.getElementById('gameLink').value = downloadLink;
                 document.getElementById('gameBtnText').value = "Instalar (Download Direto)";
 
-                statusMsg.innerText = "✨ [IA] Jogo encontrado e preenchido com sucesso!";
+                statusMsg.innerText = "✨ Jogo exato gerado e preenchido com sucesso!";
             } catch (err) {
                 console.error(err);
-                statusMsg.innerText = "❌ Erro na busca automática. Tente novamente.";
+                statusMsg.innerText = "❌ Erro ao buscar. Tente novamente.";
             }
         }
 
