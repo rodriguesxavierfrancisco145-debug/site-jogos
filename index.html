@@ -718,7 +718,7 @@
                 <p style="font-size: 0.8rem; color: var(--text-sub);">Gerencie jogos na Nuvem (Banco de Dados)</p>      
             </header>      
 
-            <!-- NOVO GERADOR DE LINKS DE IMAGEM .JPG -->
+            <!-- GERADOR DE LINKS DE IMAGEM .JPG -->
             <div class="form-card" style="border-color: #fbbf24; background: rgba(251, 191, 36, 0.03);">
                 <h2 style="color: #fbbf24;">Hospedar Imagem (Gerar link .jpg)</h2>
                 <p style="font-size: 0.8rem; color: var(--text-sub); margin-bottom: 12px;">Selecione uma imagem do seu dispositivo para gerar um link direto terminado em .jpg:</p>
@@ -946,7 +946,7 @@
             }
         }
 
-        // FUNCIONALIDADE DE UPLOAD E GERADOR DE LINK .JPG
+        // FUNCIONALIDADE DE UPLOAD E GERADOR DE LINK .JPG CORRIGIDA
         async function fazerUploadImagemImgBB() {
             const fileInput = document.getElementById('imageFileInput');
             const statusMsg = document.getElementById('uploadStatusMsg');
@@ -957,29 +957,34 @@
             }
 
             const file = fileInput.files[0];
-            statusMsg.innerText = "⏳ Enviando imagem e gerando link .jpg...";
+            statusMsg.innerText = "⏳ Convertendo e enviando imagem...";
 
-            const formData = new FormData();
-            formData.append("image", file);
+            const toBase64 = file => new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => resolve(reader.result.split(',')[1]);
+                reader.onerror = error => reject(error);
+            });
 
             try {
-                const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, {
+                const base64Image = await toBase64(file);
+
+                const formData = new URLSearchParams();
+                formData.append("key", IMGBB_API_KEY);
+                formData.append("image", base64Image);
+
+                const res = await fetch("https://api.imgbb.com/1/upload", {
                     method: 'POST',
                     body: formData
                 });
                 const data = await res.json();
 
-                if (data && data.data && data.data.url) {
+                if (data && data.success && data.data && data.data.url) {
                     let directUrl = data.data.url;
-                    // Garante que o link termina com .jpg ou extensão válida
-                    if (!directUrl.match(/\.(jpg|jpeg|png|webp|gif)$/i)) {
-                        directUrl = directUrl + ".jpg";
-                    }
-
                     document.getElementById('gameImage').value = directUrl;
-                    statusMsg.innerText = `✅ Link gerado e preenchido no formulário:\n${directUrl}`;
+                    statusMsg.innerText = `✅ Link gerado e preenchido com sucesso!`;
                 } else {
-                    statusMsg.innerText = "❌ Erro ao enviar imagem. Tente novamente.";
+                    statusMsg.innerText = "❌ Erro ao enviar imagem. Verifique a chave ou o tamanho.";
                 }
             } catch (err) {
                 console.error(err);
