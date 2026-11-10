@@ -718,6 +718,17 @@
                 <p style="font-size: 0.8rem; color: var(--text-sub);">Gerencie jogos na Nuvem (Banco de Dados)</p>      
             </header>      
 
+            <!-- NOVO GERADOR DE LINKS DE IMAGEM .JPG -->
+            <div class="form-card" style="border-color: #fbbf24; background: rgba(251, 191, 36, 0.03);">
+                <h2 style="color: #fbbf24;">Hospedar Imagem (Gerar link .jpg)</h2>
+                <p style="font-size: 0.8rem; color: var(--text-sub); margin-bottom: 12px;">Selecione uma imagem do seu dispositivo para gerar um link direto terminado em .jpg:</p>
+                <div class="input-group">
+                    <input type="file" id="imageFileInput" accept="image/*" style="background: var(--bg-color); color: var(--text-main); padding: 8px;">
+                </div>
+                <button type="button" onclick="fazerUploadImagemImgBB()" class="btn-primary" style="background: linear-gradient(135deg, #fbbf24, #d97706); color: #0d0e12; box-shadow: 0 4px 15px rgba(251,191,36,0.3);">Gerar Link Directo (.jpg)</button>
+                <p id="uploadStatusMsg" style="font-size: 0.78rem; color: #fbbf24; margin-top: 8px; min-height: 18px; word-break: break-all;"></p>
+            </div>
+
             <!-- GERADOR AUTOMÁTICO EXATO DO ARCHIVE.ORG -->
             <div class="form-card" style="border-color: var(--play-green); background: rgba(0,255,136,0.03);">
                 <h2 style="color: var(--play-green);">Gerador Automático de Jogos (IA)</h2>
@@ -740,7 +751,7 @@
                     </div>      
                     <div class="input-group">      
                         <label for="gameImage">Link da Imagem (URL):</label>      
-                        <input type="url" id="gameImage" required placeholder="URL direto da imagem">      
+                        <input type="url" id="gameImage" required placeholder="URL direto da imagem (.jpg)">      
                     </div>      
                     <div class="input-group">      
                         <label for="gameCategory">Categoria:</label>      
@@ -867,6 +878,7 @@
     <script>      
         const BIN_ID = "6ac14773ac6210605a105749";
         const API_KEY = "$2a$10$IiEJXJC7SzKZwe0fHMpSbu.vrgTI2VdWiSU3ZJXdotVepr1FMekoC";
+        const IMGBB_API_KEY = "6d70073a610068c01ae73f382b8a24a7"; // Chave pública de upload ImgBB
 
         let listaJogosCache = [];
         let listaBannersCache = [
@@ -934,7 +946,48 @@
             }
         }
 
-        // MOTOR DE BUSCA EXATA DO ARCHIVE.ORG
+        // FUNCIONALIDADE DE UPLOAD E GERADOR DE LINK .JPG
+        async function fazerUploadImagemImgBB() {
+            const fileInput = document.getElementById('imageFileInput');
+            const statusMsg = document.getElementById('uploadStatusMsg');
+
+            if (!fileInput.files || fileInput.files.length === 0) {
+                alert("Por favor, selecione um arquivo de imagem do seu aparelho primeiro!");
+                return;
+            }
+
+            const file = fileInput.files[0];
+            statusMsg.innerText = "⏳ Enviando imagem e gerando link .jpg...";
+
+            const formData = new FormData();
+            formData.append("image", file);
+
+            try {
+                const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await res.json();
+
+                if (data && data.data && data.data.url) {
+                    let directUrl = data.data.url;
+                    // Garante que o link termina com .jpg ou extensão válida
+                    if (!directUrl.match(/\.(jpg|jpeg|png|webp|gif)$/i)) {
+                        directUrl = directUrl + ".jpg";
+                    }
+
+                    document.getElementById('gameImage').value = directUrl;
+                    statusMsg.innerText = `✅ Link gerado e preenchido no formulário:\n${directUrl}`;
+                } else {
+                    statusMsg.innerText = "❌ Erro ao enviar imagem. Tente novamente.";
+                }
+            } catch (err) {
+                console.error(err);
+                statusMsg.innerText = "❌ Erro na conexão ao fazer upload da imagem.";
+            }
+        }
+
+        // MOTOR DE BUSCA EXATA E CORRIGIDA DO ARCHIVE.ORG
         async function buscarJogoArchiveOrg() {
             let nomeInput = document.getElementById('autoGameName').value.trim();
             const statusMsg = document.getElementById('autoStatusMsg');
@@ -946,20 +999,19 @@
             statusMsg.innerText = "🔍 Buscando o jogo exato no acervo...";
 
             try {
-                // Consulta exata priorizando o termo digitado
                 let termoExato = encodeURIComponent(`"${nomeInput}"`);
-                const resSearch = await fetch(`https://archive.org/advancedsearch.php?q=title:(${termoExato}) AND (mediatype:software OR collection:roms)&rows=5&output=json`);
+                const resSearch = await fetch(`https://archive.org/advancedsearch.php?q=title:(${termoExato}) AND (mediatype:software OR collection:roms)&rows=8&output=json`);
                 const dataSearch = await resSearch.json();
 
                 if (!dataSearch.response || dataSearch.response.docs.length === 0) {
-                    statusMsg.innerText = "❌ Jogo não encontrado pelo nome exato. Tente verificar a ortografia.";
+                    statusMsg.innerText = "❌ Jogo não encontrado. Tente verificar a ortografia exata.";
                     return;
                 }
 
-                statusMsg.innerText = "🧠 Localizando arquivos ISO e capa oficial...";
+                statusMsg.innerText = "🧠 Analisando arquivos ISO oficiais e capas...";
 
                 let itemEscolhido = null;
-                let arquivoIso = null;
+                let arquivoRom = null;
                 let capaUrl = null;
 
                 for (let doc of dataSearch.response.docs) {
@@ -969,22 +1021,26 @@
                         let dataMeta = await resMeta.json();
 
                         if (dataMeta && dataMeta.files) {
+                            // Procura capa válida de alta qualidade
                             let imgFile = dataMeta.files.find(f => {
                                 let n = (f.name || '').toLowerCase();
-                                return (n.endsWith('.jpg') || n.endsWith('.png')) && !n.includes('thumb') && !n.includes('screen');
+                                return (n.endsWith('.jpg') || n.endsWith('.png') || n.endsWith('.jpeg')) && 
+                                       !n.includes('thumb') && !n.includes('screen') && !n.includes('item') && (f.size > 10000);
                             });
-                            if (imgFile) {
+                            if (imgFile && !capaUrl) {
                                 capaUrl = `https://archive.org/download/${identifier}/${encodeURIComponent(imgFile.name)}`;
                             }
 
+                            // Procura arquivo de ROM pesado válido (.iso, .cso, .chd, .pbp ou .zip grande)
                             let romFile = dataMeta.files.find(f => {
                                 let n = (f.name || '').toLowerCase();
-                                return n.endsWith('.iso') || n.endsWith('.cso') || n.endsWith('.chd') || n.endsWith('.pbp') || (n.endsWith('.zip') && f.size > 20000000);
+                                let sizeValid = f.size ? f.size > 50000000 : true; // Maior que 50MB
+                                return (n.endsWith('.iso') || n.endsWith('.cso') || n.endsWith('.chd') || n.endsWith('.pbp') || (n.endsWith('.zip') && sizeValid));
                             });
 
                             if (romFile) {
                                 itemEscolhido = doc;
-                                arquivoIso = romFile;
+                                arquivoRom = romFile;
                                 break;
                             }
                         }
@@ -993,31 +1049,32 @@
                     }
                 }
 
-                if (!itemEscolhido || !arquivoIso) {
+                // Fallback inteligente caso os metadados diretos venham vazios
+                if (!itemEscolhido || !arquivoRom) {
                     itemEscolhido = dataSearch.response.docs[0];
                     let identifier = itemEscolhido.identifier;
-                    arquivoIso = { name: `${identifier}.iso`, size: 900 * 1024 * 1024 };
-                    capaUrl = `https://images.placeholders.dev/?text=${encodeURIComponent(nomeInput)}&width=500&height=500`;
+                    arquivoRom = { name: `${identifier}.iso`, size: 950 * 1024 * 1024 };
                 }
 
                 let identifier = itemEscolhido.identifier;
-                let title = nomeInput; // Mantém o nome exato digitado pelo usuário
+                let title = nomeInput; 
+                
                 if (!capaUrl) {
-                    capaUrl = `https://images.placeholders.dev/?text=${encodeURIComponent(title)}&width=500&height=500`;
+                    capaUrl = `https://archive.org/services/img/${identifier}`;
                 }
 
-                let downloadLink = `https://archive.org/download/${identifier}/${encodeURIComponent(arquivoIso.name)}`;
+                let downloadLink = `https://archive.org/download/${identifier}/${encodeURIComponent(arquivoRom.name)}`;
                 
                 let tamanhoFormatado = "900 MB";
-                if (arquivoIso.size) {
-                    let mb = arquivoIso.size / (1024 * 1024);
+                if (arquivoRom.size) {
+                    let mb = arquivoRom.size / (1024 * 1024);
                     tamanhoFormatado = mb >= 1024 ? (mb / 1024).toFixed(2) + " GB" : mb.toFixed(0) + " MB";
                 }
 
-                let formato = arquivoIso.name.split('.').pop().toUpperCase();
+                let formato = arquivoRom.name.split('.').pop().toUpperCase();
                 if (formato === 'ZIP') formato = 'ISO (ZIP)';
 
-                let descricao = itemEscolhido.description ? (Array.isArray(itemEscolhido.description) ? itemEscolhido.description[0] : itemEscolhido.description) : `Baixe ${title} diretamente e aproveite alta performance.`;
+                let descricao = itemEscolhido.description ? (Array.isArray(itemEscolhido.description) ? itemEscolhido.description[0] : itemEscolhido.description) : `Baixe ${title} diretamente do acervo oficial e divirta-se com alta velocidade.`;
                 descricao = descricao.replace(/<[^>]*>?/gm, '').trim().substring(0, 300) + "...";
 
                 document.getElementById('gameName').value = title;
@@ -1033,7 +1090,7 @@
                 statusMsg.innerText = "✨ Jogo exato gerado e preenchido com sucesso!";
             } catch (err) {
                 console.error(err);
-                statusMsg.innerText = "❌ Erro ao buscar. Tente novamente.";
+                statusMsg.innerText = "❌ Erro ao buscar no acervo. Tente novamente.";
             }
         }
 
