@@ -173,6 +173,13 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .mod-item:hover {
+      background: rgba(0, 255, 136, 0.08);
+      border-color: rgba(0, 255, 136, 0.3);
     }
 
     .badge-active {
@@ -375,7 +382,7 @@
 
       <div class="sidebar-title">Mods Ativos</div>
       <ul class="mod-list" id="modList">
-        <li class="mod-item">
+        <li class="mod-item" onclick="downloadSingleMod(0)">
           <span>super_pulo.cs</span>
           <span class="badge-active">ATIVO</span>
         </li>
@@ -418,6 +425,7 @@
     const generatedScripts = [
       {
         filename: "cleo/super_pulo.cs",
+        displayName: "super_pulo.cs",
         content: "{$CLEO .cs}\n0000: NOP\n:MAIN\nwait 0\nif\n  key_pressed 32\nthen\n  // Pulo turbinado\nend\njump @MAIN"
       }
     ];
@@ -439,6 +447,21 @@
           tab.classList.add('active');
         }
       });
+    }
+
+    // Função para baixar um mod individual com confirmação
+    function downloadSingleMod(index) {
+      const script = generatedScripts[index];
+      if (!script) return;
+
+      const confirmDownload = confirm(`Deseja baixar o mod "${script.displayName}"?`);
+      if (confirmDownload) {
+        const blob = new Blob([script.content], { type: 'text/plain;charset=utf-8' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = script.displayName;
+        link.click();
+      }
     }
 
     function sendMessage() {
@@ -463,14 +486,18 @@
         messagesContainer.appendChild(aiMsg);
 
         const newFileName = `mod_custom_${Date.now()}.cs`;
+        const scriptIndex = generatedScripts.length;
+
         generatedScripts.push({
           filename: `cleo/${newFileName}`,
+          displayName: newFileName,
           content: `// Mod: ${text}\n{$CLEO .cs}\n0000: NOP\n`
         });
 
         const modList = document.getElementById('modList');
         const item = document.createElement('li');
         item.className = 'mod-item';
+        item.onclick = function() { downloadSingleMod(scriptIndex); };
         item.innerHTML = `<span>${newFileName}</span><span class="badge-active">ATIVO</span>`;
         modList.appendChild(item);
 
