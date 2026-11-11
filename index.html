@@ -4,152 +4,252 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>GTA Mod Studio AI</title>
-  <!-- Biblioteca para gerar arquivos ZIP direto no navegador -->
+  <!-- Fontes Gamer -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+  <!-- Biblioteca para gerar ZIP -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  
   <style>
+    :root {
+      --bg-dark: #090a10;
+      --card-bg: rgba(18, 20, 29, 0.75);
+      --card-border: rgba(0, 255, 136, 0.15);
+      --neon-green: #00ff88;
+      --neon-green-glow: rgba(0, 255, 136, 0.4);
+      --neon-cyan: #00e5ff;
+      --text-main: #f0f3fe;
+      --text-muted: #7e859b;
+    }
+
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: 'Rajdhani', sans-serif;
     }
 
     body {
-      background-color: #0f111a;
-      color: #e1e1e6;
+      background-color: var(--bg-dark);
+      background-image: 
+        radial-gradient(circle at 15% 15%, rgba(0, 255, 136, 0.05) 0%, transparent 40%),
+        radial-gradient(circle at 85% 85%, rgba(0, 229, 255, 0.05) 0%, transparent 40%);
+      color: var(--text-main);
       display: flex;
       flex-direction: column;
       height: 100vh;
+      height: 100dvh;
       overflow: hidden;
     }
 
     /* Cabeçalho */
     header {
-      background-color: #161824;
-      padding: 12px 20px;
+      background: rgba(12, 14, 22, 0.9);
+      backdrop-filter: blur(12px);
+      padding: 12px 18px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border-bottom: 1px solid #282a36;
+      border-bottom: 1px solid var(--card-border);
+      z-index: 10;
     }
 
     header h1 {
-      font-size: 1.2rem;
-      color: #00d26a;
-      letter-spacing: 1px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 800;
+      background: linear-gradient(90deg, var(--neon-green), var(--neon-cyan));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
     }
 
     .btn-export {
-      background-color: #00d26a;
+      background: linear-gradient(135deg, var(--neon-green), #00b85c);
       color: #000;
       border: none;
       padding: 8px 16px;
-      font-weight: bold;
-      border-radius: 4px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      border-radius: 6px;
       cursor: pointer;
-      transition: 0.2s;
-    }
-
-    .btn-export:hover {
-      background-color: #00b85c;
-    }
-
-    /* Layout Principal */
-    .main-container {
-      display: flex;
-      flex: 1;
-      height: calc(100vh - 55px);
-    }
-
-    /* Painel Esquerdo: Arquivos e Mods */
-    .sidebar-left {
-      width: 260px;
-      background-color: #161824;
-      border-right: 1px solid #282a36;
-      padding: 15px;
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-    }
-
-    .sidebar-title {
-      font-size: 0.85rem;
+      box-shadow: 0 0 12px var(--neon-green-glow);
+      transition: all 0.2s ease;
       text-transform: uppercase;
-      color: #8b92a5;
       letter-spacing: 0.5px;
     }
 
+    .btn-export:active {
+      transform: scale(0.96);
+    }
+
+    /* Navegação mobile (Tabs) */
+    .mobile-nav {
+      display: flex;
+      background: #0d0f17;
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    .nav-tab {
+      flex: 1;
+      padding: 10px;
+      text-align: center;
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      cursor: pointer;
+    }
+
+    .nav-tab.active {
+      color: var(--neon-green);
+      border-bottom-color: var(--neon-green);
+      background: rgba(0, 255, 136, 0.05);
+    }
+
+    /* Container Principal */
+    .main-container {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Painel Esquerdo */
+    .sidebar-left {
+      width: 280px;
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      border-right: 1px solid var(--card-border);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .sidebar-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 1px;
+      color: var(--neon-cyan);
+      text-transform: uppercase;
+    }
+
     .upload-area {
-      border: 2px dashed #383a59;
-      border-radius: 6px;
-      padding: 15px;
+      border: 1.5px dashed rgba(0, 255, 136, 0.3);
+      border-radius: 10px;
+      padding: 18px 12px;
       text-align: center;
       cursor: pointer;
-      background-color: #1a1c29;
+      background: rgba(0, 0, 0, 0.3);
+      transition: all 0.3s ease;
     }
 
     .upload-area:hover {
-      border-color: #00d26a;
+      border-color: var(--neon-green);
+      box-shadow: inset 0 0 15px rgba(0, 255, 136, 0.1);
     }
 
-    .file-input {
-      display: none;
-    }
+    .file-input { display: none; }
 
     .mod-list {
       list-style: none;
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 10px;
+      overflow-y: auto;
     }
 
     .mod-item {
-      background-color: #212333;
-      padding: 8px 12px;
-      border-radius: 4px;
-      font-size: 0.9rem;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-size: 0.95rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
 
-    /* Área Central: Gameplay/Preview */
+    .badge-active {
+      background: rgba(0, 255, 136, 0.15);
+      color: var(--neon-green);
+      border: 1px solid rgba(0, 255, 136, 0.3);
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+
+    /* Área Central (Preview) */
     .preview-area {
       flex: 1;
-      background-color: #050508;
+      background: #040508;
       display: flex;
-      flex-direction: column;
       justify-content: center;
       align-items: center;
+      padding: 15px;
       position: relative;
     }
 
     .canvas-placeholder {
-      width: 90%;
-      height: 80%;
-      border: 1px solid #282a36;
-      border-radius: 8px;
+      width: 100%;
+      height: 100%;
+      max-width: 900px;
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      background: radial-gradient(circle, #1a1c29 0%, #08090d 100%);
-      color: #565d73;
+      background: radial-gradient(circle, #101424 0%, #05060a 100%);
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
+      position: relative;
+      overflow: hidden;
+      text-align: center;
+      padding: 20px;
     }
 
-    /* Painel Direito: Chat da IA */
+    .canvas-placeholder::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, transparent, var(--neon-green), transparent);
+    }
+
+    .play-icon {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: rgba(0, 255, 136, 0.1);
+      border: 1px solid var(--neon-green);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 15px;
+      box-shadow: 0 0 20px var(--neon-green-glow);
+    }
+
+    /* Painel Direito (Chat) */
     .sidebar-right {
-      width: 320px;
-      background-color: #161824;
-      border-left: 1px solid #282a36;
+      width: 340px;
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      border-left: 1px solid var(--card-border);
       display: flex;
       flex-direction: column;
     }
 
     .chat-header {
-      padding: 15px;
-      border-bottom: 1px solid #282a36;
-      font-weight: bold;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--card-border);
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.85rem;
+      color: var(--neon-cyan);
     }
 
     .chat-messages {
@@ -162,57 +262,85 @@
     }
 
     .message {
-      padding: 10px 12px;
-      border-radius: 6px;
-      font-size: 0.88rem;
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-size: 0.95rem;
       line-height: 1.4;
+      max-width: 85%;
     }
 
     .message.system {
-      background-color: #212333;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
       align-self: flex-start;
+      border-bottom-left-radius: 2px;
     }
 
     .message.user {
-      background-color: #00d26a;
+      background: linear-gradient(135deg, var(--neon-green), #00b85c);
       color: #000;
+      font-weight: 600;
       align-self: flex-end;
+      border-bottom-right-radius: 2px;
     }
 
     .chat-input-container {
-      padding: 15px;
-      border-top: 1px solid #282a36;
+      padding: 12px;
+      border-top: 1px solid var(--card-border);
       display: flex;
       gap: 8px;
+      background: rgba(0, 0, 0, 0.2);
     }
 
     .chat-input {
       flex: 1;
-      background-color: #0f111a;
-      border: 1px solid #282a36;
-      padding: 10px;
-      border-radius: 4px;
+      background: rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 12px;
+      border-radius: 8px;
       color: #fff;
+      font-size: 0.95rem;
       outline: none;
     }
 
     .chat-input:focus {
-      border-color: #00d26a;
+      border-color: var(--neon-green);
+      box-shadow: 0 0 10px var(--neon-green-glow);
     }
 
     .btn-send {
-      background-color: #212333;
-      color: #00d26a;
-      border: 1px solid #00d26a;
-      padding: 0 15px;
-      border-radius: 4px;
+      background: var(--neon-green);
+      color: #000;
+      border: none;
+      padding: 0 16px;
+      border-radius: 8px;
       cursor: pointer;
-      font-weight: bold;
+      font-weight: 700;
+      transition: all 0.2s;
     }
 
     .btn-send:hover {
-      background-color: #00d26a;
-      color: #000;
+      box-shadow: 0 0 12px var(--neon-green-glow);
+    }
+
+    /* REGRAS RESPONSIVAS PARA CELULAR */
+    @media (max-width: 850px) {
+      .mobile-nav { display: flex; }
+      
+      .sidebar-left, .preview-area, .sidebar-right {
+        width: 100%;
+        height: 100%;
+        display: none;
+      }
+
+      .main-container.tab-files .sidebar-left { display: flex; }
+      .main-container.tab-preview .preview-area { display: flex; }
+      .main-container.tab-chat .sidebar-right { display: flex; }
+    }
+
+    @media (min-width: 851px) {
+      .mobile-nav { display: none; }
+      .sidebar-left, .preview-area, .sidebar-right { display: flex !important; }
     }
   </style>
 </head>
@@ -220,26 +348,36 @@
 
   <!-- Cabeçalho -->
   <header>
-    <h1>GTA MOD STUDIO AI</h1>
-    <button class="btn-export" onclick="exportModPack()">Exportar Jogo Modificado (.ZIP)</button>
+    <h1>GTA MOD STUDIO</h1>
+    <button class="btn-export" onclick="exportModPack()">Exportar (.ZIP)</button>
   </header>
 
+  <!-- Navegação em Abas no Celular -->
+  <div class="mobile-nav">
+    <button class="nav-tab" onclick="switchTab('files')">Arquivos</button>
+    <button class="nav-tab active" onclick="switchTab('preview')">Preview</button>
+    <button class="nav-tab" onclick="switchTab('chat')">IA Modder</button>
+  </div>
+
   <!-- Container Principal -->
-  <div class="main-container">
+  <div class="main-container tab-preview" id="mainContainer">
     
     <!-- Esquerda: Gerenciador de Arquivos -->
     <div class="sidebar-left">
       <div class="sidebar-title">Arquivos do Jogo</div>
       <label class="upload-area">
-        <p style="font-size: 0.85rem;">Clique para carregar a pasta do GTA / Mods</p>
+        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="margin-bottom: 5px; color: var(--neon-green);">
+          <path d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
+        </svg>
+        <p style="font-size: 0.85rem; color: var(--text-main);">Carregar Pasta do GTA / Mods</p>
         <input type="file" class="file-input" id="fileInput" multiple webkitdirectory />
       </label>
 
-      <div class="sidebar-title">Mods Gerados</div>
+      <div class="sidebar-title">Mods Ativos</div>
       <ul class="mod-list" id="modList">
         <li class="mod-item">
           <span>super_pulo.cs</span>
-          <small style="color: #00d26a;">Ativo</small>
+          <span class="badge-active">ATIVO</span>
         </li>
       </ul>
     </div>
@@ -247,12 +385,15 @@
     <!-- Centro: Tela de Simulação / Preview -->
     <div class="preview-area">
       <div class="canvas-placeholder">
-        <svg width="64" height="64" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-          <path stroke-linecap="round" stroke-linejoin="round" d="M15.91 11.672a.375.375 0 010 .656l-5.603 3.113a.375.375 0 01-.557-.328V8.887c0-.286.307-.466.557-.327l5.603 3.112z" />
-        </svg>
-        <p style="margin-top: 15px;">Área de Pré-visualização do Jogo</p>
-        <small>Carregue os arquivos ou digite um comando para simular as alterações</small>
+        <div class="play-icon">
+          <svg width="28" height="28" fill="var(--neon-green)" viewBox="0 0 24 24">
+            <path d="M8 5v14l11-7z"/>
+          </svg>
+        </div>
+        <h3 style="color: #fff; font-family: 'Orbitron'; font-size: 1.1rem; margin-bottom: 6px;">Simulador do Jogo</h3>
+        <p style="color: var(--text-muted); font-size: 0.85rem; max-width: 300px;">
+          Suba os arquivos ou envie um comando no chat da IA para ver o mod em ação.
+        </p>
       </div>
     </div>
 
@@ -261,18 +402,18 @@
       <div class="chat-header">Assistente de Criação</div>
       <div class="chat-messages" id="chatMessages">
         <div class="message system">
-          Olá! O que você quer criar ou alterar no GTA San Andreas hoje? Digite sua ideia abaixo.
+          E aí! O que você quer criar pro GTA San Andreas hoje? Digite sua ideia abaixo!
         </div>
       </div>
       <div class="chat-input-container">
-        <input type="text" class="chat-input" id="chatInput" placeholder="Ex: Crie um script para voar..." />
+        <input type="text" class="chat-input" id="chatInput" placeholder="Ex: CJ voa com a tecla SHIFT..." />
         <button class="btn-send" onclick="sendMessage()">Gerar</button>
       </div>
     </div>
 
   </div>
 
-  <!-- Lógica da Aplicação -->
+  <!-- Script da Aplicação -->
   <script>
     const generatedScripts = [
       {
@@ -281,6 +422,25 @@
       }
     ];
 
+    // Troca de abas no celular
+    function switchTab(tabName) {
+      const container = document.getElementById('mainContainer');
+      const tabs = document.querySelectorAll('.nav-tab');
+      
+      container.className = `main-container tab-${tabName}`;
+      
+      tabs.forEach((tab, index) => {
+        tab.classList.remove('active');
+        if (
+          (tabName === 'files' && index === 0) ||
+          (tabName === 'preview' && index === 1) ||
+          (tabName === 'chat' && index === 2)
+        ) {
+          tab.classList.add('active');
+        }
+      });
+    }
+
     function sendMessage() {
       const input = document.getElementById('chatInput');
       const messagesContainer = document.getElementById('chatMessages');
@@ -288,7 +448,6 @@
 
       if (!text) return;
 
-      // Adiciona mensagem do usuário
       const userMsg = document.createElement('div');
       userMsg.className = 'message user';
       userMsg.innerText = text;
@@ -297,35 +456,31 @@
       input.value = '';
       messagesContainer.scrollTop = messagesContainer.scrollHeight;
 
-      // Resposta simulada da IA
       setTimeout(() => {
         const aiMsg = document.createElement('div');
         aiMsg.className = 'message system';
-        aiMsg.innerText = `Script gerado com sucesso para: "${text}". Adicionado à lista de mods.`;
+        aiMsg.innerText = `Script CLEO gerado pra: "${text}". Mod ativado na lista!`;
         messagesContainer.appendChild(aiMsg);
 
-        // Adiciona à lista da barra lateral
         const newFileName = `mod_custom_${Date.now()}.cs`;
         generatedScripts.push({
           filename: `cleo/${newFileName}`,
-          content: `// Mod gerado para: ${text}\n{$CLEO .cs}\n0000: NOP\n`
+          content: `// Mod: ${text}\n{$CLEO .cs}\n0000: NOP\n`
         });
 
         const modList = document.getElementById('modList');
         const item = document.createElement('li');
         item.className = 'mod-item';
-        item.innerHTML = `<span>${newFileName}</span><small style="color: #00d26a;">Ativo</small>`;
+        item.innerHTML = `<span>${newFileName}</span><span class="badge-active">ATIVO</span>`;
         modList.appendChild(item);
 
         messagesContainer.scrollTop = messagesContainer.scrollHeight;
       }, 1000);
     }
 
-    // Função para exportar os arquivos modificados em .ZIP
     function exportModPack() {
       const zip = new JSZip();
       
-      // Adiciona os scripts gerados dentro da pasta /cleo no zip
       generatedScripts.forEach(script => {
         zip.file(script.filename, script.content);
       });
@@ -338,11 +493,8 @@
       });
     }
 
-    // Permitir enviar pressionando a tecla Enter
     document.getElementById('chatInput').addEventListener('keypress', function(e) {
-      if (e.key === 'Enter') {
-        sendMessage();
-      }
+      if (e.key === 'Enter') sendMessage();
     });
   </script>
 </body>
