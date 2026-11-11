@@ -372,12 +372,12 @@
     <!-- Esquerda: Gerenciador de Arquivos -->
     <div class="sidebar-left">
       <div class="sidebar-title">Arquivos do Jogo</div>
-      <label class="upload-area">
+      <label class="upload-area" onclick="triggerFileUpload()">
         <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="margin-bottom: 5px; color: var(--neon-green);">
           <path d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
         </svg>
         <p style="font-size: 0.85rem; color: var(--text-main);">Carregar Pasta do GTA / Mods</p>
-        <input type="file" class="file-input" id="fileInput" multiple webkitdirectory />
+        <input type="file" class="file-input" id="fileInput" multiple webkitdirectory onchange="handleFileSelection(event)" />
       </label>
 
       <div class="sidebar-title">Mods Ativos</div>
@@ -435,7 +435,7 @@
       const container = document.getElementById('mainContainer');
       const tabs = document.querySelectorAll('.nav-tab');
       
-      container.className = `main-container tab-${tabName}`;
+      container.className = `main-container tab-tab-${tabName}`.replace('tab-tab-', 'tab-');
       
       tabs.forEach((tab, index) => {
         tab.classList.remove('active');
@@ -447,6 +447,19 @@
           tab.classList.add('active');
         }
       });
+    }
+
+    // Aciona o seletor de arquivos do sistema operacional/gerenciadores
+    function triggerFileUpload() {
+      document.getElementById('fileInput').click();
+    }
+
+    // Trata os arquivos selecionados
+    function handleFileSelection(event) {
+      const files = event.target.files;
+      if (files.length > 0) {
+        alert(`${files.length} arquivo(s) carregado(s) com sucesso para o projeto!`);
+      }
     }
 
     // Função para baixar um mod individual com confirmação
