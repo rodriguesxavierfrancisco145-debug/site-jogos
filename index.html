@@ -1,1517 +1,349 @@
-<!DOCTYPE html>  
-<html lang="pt-BR">    
-<head>      
-    <meta charset="UTF-8">      
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">      
-    <title>PSP GAMER STORE</title>      
-    <style>      
-        :root {      
-            --bg-color: #0d0e12;      
-            --surface-color: #1a1b22;      
-            --surface-variant: #232530;
-            --card-bg: #1a1b22;      
-            --text-main: #f1f3f5;      
-            --text-sub: #9ca3af;      
-            --play-green: #00ff88;      
-            --play-green-hover: #00cc6a;      
-            --play-blue: #38bdf8;
-            --accent-pink: #f43f5e;      
-            --border-color: rgba(56, 189, 248, 0.2);
-        }  
-        * {      
-            margin: 0;      
-            padding: 0;      
-            box-sizing: border-box;      
-            font-family: 'Roboto', 'Segoe UI', Arial, sans-serif;      
-        }    
-        body {      
-            background-color: var(--bg-color);      
-            color: var(--text-main);      
-            padding-bottom: 30px;
-        }
-
-        .container {
-            max-width: 520px;
-            margin: 0 auto;
-            padding: 0 16px;
-        }
-
-        .play-header {
-            position: sticky;
-            top: 0;
-            background-color: rgba(13, 14, 18, 0.95);
-            backdrop-filter: blur(10px);
-            z-index: 900;
-            padding: 12px 0 8px 0;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .top-bar {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 12px;
-            margin-bottom: 12px;
-        }
-
-        .brand-container {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            cursor: pointer;
-        }
-
-        .play-icon {
-            width: 36px;
-            height: 36px;
-            background: linear-gradient(135deg, #38bdf8, #0072ff);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-            color: white;
-            font-weight: bold;
-            box-shadow: 0 0 15px rgba(56, 189, 248, 0.5);
-        }
-
-        .logo {
-            color: var(--text-main);
-            font-size: 1.2rem;
-            font-weight: 800;
-            letter-spacing: 0.5px;
-            text-shadow: 0 0 10px rgba(56, 189, 248, 0.3);
-        }
-
-        .top-icons {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            position: relative;
-        }
-
-        .top-icons span {
-            background: var(--surface-color);
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            font-size: 1.1rem;
-            border: 1px solid var(--border-color);
-            transition: all 0.2s;
-        }
-
-        .top-icons span:hover {
-            background: var(--surface-variant);
-            border-color: var(--play-blue);
-        }
-
-        .search-box-container {
-            margin-top: 4px;
-        }
-
-        .search-box {
-            width: 100%;
-            background-color: var(--surface-color);
-            border: 1px solid var(--border-color);
-            border-radius: 24px;
-            padding: 11px 18px;
-            color: var(--text-main);
-            font-size: 0.9rem;
-            outline: none;
-            transition: all 0.3s ease;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);
-        }
-
-        .search-box:focus {
-            background-color: var(--surface-variant);
-            border-color: var(--play-blue);
-            box-shadow: 0 0 12px rgba(56, 189, 248, 0.4), inset 0 2px 4px rgba(0,0,0,0.5);
-        }
-
-        .dropdown-menu {
-            display: none;
-            position: absolute;
-            right: 0;
-            top: 48px;
-            background-color: var(--surface-color);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
-            width: 180px;
-            z-index: 1000;
-            overflow: hidden;
-        }
-
-        .dropdown-menu.show { display: block; }
-
-        .dropdown-item {
-            padding: 12px 16px;
-            font-size: 0.85rem;
-            color: var(--text-main);
-            cursor: pointer;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-            transition: background 0.2s;
-        }
-
-        .dropdown-item:last-child { border-bottom: none; }
-        .dropdown-item:hover { background-color: var(--surface-variant); color: var(--play-blue); }
-
-        .categories {
-            display: flex;
-            gap: 8px;
-            overflow-x: auto;
-            padding: 12px 0 8px 0;
-            scrollbar-width: none;
-        }
-
-        .categories::-webkit-scrollbar { display: none; }
-
-        .cat-btn {
-            background-color: var(--surface-color);
-            color: var(--text-sub);
-            border: 1px solid var(--border-color);
-            padding: 8px 18px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            cursor: pointer;
-            white-space: nowrap;
-            transition: all 0.3s;
-        }
-
-        .cat-btn:hover {
-            border-color: var(--play-blue);
-            color: var(--text-main);
-        }
-
-        .cat-btn.active {
-            background: linear-gradient(135deg, rgba(0,255,136,0.15), rgba(56,189,248,0.15));
-            color: var(--play-green);
-            border-color: var(--play-green);
-            font-weight: 700;
-            box-shadow: 0 0 12px rgba(0,255,136,0.3);
-        }
-
-        .carousel-container {
-            position: relative;
-            width: 100%;
-            height: 170px;
-            border-radius: 14px;
-            overflow: hidden;
-            margin: 15px 0;
-            background: var(--surface-color);
-            border: 1px solid var(--border-color);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.6);
-        }
-
-        .carousel-track {
-            display: flex;
-            width: 100%;
-            height: 100%;
-            transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
-        }
-
-        .carousel-slide {
-            min-width: 100%;
-            height: 100%;
-            position: relative;
-        }
-
-        .carousel-slide img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .carousel-caption {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: linear-gradient(to top, rgba(13, 14, 18, 0.95), transparent);
-            padding: 14px;
-            font-size: 0.9rem;
-            font-weight: 700;
-            color: white;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.8);
-        }
-
-        .carousel-indicators {
-            position: absolute;
-            bottom: 10px;
-            right: 14px;
-            display: flex;
-            gap: 6px;
-            z-index: 10;
-        }
-
-        .indicator {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.4);
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .indicator.active {
-            background: var(--play-green);
-            width: 20px;
-            border-radius: 4px;
-            box-shadow: 0 0 8px var(--play-green);
-        }
-
-        .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin: 20px 0 12px 0;
-        }
-
-        .section-header h2 {
-            font-size: 1.15rem;
-            font-weight: 800;
-            color: var(--text-main);
-            letter-spacing: 0.3px;
-        }
-
-        .games-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 14px;
-        }
-
-        @keyframes fadeInGame {
-            from { opacity: 0; transform: scale(0.9) translateY(15px); }
-            to { opacity: 1; transform: scale(1) translateY(0); }
-        }
-
-        .game-card {
-            background: var(--surface-color);
-            border-radius: 14px;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            border: 1px solid var(--border-color);
-            transition: all 0.3s ease;
-            cursor: pointer;
-            animation: fadeInGame 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
-        }
-
-        .game-card:hover {
-            transform: translateY(-5px) scale(1.02);
-            border-color: var(--play-blue);
-            box-shadow: 0 10px 25px rgba(56, 189, 248, 0.25);
-            background: var(--surface-variant);
-        }
-
-        .card-img-container {
-            position: relative;
-            width: 100%;
-            height: 135px;
-            overflow: hidden;
-        }
-
-        .game-card img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.5s ease;
-        }
-
-        .game-card:hover img {
-            transform: scale(1.08);
-        }
-
-        .category-tag {
-            position: absolute;
-            top: 8px;
-            left: 8px;
-            background: rgba(13, 14, 18, 0.85);
-            backdrop-filter: blur(4px);
-            padding: 4px 10px;
-            border-radius: 8px;
-            font-size: 0.72rem;
-            font-weight: 800;
-            color: var(--play-blue);
-            border: 1px solid rgba(56, 189, 248, 0.3);
-        }
-
-        .game-info {
-            padding: 12px;
-            display: flex;
-            flex-direction: column;
-            flex: 1;
-        }
-
-        .game-info h3 {
-            font-size: 0.92rem;
-            font-weight: 700;
-            color: var(--text-main);
-            margin-bottom: 6px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .game-meta {
-            font-size: 0.76rem;
-            color: var(--text-sub);
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .play-install-btn {
-            background: linear-gradient(135deg, var(--play-green), #00aa5b);
-            color: #0d0e12;
-            text-align: center;
-            padding: 8px 0;
-            border-radius: 8px;
-            font-size: 0.82rem;
-            font-weight: 800;
-            margin-top: auto;
-            border: none;
-            width: 100%;
-            display: block;
-            box-shadow: 0 4px 12px rgba(0, 255, 136, 0.3);
-            transition: all 0.2s;
-            text-decoration: none;
-        }
-
-        .play-install-btn:hover { 
-            transform: scale(1.02);
-            box-shadow: 0 6px 16px rgba(0, 255, 136, 0.5); 
-        }
-
-        .game-detail-card {
-            background: var(--surface-color);
-            border-radius: 16px;
-            padding: 20px;
-            border: 1px solid var(--border-color);
-            box-shadow: 0 10px 35px rgba(0,0,0,0.6);
-            animation: fadeInGame 0.3s ease;
-        }
-
-        .detail-header {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 16px;
-        }
-
-        .detail-header img {
-            width: 95px;
-            height: 95px;
-            border-radius: 14px;
-            object-fit: cover;
-            border: 1px solid var(--border-color);
-        }
-
-        .detail-header-info {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        .detail-header-info h2 {
-            font-size: 1.25rem;
-            font-weight: 800;
-            margin-bottom: 6px;
-            color: var(--text-main);
-        }
-
-        .detail-sub {
-            font-size: 0.85rem;
-            color: var(--play-blue);
-            font-weight: 700;
-        }
-
-        .detail-stats {
-            display: flex;
-            justify-content: space-around;
-            padding: 14px 0;
-            border-top: 1px solid rgba(255,255,255,0.06);
-            border-bottom: 1px solid rgba(255,255,255,0.06);
-            margin-bottom: 18px;
-            text-align: center;
-        }
-
-        .stat-item {
-            display: flex;
-            flex-direction: column;
-            gap: 3px;
-        }
-
-        .stat-value {
-            font-size: 0.9rem;
-            font-weight: 800;
-            color: var(--text-main);
-        }
-
-        .stat-label {
-            font-size: 0.72rem;
-            color: var(--text-sub);
-        }
-
-        .detail-desc {
-            font-size: 0.88rem;
-            color: var(--text-sub);
-            line-height: 1.6;
-            margin-bottom: 20px;
-            white-space: pre-wrap;
-            background: var(--bg-color);
-            padding: 14px;
-            border-radius: 10px;
-            border: 1px solid rgba(255,255,255,0.04);
-        }
-
-        .back-btn {
-            background: var(--surface-color);
-            color: var(--text-main);
-            border: 1px solid var(--border-color);
-            padding: 8px 16px;
-            border-radius: 10px;
-            font-size: 0.85rem;
-            cursor: pointer;
-            margin-bottom: 15px;
-            font-weight: 700;
-            transition: background 0.2s;
-        }
-
-        .back-btn:hover { background: var(--surface-variant); }
-
-        .form-card {
-            background: var(--surface-color);
-            padding: 20px;
-            border-radius: 14px;
-            margin-bottom: 16px;
-            border: 1px solid var(--border-color);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.4);
-        }
-
-        .form-card h2 {
-            margin-bottom: 16px;
-            font-size: 1.15rem;
-            color: var(--play-blue);
-            font-weight: 800;
-        }
-
-        .input-group { margin-bottom: 14px; }
-        .input-group label {
-            display: block;
-            margin-bottom: 6px;
-            font-size: 0.82rem;
-            color: var(--text-sub);
-            font-weight: 600;
-        }
-
-        .input-group input, .input-group select, .input-group textarea {
-            width: 100%;
-            padding: 11px;
-            border-radius: 10px;
-            border: 1px solid var(--border-color);
-            background-color: var(--bg-color);
-            color: white;
-            font-size: 0.9rem;
-            outline: none;
-            transition: border-color 0.2s;
-        }
-
-        .input-group input:focus, .input-group select:focus, .input-group textarea:focus {
-            border-color: var(--play-blue);
-        }
-
-        button.btn-primary {
-            background: linear-gradient(135deg, var(--play-green), #00aa5b);
-            color: #0d0e12;
-            border: none;
-            padding: 12px;
-            font-size: 0.95rem;
-            font-weight: 800;
-            border-radius: 10px;
-            cursor: pointer;
-            width: 100%;
-            box-shadow: 0 4px 15px rgba(0, 255, 136, 0.3);
-            text-transform: uppercase;
-        }
-
-        .delete-btn { background: linear-gradient(135deg, #f43f5e, #cc0033); color: white; border: none; padding: 8px; border-radius: 8px; width: 100%; font-size: 0.78rem; font-weight: bold; margin-top: 6px; cursor: pointer;}
-        .edit-btn { background: linear-gradient(135deg, #fbbf24, #d97706); color: #0d0e12; border: none; padding: 8px; border-radius: 8px; width: 100%; font-size: 0.78rem; font-weight: bold; margin-top: 6px; cursor: pointer;}
-
-        #shareLockOverlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(13, 14, 18, 0.96);
-            backdrop-filter: blur(8px);
-            z-index: 999999;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-
-        .share-lock-card {
-            background: var(--surface-color);
-            border: 1px solid var(--border-color);
-            border-radius: 18px;
-            padding: 25px;
-            width: 100%;
-            max-width: 390px;
-            text-align: center;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.9), 0 0 25px rgba(56, 189, 248, 0.15);
-        }
-
-        .share-counter {
-            font-size: 1.5rem;
-            font-weight: 900;
-            color: var(--play-blue);
-            margin-bottom: 10px;
-        }
-
-        .share-progress-bar-bg {
-            width: 100%; height: 10px; background: var(--bg-color); border-radius: 5px; overflow: hidden; margin-bottom: 18px; border: 1px solid rgba(255,255,255,0.05);
-        }
-
-        .share-progress-bar-fill {
-            width: 0%; height: 100%; background: linear-gradient(90deg, var(--accent-pink), var(--play-green)); transition: width 0.3s;
-        }
-
-        .whatsapp-floating-icon {
-            position: fixed;
-            bottom: 25px; left: 20px;
-            width: 56px; height: 56px;
-            background: linear-gradient(135deg, #25d366, #128c7e);
-            border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 6px 20px rgba(37, 211, 102, 0.5);
-            z-index: 99999;
-            border: 2px solid rgba(255,255,255,0.2);
-            animation: whatsappDanca 3s ease-in-out infinite;
-        }
-
-        .whatsapp-floating-icon svg { width: 30px; height: 30px; fill: white; }
-
-        @keyframes whatsappDanca {
-            0% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-6px) rotate(-3deg); }
-            100% { transform: translateY(0px) rotate(0deg); }
-        }
-
-        #whatsappFloatingBanner {
-            display: none;
-            position: fixed;
-            bottom: 20px; right: 20px; left: 20px;
-            max-width: 450px; margin: 0 auto;
-            background: var(--surface-color);
-            border: 1px solid var(--play-green);
-            border-radius: 14px;
-            padding: 14px 18px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
-            z-index: 99998;
-        }
-
-        .wa-banner-content { display: flex; align-items: center; gap: 12px; position: relative; }
-        .wa-text-area h4 { color: var(--play-green); font-size: 0.95rem; font-weight: 700; margin-bottom: 3px; }
-        .wa-text-area p { color: var(--text-sub); font-size: 0.8rem; margin-bottom: 8px; }
-        .wa-follow-btn {
-            background: linear-gradient(135deg, var(--play-green), #00aa5b); color: #0d0e12; text-decoration: none; padding: 6px 14px; border-radius: 8px; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; box-shadow: 0 3px 10px rgba(0,255,136,0.3);
-        }
-        .wa-close-btn { position: absolute; top: -5px; right: -5px; cursor: pointer; width: 22px; height: 22px; background: #232530; color: var(--text-sub); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: bold; border: 1px solid rgba(255,255,255,0.1); }
-
-        #syncStatus {
-            position: fixed; bottom: 15px; left: 50%; transform: translateX(-50%);
-            background: rgba(0, 255, 136, 0.95); color: #0d0e12; padding: 8px 18px; border-radius: 20px;
-            font-size: 0.85rem; font-weight: 800; z-index: 99999; display: none; box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-        }
-
-        .tab-content { display: none; }
-        .tab-content.active { display: block; }
-        .empty-msg { text-align: center; grid-column: 1 / -1; color: var(--text-sub); padding: 40px; font-size: 0.9rem; font-style: italic; background: var(--surface-color); border-radius: 12px; border: 1px solid var(--border-color);}
-        
-        .admin-login-area { text-align: center; margin-top: 35px; color: var(--text-sub); font-size: 0.82rem; cursor: pointer; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.05);}
-    </style>  
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GTA Mod Studio AI</title>
+  <!-- Biblioteca para gerar arquivos ZIP direto no navegador -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: #0f111a;
+      color: #e1e1e6;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* Cabeçalho */
+    header {
+      background-color: #161824;
+      padding: 12px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #282a36;
+    }
+
+    header h1 {
+      font-size: 1.2rem;
+      color: #00d26a;
+      letter-spacing: 1px;
+    }
+
+    .btn-export {
+      background-color: #00d26a;
+      color: #000;
+      border: none;
+      padding: 8px 16px;
+      font-weight: bold;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .btn-export:hover {
+      background-color: #00b85c;
+    }
+
+    /* Layout Principal */
+    .main-container {
+      display: flex;
+      flex: 1;
+      height: calc(100vh - 55px);
+    }
+
+    /* Painel Esquerdo: Arquivos e Mods */
+    .sidebar-left {
+      width: 260px;
+      background-color: #161824;
+      border-right: 1px solid #282a36;
+      padding: 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .sidebar-title {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      color: #8b92a5;
+      letter-spacing: 0.5px;
+    }
+
+    .upload-area {
+      border: 2px dashed #383a59;
+      border-radius: 6px;
+      padding: 15px;
+      text-align: center;
+      cursor: pointer;
+      background-color: #1a1c29;
+    }
+
+    .upload-area:hover {
+      border-color: #00d26a;
+    }
+
+    .file-input {
+      display: none;
+    }
+
+    .mod-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .mod-item {
+      background-color: #212333;
+      padding: 8px 12px;
+      border-radius: 4px;
+      font-size: 0.9rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* Área Central: Gameplay/Preview */
+    .preview-area {
+      flex: 1;
+      background-color: #050508;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+
+    .canvas-placeholder {
+      width: 90%;
+      height: 80%;
+      border: 1px solid #282a36;
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: radial-gradient(circle, #1a1c29 0%, #08090d 100%);
+      color: #565d73;
+    }
+
+    /* Painel Direito: Chat da IA */
+    .sidebar-right {
+      width: 320px;
+      background-color: #161824;
+      border-left: 1px solid #282a36;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .chat-header {
+      padding: 15px;
+      border-bottom: 1px solid #282a36;
+      font-weight: bold;
+    }
+
+    .chat-messages {
+      flex: 1;
+      padding: 15px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .message {
+      padding: 10px 12px;
+      border-radius: 6px;
+      font-size: 0.88rem;
+      line-height: 1.4;
+    }
+
+    .message.system {
+      background-color: #212333;
+      align-self: flex-start;
+    }
+
+    .message.user {
+      background-color: #00d26a;
+      color: #000;
+      align-self: flex-end;
+    }
+
+    .chat-input-container {
+      padding: 15px;
+      border-top: 1px solid #282a36;
+      display: flex;
+      gap: 8px;
+    }
+
+    .chat-input {
+      flex: 1;
+      background-color: #0f111a;
+      border: 1px solid #282a36;
+      padding: 10px;
+      border-radius: 4px;
+      color: #fff;
+      outline: none;
+    }
+
+    .chat-input:focus {
+      border-color: #00d26a;
+    }
+
+    .btn-send {
+      background-color: #212333;
+      color: #00d26a;
+      border: 1px solid #00d26a;
+      padding: 0 15px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .btn-send:hover {
+      background-color: #00d26a;
+      color: #000;
+    }
+  </style>
 </head>
+<body>
 
-<body>  
-    <a href="https://whatsapp.com/channel/0029VbDVqMICBtx8ZZL1Vx3K" target="_blank" class="whatsapp-floating-icon" title="Siga nosso canal no WhatsApp">
-        <svg viewBox="0 0 24 24">
-            <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.124-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
-        </svg>
-    </a>
+  <!-- Cabeçalho -->
+  <header>
+    <h1>GTA MOD STUDIO AI</h1>
+    <button class="btn-export" onclick="exportModPack()">Exportar Jogo Modificado (.ZIP)</button>
+  </header>
 
-    <div id="shareLockOverlay">      
-        <div class="share-lock-card">      
-            <h2 style="color: var(--text-main); font-size: 1.25rem; margin-bottom: 8px;">Acesso Bloqueado</h2>      
-            <p style="font-size: 0.85rem; color: var(--text-sub); margin-bottom: 18px;">Para desbloquear o site e acessar todos os jogos grátis, você precisa compartilhar o nosso canal do WhatsApp com amigos ou grupos!</p>    
-            <div class="share-progress-container">      
-                <div class="share-counter" id="shareCounterText">0/5</div>      
-                <div class="share-progress-bar-bg">      
-                    <div class="share-progress-bar-fill" id="shareProgressBar"></div>      
-                </div>      
-            </div>      
-            <button onclick="realizarCompartilhamento()" class="btn-primary" style="margin-bottom: 10px;">Compartilhar no WhatsApp</button>      
-            <p id="shareMsgAviso" style="font-size: 0.78rem; color: var(--accent-pink); min-height: 18px;"></p>
-        </div>  
-    </div>    
-
-    <div id="syncStatus">Sincronizado com sucesso!</div>    
+  <!-- Container Principal -->
+  <div class="main-container">
     
-    <div id="whatsappFloatingBanner">      
-        <div class="wa-banner-content">      
-            <div style="font-size: 1.6rem; font-weight: bold; color: var(--play-green);">[i]</div>      
-            <div class="wa-text-area">      
-                <h4>Canal Oficial PSP Gamer</h4>      
-                <p>Siga para receber os novos lançamentos em primeira mão.</p>      
-                <a href="https://whatsapp.com/channel/0029VbDVqMICBtx8ZZL1Vx3K" target="_blank" class="wa-follow-btn">Seguir Canal</a>      
-            </div>      
-            <div class="wa-close-btn" onclick="fecharBannerWhatsapp()">X</div>      
-        </div>      
-    </div>    
-
-    <div class="container">
-        <header class="play-header">
-            <div class="top-bar">      
-                <div class="brand-container" onclick="solicitarSenha()">
-                    <div class="play-icon">P</div>
-                    <div class="logo">PSP Gamer Store</div>
-                </div>      
-                <div class="top-icons">      
-                    <span onclick="toggleMenu(event)" title="Menu">Menu</span>      
-                    <div id="dropdownMenu" class="dropdown-menu">      
-                        <div class="dropdown-item" onclick="abrirPaginaPedirJogo()">Pedir Jogo</div>
-                        <div class="dropdown-item" onclick="abrirPaginaDenunciarJogo()">Denunciar Jogo</div>
-                        <div class="dropdown-item" onclick="alert('Precisa de ajuda? Fale no nosso canal oficial!')">Suporte</div>      
-                        <div class="dropdown-item" onclick="alert('1. Selecione o jogo\n2. Clique em Instalar/Baixar\n3. Divirta-se!')">Ajuda</div>      
-                    </div>      
-                </div>      
-            </div> 
-            
-            <div class="search-box-container">
-                <input type="text" class="search-box" id="searchInput" placeholder="Pesquisar jogos e apps..." oninput="renderGames()">
-            </div>
-
-            <div class="categories">      
-                <button class="cat-btn active" onclick="filtrarCategoria('Todos', this)">Todos</button>      
-                <button class="cat-btn" onclick="filtrarCategoria('PSP', this)">PSP</button>      
-                <button class="cat-btn" onclick="filtrarCategoria('PS2', this)">PS2</button>      
-                <button class="cat-btn" onclick="filtrarCategoria('PS3', this)">PS3</button>      
-                <button class="cat-btn" onclick="filtrarCategoria('PC', this)">PC</button>      
-                <button class="cat-btn" onclick="filtrarCategoria('APK', this)">APK</button>      
-            </div> 
-        </header>
-
-        <div class="carousel-container" id="carouselContainer">      
-            <div class="carousel-track" id="carouselTrack"></div>      
-            <div class="carousel-indicators" id="carouselIndicators"></div>      
-        </div>      
-
-        <div id="inicio" class="tab-content">      
-            <header style="margin-bottom: 15px;">      
-                <h1 style="font-size: 1.4rem; color: var(--play-blue);">Painel do Administrador</h1>      
-                <p style="font-size: 0.8rem; color: var(--text-sub);">Gerencie jogos na Nuvem (Banco de Dados)</p>      
-            </header>      
-
-            <!-- GERADOR DE LINKS DE IMAGEM .JPG -->
-            <div class="form-card" style="border-color: #fbbf24; background: rgba(251, 191, 36, 0.03);">
-                <h2 style="color: #fbbf24;">Hospedar Imagem (Gerar link .jpg)</h2>
-                <p style="font-size: 0.8rem; color: var(--text-sub); margin-bottom: 12px;">Selecione uma imagem do seu dispositivo para gerar um link direto terminado em .jpg:</p>
-                <div class="input-group">
-                    <input type="file" id="imageFileInput" accept="image/*" style="background: var(--bg-color); color: var(--text-main); padding: 8px;">
-                </div>
-                <button type="button" onclick="fazerUploadImagemImgBB()" class="btn-primary" style="background: linear-gradient(135deg, #fbbf24, #d97706); color: #0d0e12; box-shadow: 0 4px 15px rgba(251,191,36,0.3);">Gerar Link Directo (.jpg)</button>
-                <p id="uploadStatusMsg" style="font-size: 0.78rem; color: #fbbf24; margin-top: 8px; min-height: 18px; word-break: break-all;"></p>
-            </div>
-
-            <!-- GERADOR AUTOMÁTICO EXATO DO ARCHIVE.ORG -->
-            <div class="form-card" style="border-color: var(--play-green); background: rgba(0,255,136,0.03);">
-                <h2 style="color: var(--play-green);">Gerador Automático de Jogos (IA)</h2>
-                <p style="font-size: 0.8rem; color: var(--text-sub); margin-bottom: 12px;">Digite o nome exato do jogo para buscar a ISO, capa e link direto:</p>
-                <div class="input-group">
-                    <label for="autoGameName">Nome Exato do Jogo:</label>
-                    <input type="text" id="autoGameName" placeholder="Ex: Midnight Club 3: DUB Edition">
-                </div>
-                <button type="button" onclick="buscarJogoArchiveOrg()" class="btn-primary" style="background: linear-gradient(135deg, var(--play-blue), #0072ff); color: white; box-shadow: 0 4px 15px rgba(56,189,248,0.3);">Gerar Jogo Automaticamente</button>
-                <p id="autoStatusMsg" style="font-size: 0.78rem; color: var(--play-green); margin-top: 8px; min-height: 18px;"></p>
-            </div>
-
-            <div class="form-card">      
-                <h2 id="formTitle">Publicar Novo Jogo</h2>      
-                <form id="gameForm">      
-                    <input type="hidden" id="editGameId">      
-                    <div class="input-group">      
-                        <label for="gameName">Nome do Jogo:</label>      
-                        <input type="text" id="gameName" required placeholder="Ex: God of War">      
-                    </div>      
-                    <div class="input-group">      
-                        <label for="gameImage">Link da Imagem (URL):</label>      
-                        <input type="url" id="gameImage" required placeholder="URL direto da imagem (.jpg)">      
-                    </div>      
-                    <div class="input-group">      
-                        <label for="gameCategory">Categoria:</label>      
-                        <select id="gameCategory">      
-                            <option value="PSP">PSP</option>      
-                            <option value="PS2">PS2</option>      
-                            <option value="PS3">PS3</option>      
-                            <option value="PC">PC</option>      
-                            <option value="APK">APK</option>      
-                        </select>      
-                    </div>      
-                    <div style="display: flex; gap: 10px;">      
-                        <div class="input-group" style="flex:1;">      
-                            <label for="gameSize">Tamanho:</label>      
-                            <input type="text" id="gameSize" required placeholder="Ex: 1.2 GB">      
-                        </div>      
-                        <div class="input-group" style="flex:1;">      
-                            <label for="gameFormat">Formato:</label>      
-                            <input type="text" id="gameFormat" required placeholder="Ex: ISO / APK">      
-                        </div>      
-                    </div>      
-                    <div class="input-group">      
-                        <label for="gameStatus">Status:</label>      
-                        <input type="text" id="gameStatus" required placeholder="Ex: Grátis">      
-                    </div>      
-                    <div class="input-group">      
-                        <label for="gameDescription">Descrição:</label>      
-                        <textarea id="gameDescription" rows="3" placeholder="Detalhes do jogo..."></textarea>      
-                    </div>      
-                    <div class="input-group">      
-                        <label for="gameLink">Link de Download:</label>      
-                        <input type="url" id="gameLink" required placeholder="Link de download direto">      
-                    </div>      
-                    <div class="input-group">      
-                        <label for="gameBtnText">Texto do Botão:</label>      
-                        <input type="text" id="gameBtnText" placeholder="Ex: Baixar / Instalar">      
-                    </div>      
-                    <button type="submit" id="submitBtn" class="btn-primary">Publicar Jogo</button>      
-                </form>      
-                <div id="cancelEditContainer" style="display:none; margin-top: 8px;">      
-                    <button onclick="cancelarEdicao()" style="background: #444; color: white; border:none; padding:8px; border-radius:6px; width:100%;">Cancelar Edição</button>      
-                </div>      
-
-                <button onclick="logoutAdmin()" class="delete-btn" style="margin-top: 20px; padding: 10px;">Sair do Painel Admin</button>      
-            </div>
-        </div>      
-
-        <div id="jogos" class="tab-content active">     
-            <div class="section-header">
-                <h2>Recomendados para você</h2>
-            </div> 
-            <div class="games-grid" id="gamesGrid">      
-                <p class="empty-msg">Carregando jogos da nuvem...</p>      
-            </div>      
-        </div>      
-
-        <div id="pedirJogoTab" class="tab-content">      
-            <button class="back-btn" onclick="switchTab('jogos')">Voltar</button>
-            <div class="form-card">      
-                <h2>Pedir um Jogo</h2>      
-                <p style="font-size: 0.8rem; color: var(--text-sub); margin-bottom: 12px;">Solicite um jogo e envie diretamente para o nosso WhatsApp!</p>      
-                <form id="pedirJogoForm" onsubmit="enviarPedidoWhatsapp(event)">      
-                    <div class="input-group">      
-                        <label for="pedidoNome">Nome do Jogo:</label>      
-                        <input type="text" id="pedidoNome" required placeholder="Ex: GTA San Andreas, Naruto...">      
-                    </div>      
-                    <div class="input-group">      
-                        <label for="pedidoPlataforma">Plataforma:</label>      
-                        <select id="pedidoPlataforma">      
-                            <option value="PSP">PSP</option>      
-                            <option value="PS2">PS2</option>      
-                            <option value="PS3">PS3</option>      
-                            <option value="PC">PC</option>      
-                            <option value="APK">APK / Android</option>      
-                        </select>      
-                    </div>      
-                    <div class="input-group">      
-                        <label for="pedidoObs">Observações (Opcional):</label>      
-                        <textarea id="pedidoObs" rows="3" placeholder="Ex: Versão em português, mod..."></textarea>      
-                    </div>      
-                    <button type="submit" class="btn-primary">Enviar Pedido</button>      
-                </form>      
-            </div>      
-        </div>      
-
-        <div id="denunciarJogoTab" class="tab-content">      
-            <button class="back-btn" onclick="switchTab('jogos')">Voltar</button>
-            <div class="form-card">      
-                <h2>Denunciar um Jogo</h2>      
-                <p style="font-size: 0.8rem; color: var(--text-sub); margin-bottom: 12px;">Link quebrado ou arquivo com erro? Nos avise no WhatsApp.</p>      
-                <form id="denunciarJogoForm" onsubmit="enviarDenunciaWhatsapp(event)">      
-                    <div class="input-group">      
-                        <label for="denunciaNome">Nome do Jogo:</label>      
-                        <input type="text" id="denunciaNome" required placeholder="Ex: God of War...">      
-                    </div>      
-                    <div class="input-group">      
-                        <label for="denunciaMotivo">Motivo da Denúncia:</label>      
-                        <select id="denunciaMotivo">      
-                            <option value="Link Off / Quebrado">Link Off / Quebrado</option>      
-                            <option value="Arquivo Corrompido">Arquivo Corrompido</option>      
-                            <option value="Jogo Incorreto">Jogo Incorreto</option>      
-                            <option value="Outro Problema">Outro Problema</option>      
-                        </select>      
-                    </div>      
-                    <div class="input-group">      
-                        <label for="denunciaDetalhes">Detalhes do Problema:</label>      
-                        <textarea id="denunciaDetalhes" rows="3" required placeholder="Ex: O link não abre..."></textarea>      
-                    </div>      
-                    <button type="submit" class="delete-btn" style="padding: 10px;">Enviar Denúncia</button>      
-                </form>      
-            </div>      
-        </div>      
-
-        <div id="detalhes" class="tab-content">      
-            <button class="back-btn" onclick="switchTab('jogos')">Voltar</button>      
-            <div id="gameDetailContent"></div>      
-        </div>      
-
-        <div class="admin-login-area" onclick="solicitarSenha()">      
-            PSP GAMER STORE - Cloud Database Edition    
-        </div>  
-    </div>    
-
-    <script>      
-        const BIN_ID = "6ac14773ac6210605a105749";
-        const API_KEY = "$2a$10$IiEJXJC7SzKZwe0fHMpSbu.vrgTI2VdWiSU3ZJXdotVepr1FMekoC";
-        const IMGBB_API_KEY = "6d70073a610068c01ae73f382b8a24a7"; // Chave pública de upload ImgBB
-
-        let listaJogosCache = [];
-        let listaBannersCache = [
-          {
-            "image": "https://i.ibb.co/Hf9GsdxW/unnamed-4.jpg",
-            "title": "Os Melhores Jogos de PSP na Play Store"
-          },
-          {
-            "image": "https://i.ibb.co/TDVGhzHB/8388323c59abc8fc8f5f2c270240d6ba.jpg",
-            "title": "Novidades Adicionadas Toda Semana"
-          },
-          {
-            "image": "https://i.ibb.co/N6n6FHhs/unnamed-8.jpg",
-            "title": "Downloads Diretos e Sem Anúncios"
-          },
-          {
-            "image": "https://i.ibb.co/whzq0NxW/unnamed-5.jpg",
-            "title": "Baixe ISOs e APKs de Graça"
-          }
-        ];      
-
-        let indiceCarrosselAtual = 0;      
-        let intervaloCarrossel = null;      
-        const SENHA_ADMIN = "Rodri2012";      
-        let categoriaAtual = 'Todos';      
-
-        const LINK_CANAL_COMPARTILHAR = "https://whatsapp.com/channel/0029VbDVqMICBtx8ZZL1Vx3K";      
-        let progressoCompartilhamento = 0;      
-
-        async function carregarDadosDaNuvem() {
-            try {
-                const response = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
-                    headers: { 'X-Master-Key': API_KEY }
-                });
-                const data = await response.json();
-                if (data.record && data.record.jogos) {
-                    listaJogosCache = data.record.jogos;
-                }
-                if (data.record && data.record.banners) {
-                    listaBannersCache = data.record.banners;
-                }
-                renderGames();
-                renderizarCarrossel();
-            } catch (error) {
-                console.error("Erro ao carregar dados da nuvem:", error);
-                document.getElementById('gamesGrid').innerHTML = '<p class="empty-msg">Erro ao carregar jogos da nuvem.</p>';
-            }
-        }
-
-        async function salvarDadosNaNuvem() {
-            try {
-                mostrarStatusSync("Salvando na nuvem...");
-                await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-Master-Key': API_KEY
-                    },
-                    body: JSON.stringify({ jogos: listaJogosCache, banners: listaBannersCache })
-                });
-                mostrarStatusSync("Publicado com sucesso para todos!");
-            } catch (error) {
-                console.error("Erro ao salvar:", error);
-                alert("Erro ao salvar no banco de dados.");
-            }
-        }
-
-        // FUNCIONALIDADE DE UPLOAD E GERADOR DE LINK .JPG CORRIGIDA
-        async function fazerUploadImagemImgBB() {
-            const fileInput = document.getElementById('imageFileInput');
-            const statusMsg = document.getElementById('uploadStatusMsg');
-
-            if (!fileInput.files || fileInput.files.length === 0) {
-                alert("Por favor, selecione um arquivo de imagem do seu aparelho primeiro!");
-                return;
-            }
-
-            const file = fileInput.files[0];
-            statusMsg.innerText = "⏳ Convertendo e enviando imagem...";
-
-            const toBase64 = file => new Promise((resolve, reject) => {
-                const reader = new FileReader();
-                reader.readAsDataURL(file);
-                reader.onload = () => resolve(reader.result.split(',')[1]);
-                reader.onerror = error => reject(error);
-            });
-
-            try {
-                const base64Image = await toBase64(file);
-
-                const formData = new URLSearchParams();
-                formData.append("key", IMGBB_API_KEY);
-                formData.append("image", base64Image);
-
-                const res = await fetch("https://api.imgbb.com/1/upload", {
-                    method: 'POST',
-                    body: formData
-                });
-                const data = await res.json();
-
-                if (data && data.success && data.data && data.data.url) {
-                    let directUrl = data.data.url;
-                    document.getElementById('gameImage').value = directUrl;
-                    statusMsg.innerText = `✅ Link gerado e preenchido com sucesso!`;
-                } else {
-                    statusMsg.innerText = "❌ Erro ao enviar imagem. Verifique a chave ou o tamanho.";
-                }
-            } catch (err) {
-                console.error(err);
-                statusMsg.innerText = "❌ Erro na conexão ao fazer upload da imagem.";
-            }
-        }
-
-        // MOTOR DE BUSCA EXATA E CORRIGIDA DO ARCHIVE.ORG
-        async function buscarJogoArchiveOrg() {
-            let nomeInput = document.getElementById('autoGameName').value.trim();
-            const statusMsg = document.getElementById('autoStatusMsg');
-            if (!nomeInput) {
-                alert("Digite o nome exato do jogo primeiro!");
-                return;
-            }
-
-            statusMsg.innerText = "🔍 Buscando o jogo exato no acervo...";
-
-            try {
-                let termoExato = encodeURIComponent(`"${nomeInput}"`);
-                const resSearch = await fetch(`https://archive.org/advancedsearch.php?q=title:(${termoExato}) AND (mediatype:software OR collection:roms)&rows=8&output=json`);
-                const dataSearch = await resSearch.json();
-
-                if (!dataSearch.response || dataSearch.response.docs.length === 0) {
-                    statusMsg.innerText = "❌ Jogo não encontrado. Tente verificar a ortografia exata.";
-                    return;
-                }
-
-                statusMsg.innerText = "🧠 Analisando arquivos ISO oficiais e capas...";
-
-                let itemEscolhido = null;
-                let arquivoRom = null;
-                let capaUrl = null;
-
-                for (let doc of dataSearch.response.docs) {
-                    let identifier = doc.identifier;
-                    try {
-                        let resMeta = await fetch(`https://archive.org/metadata/${identifier}`);
-                        let dataMeta = await resMeta.json();
-
-                        if (dataMeta && dataMeta.files) {
-                            // Procura capa válida de alta qualidade
-                            let imgFile = dataMeta.files.find(f => {
-                                let n = (f.name || '').toLowerCase();
-                                return (n.endsWith('.jpg') || n.endsWith('.png') || n.endsWith('.jpeg')) && 
-                                       !n.includes('thumb') && !n.includes('screen') && !n.includes('item') && (f.size > 10000);
-                            });
-                            if (imgFile && !capaUrl) {
-                                capaUrl = `https://archive.org/download/${identifier}/${encodeURIComponent(imgFile.name)}`;
-                            }
-
-                            // Procura arquivo de ROM pesado válido (.iso, .cso, .chd, .pbp ou .zip grande)
-                            let romFile = dataMeta.files.find(f => {
-                                let n = (f.name || '').toLowerCase();
-                                let sizeValid = f.size ? f.size > 50000000 : true; // Maior que 50MB
-                                return (n.endsWith('.iso') || n.endsWith('.cso') || n.endsWith('.chd') || n.endsWith('.pbp') || (n.endsWith('.zip') && sizeValid));
-                            });
-
-                            if (romFile) {
-                                itemEscolhido = doc;
-                                arquivoRom = romFile;
-                                break;
-                            }
-                        }
-                    } catch (e) {
-                        continue;
-                    }
-                }
-
-                // Fallback inteligente caso os metadados diretos venham vazios
-                if (!itemEscolhido || !arquivoRom) {
-                    itemEscolhido = dataSearch.response.docs[0];
-                    let identifier = itemEscolhido.identifier;
-                    arquivoRom = { name: `${identifier}.iso`, size: 950 * 1024 * 1024 };
-                }
-
-                let identifier = itemEscolhido.identifier;
-                let title = nomeInput; 
-                
-                if (!capaUrl) {
-                    capaUrl = `https://archive.org/services/img/${identifier}`;
-                }
-
-                let downloadLink = `https://archive.org/download/${identifier}/${encodeURIComponent(arquivoRom.name)}`;
-                
-                let tamanhoFormatado = "900 MB";
-                if (arquivoRom.size) {
-                    let mb = arquivoRom.size / (1024 * 1024);
-                    tamanhoFormatado = mb >= 1024 ? (mb / 1024).toFixed(2) + " GB" : mb.toFixed(0) + " MB";
-                }
-
-                let formato = arquivoRom.name.split('.').pop().toUpperCase();
-                if (formato === 'ZIP') formato = 'ISO (ZIP)';
-
-                let descricao = itemEscolhido.description ? (Array.isArray(itemEscolhido.description) ? itemEscolhido.description[0] : itemEscolhido.description) : `Baixe ${title} diretamente do acervo oficial e divirta-se com alta velocidade.`;
-                descricao = descricao.replace(/<[^>]*>?/gm, '').trim().substring(0, 300) + "...";
-
-                document.getElementById('gameName').value = title;
-                document.getElementById('gameImage').value = capaUrl;
-                document.getElementById('gameCategory').value = "PSP";
-                document.getElementById('gameSize').value = tamanhoFormatado;
-                document.getElementById('gameFormat').value = formato;
-                document.getElementById('gameStatus').value = "Grátis";
-                document.getElementById('gameDescription').value = descricao;
-                document.getElementById('gameLink').value = downloadLink;
-                document.getElementById('gameBtnText').value = "Instalar (Download Direto)";
-
-                statusMsg.innerText = "✨ Jogo exato gerado e preenchido com sucesso!";
-            } catch (err) {
-                console.error(err);
-                statusMsg.innerText = "❌ Erro ao buscar no acervo. Tente novamente.";
-            }
-        }
-
-        function atualizarInterfaceBloqueio() {      
-            const contadorText = document.getElementById('shareCounterText');      
-            const barraFill = document.getElementById('shareProgressBar');      
-            const overlay = document.getElementById('shareLockOverlay');      
-
-            if (progressoCompartilhamento >= 5) {      
-                if (overlay) overlay.style.display = 'none';      
-            } else {      
-                if (overlay) overlay.style.display = 'flex';      
-                if (contadorText) contadorText.innerText = `${progressoCompartilhamento}/5`;      
-                if (barraFill) barraFill.style.width = `${(progressoCompartilhamento / 5) * 100}%`;      
-            }      
-        }      
-
-        function realizarCompartilhamento() {      
-            if (progressoCompartilhamento >= 5) return;      
-            progressoCompartilhamento++;      
-            atualizarInterfaceBloqueio();      
-
-            const aviso = document.getElementById('shareMsgAviso');      
-            if (progressoCompartilhamento < 5) {      
-                if (aviso) aviso.innerText = `Compartilhe mais ${5 - progressoCompartilhamento} vezes!`;      
-            } else {      
-                if (aviso) aviso.innerText = "Desbloqueado!";      
-            }      
-
-            const textoMensagem = encodeURIComponent("Baixe os melhores jogos de PSP, PS2 e APK de graça no PSP GAMER STORE! Siga o canal oficial: " + LINK_CANAL_COMPARTILHAR);      
-            window.open(`https://api.whatsapp.com/send?text=${textoMensagem}`, '_blank');      
-        }      
-
-        function mostrarStatusSync(texto) {      
-            const status = document.getElementById('syncStatus');      
-            if(status) {      
-                status.innerText = texto;      
-                status.style.display = 'block';      
-                setTimeout(() => { status.style.display = 'none'; }, 4000);      
-            }      
-        }      
-
-        function fecharBannerWhatsapp() {      
-            const banner = document.getElementById('whatsappFloatingBanner');      
-            if (banner) banner.style.display = 'none';      
-        }      
-
-        function iniciarLoopWhatsappBanner() {      
-            setInterval(() => {      
-                const banner = document.getElementById('whatsappFloatingBanner');      
-                if (banner && banner.style.display !== 'block') {      
-                    banner.style.display = 'block';      
-                }      
-            }, 20000);      
-        }      
-
-        window.addEventListener('DOMContentLoaded', () => {      
-            atualizarInterfaceBloqueio();      
-            carregarDadosDaNuvem();
-            iniciarAutoplayCarrossel();      
-            iniciarLoopWhatsappBanner();      
-            switchTab('jogos');      
-
-            const urlParams = new URLSearchParams(window.location.search);      
-            const jogoIdUrl = urlParams.get('jogo');      
-            if (jogoIdUrl) {      
-                setTimeout(() => { verDetalhesDoJogo(Number(jogoIdUrl)); }, 300);      
-            }      
-
-            window.addEventListener('click', function(e) {      
-                if (!e.target.closest('.top-icons')) {      
-                    const menu = document.getElementById('dropdownMenu');      
-                    if(menu) menu.classList.remove('show');      
-                }      
-            });      
-        });      
-
-        function renderizarCarrossel() {      
-            const track = document.getElementById('carouselTrack');      
-            const indicators = document.getElementById('carouselIndicators');      
-            if (!track || !indicators) return;      
-
-            track.innerHTML = '';      
-            indicators.innerHTML = '';      
-
-            listaBannersCache.forEach((banner, index) => {      
-                const slide = document.createElement('div');      
-                slide.className = 'carousel-slide';      
-                slide.innerHTML = `      
-                    <img src="${banner.image}" alt="${banner.title}">      
-                    <div class="carousel-caption">${banner.title}</div>      
-                `;      
-                track.appendChild(slide);      
-
-                const ind = document.createElement('div');      
-                ind.className = `indicator ${index === 0 ? 'active' : ''}`;      
-                ind.onclick = () => irParaSlide(index);      
-                indicators.appendChild(ind);      
-            });      
-            atualizarPosicaoCarrossel();      
-        }      
-
-        function atualizarPosicaoCarrossel() {      
-            const track = document.getElementById('carouselTrack');      
-            const indicators = document.querySelectorAll('.indicator');      
-            if (!track || listaBannersCache.length === 0) return;      
-
-            track.style.transform = `translateX(-${indiceCarrosselAtual * 100}%)`;      
-            indicators.forEach((ind, i) => ind.classList.toggle('active', i === indiceCarrosselAtual));      
-        }      
-
-        function proximoSlide() {      
-            if (!listaBannersCache.length) return;      
-            indiceCarrosselAtual = (indiceCarrosselAtual + 1) % listaBannersCache.length;      
-            atualizarPosicaoCarrossel();      
-        }      
-
-        function irParaSlide(index) {      
-            indiceCarrosselAtual = index;      
-            atualizarPosicaoCarrossel();      
-            iniciarAutoplayCarrossel();      
-        }      
-
-        function iniciarAutoplayCarrossel() {      
-            if (intervaloCarrossel) clearInterval(intervaloCarrossel);      
-            intervaloCarrossel = setInterval(proximoSlide, 4500);      
-        }      
-
-        function renderizarInputsAdminBanners() {      
-            const container = document.getElementById('carouselFormList');      
-            if (!container) return;      
-            container.innerHTML = '';      
-
-            for (let i = 0; i < 4; i++) {      
-                const banner = listaBannersCache[i] || { image: '', title: '' };      
-                const div = document.createElement('div');      
-                div.style.marginBottom = "8px";      
-                div.innerHTML = `      
-                    <input type="url" id="bannerImg_${i}" value="${banner.image}" placeholder="URL Imagem ${i+1}" style="margin-bottom:4px;">      
-                    <input type="text" id="bannerTitle_${i}" value="${banner.title}" placeholder="Título ${i+1}">      
-                `;      
-                container.appendChild(div);      
-            }      
-        }      
-
-        async function salvarBannersCarrossel() {      
-            let novosBanners = [];      
-            for (let i = 0; i < 4; i++) {      
-                const imgInput = document.getElementById(`bannerImg_${i}`);      
-                const titleInput = document.getElementById(`bannerTitle_${i}`);      
-                if (imgInput && imgInput.value.trim()) {      
-                    novosBanners.push({       
-                        image: imgInput.value.trim(),       
-                        title: titleInput.value.trim() || 'Destaque'       
-                    });      
-                }      
-            }      
-            if (novosBanners.length === 0) return alert("Adicione pelo menos 1 banner!");      
-            listaBannersCache = novosBanners;      
-            indiceCarrosselAtual = 0;      
-            renderizarCarrossel();      
-            await salvarDadosNaNuvem();
-        }      
-
-        function toggleMenu(event) {      
-            event.stopPropagation();      
-            document.getElementById('dropdownMenu').classList.toggle('show');      
-        }      
-
-        function abrirPaginaPedirJogo() {
-            document.getElementById('dropdownMenu').classList.remove('show');
-            switchTab('pedirJogoTab');
-        }
-
-        function abrirPaginaDenunciarJogo() {
-            document.getElementById('dropdownMenu').classList.remove('show');
-            switchTab('denunciarJogoTab');
-        }
-
-        function solicitarSenha() {      
-            if (localStorage.getItem('isAdmin') === 'true') {      
-                switchTab('inicio');      
-                renderizarInputsAdminBanners();      
-                return;      
-            }      
-            let senha = prompt("Senha de administrador:");      
-            if (senha === SENHA_ADMIN) {      
-                localStorage.setItem('isAdmin', 'true');      
-                switchTab('inicio');      
-                renderizarInputsAdminBanners();      
-                renderGames();      
-                alert("Painel liberado!");      
-            } else if (senha !== null) {      
-                alert("Senha incorreta!");      
-            }      
-        }      
-
-        function logoutAdmin() {      
-            localStorage.removeItem('isAdmin');      
-            cancelarEdicao();      
-            switchTab('jogos');      
-            renderGames();      
-            alert("Saiu do painel.");      
-        }      
-
-        function switchTab(tabId) {      
-            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));      
-            const target = document.getElementById(tabId);      
-            if(target) target.classList.add('active');      
-        }      
-
-        function filtrarCategoria(cat, btn) {      
-            categoriaAtual = cat;      
-            document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));      
-            if(btn) btn.classList.add('active');      
-            switchTab('jogos');      
-            renderGames();      
-        }      
-
-        function enviarPedidoWhatsapp(e) {      
-            e.preventDefault();      
-            const nomeJogo = document.getElementById('pedidoNome').value.trim();      
-            const plataforma = document.getElementById('pedidoPlataforma').value;      
-            const obs = document.getElementById('pedidoObs').value.trim();      
-
-            let mensagem = `Olá! Quero pedir um jogo:\n\n- Jogo: ${nomeJogo}\n- Plataforma: ${plataforma}`;      
-            if (obs) mensagem += `\n- Obs: ${obs}`;      
-
-            window.open(`https://wa.me/258843843479?text=${encodeURIComponent(mensagem)}`, '_blank');      
-        }      
-
-        function enviarDenunciaWhatsapp(e) {      
-            e.preventDefault();      
-            const nomeJogo = document.getElementById('denunciaNome').value.trim();      
-            const motivo = document.getElementById('denunciaMotivo').value;      
-            const detalhes = document.getElementById('denunciaDetalhes').value.trim();      
-
-            let mensagem = `DENÚNCIA DE JOGO\n\n- Jogo: ${nomeJogo}\n- Motivo: ${motivo}\n- Detalhes: ${detalhes}`;      
-            window.open(`https://wa.me/258843843479?text=${encodeURIComponent(mensagem)}`, '_blank');      
-        }      
-
-        const gameForm = document.getElementById('gameForm');      
-        if(gameForm) {      
-            gameForm.addEventListener('submit', async function(e) {      
-                e.preventDefault();      
-
-                const editId = document.getElementById('editGameId').value;      
-                const name = document.getElementById('gameName').value;      
-                const image = document.getElementById('gameImage').value;      
-                const category = document.getElementById('gameCategory').value || 'PSP';      
-                const size = document.getElementById('gameSize').value;      
-                const format = document.getElementById('gameFormat').value;      
-                const status = document.getElementById('gameStatus').value;      
-                const description = document.getElementById('gameDescription').value || 'Sem descrição.';      
-                const link = document.getElementById('gameLink').value;      
-                const btnText = document.getElementById('gameBtnText').value.trim() || 'Instalar (Download Direto)';      
-
-                if (editId) {      
-                    listaJogosCache = listaJogosCache.map(game => game.id == editId ? { ...game, name, image, category, size, format, status, description, link, btnText } : game);      
-                    cancelarEdicao();      
-                } else {      
-                    listaJogosCache.unshift({ id: Date.now(), name, image, category, size, format, status, description, link, btnText });      
-                }      
-
-                await salvarDadosNaNuvem();
-                renderGames();      
-                switchTab('jogos');      
-                gameForm.reset();      
-            });      
-        }      
-
-        async function deleteGame(id) {      
-            if (confirm("Deseja excluir este jogo?")) {      
-                listaJogosCache = listaJogosCache.filter(game => game.id !== id);      
-                await salvarDadosNaNuvem();
-                renderGames();      
-                switchTab('jogos');      
-            }      
-        }      
-
-        function prepararEdicao(id) {      
-            const game = listaJogosCache.find(g => g.id === id);      
-            if (!game) return;      
-
-            document.getElementById('editGameId').value = game.id;      
-            document.getElementById('gameName').value = game.name;      
-            document.getElementById('gameImage').value = game.image;      
-            document.getElementById('gameCategory').value = game.category || 'PSP';      
-            document.getElementById('gameSize').value = game.size;      
-            document.getElementById('gameFormat').value = game.format;      
-            document.getElementById('gameStatus').value = game.status;      
-            document.getElementById('gameDescription').value = game.description;      
-            document.getElementById('gameLink').value = game.link;      
-            document.getElementById('gameBtnText').value = game.btnText || '';      
-
-            document.getElementById('formTitle').innerText = "Editar Jogo";      
-            document.getElementById('submitBtn').innerText = "Salvar Alterações";      
-            document.getElementById('cancelEditContainer').style.display = "block";      
-
-            switchTab('inicio');      
-            renderizarInputsAdminBanners();      
-        }      
-
-        function cancelarEdicao() {      
-            if(gameForm) gameForm.reset();      
-            document.getElementById('editGameId').value = "";      
-            document.getElementById('formTitle').innerText = "Publicar Novo Jogo";      
-            document.getElementById('submitBtn').innerText = "Publicar Jogo";      
-            document.getElementById('cancelEditContainer').style.display = "none";      
-        }      
-
-        function verDetalhesDoJogo(id) {      
-            const game = listaJogosCache.find(g => g.id === id);      
-            if (!game) return;      
-
-            let botoesAdminDetalhe = '';      
-            if (localStorage.getItem('isAdmin') === 'true') {      
-                botoesAdminDetalhe = `      
-                    <div style="display: flex; gap: 8px; margin-top: 12px;">      
-                        <button class="edit-btn" onclick="prepararEdicao(${game.id})">Editar</button>      
-                        <button class="delete-btn" onclick="deleteGame(${game.id})">Excluir</button>      
-                    </div>      
-                `;      
-            }      
-
-            document.getElementById('gameDetailContent').innerHTML = `      
-                <div class="game-detail-card">      
-                    <div class="detail-header">      
-                        <img src="${game.image}" alt="${game.name}">      
-                        <div class="detail-header-info">      
-                            <h2>${game.name}</h2>      
-                            <div class="detail-sub">${game.category} - ${game.status}</div>      
-                        </div>      
-                    </div>      
-
-                    <div class="detail-stats">
-                        <div class="stat-item">
-                            <span class="stat-value">4.9 estrelas</span>
-                            <span class="stat-label">Avaliação</span>
-                        </div>
-                        <div class="stat-item">
-                            <span class="stat-value">${game.size}</span>
-                            <span class="stat-label">Tamanho</span>
-                        </div>
-                        <div class="stat-item">
-                            <span class="stat-value">${game.format}</span>
-                            <span class="stat-label">Formato</span>
-                        </div>
-                    </div>
-
-                    <a href="${game.link}" target="_blank" class="play-install-btn" style="padding: 12px; font-size: 0.95rem; text-decoration:none;">${game.btnText || 'Instalar'}</a>      
-
-                    <h4 style="font-size: 0.9rem; color: var(--text-main); margin: 18px 0 6px 0;">Sobre este jogo</h4>      
-                    <p class="detail-desc">${game.description}</p>      
-
-                    ${botoesAdminDetalhe}      
-                </div>      
-            `;      
-            switchTab('detalhes');      
-        }      
-
-        function renderGames() {      
-            const gamesGrid = document.getElementById('gamesGrid');      
-            const searchInput = document.getElementById('searchInput');      
-            if (!gamesGrid) return;      
-
-            const termoBusca = searchInput ? searchInput.value.toLowerCase() : '';      
-            gamesGrid.innerHTML = '';      
-
-            let filtrados = listaJogosCache.filter(game => {      
-                let matchCat = (categoriaAtual === 'Todos' || (game.category && game.category === categoriaAtual));      
-                let matchBusca = game.name.toLowerCase().includes(termoBusca);      
-                return matchCat && matchBusca;      
-            });      
-
-            if (filtrados.length === 0) {      
-                gamesGrid.innerHTML = '<p class="empty-msg">Nenhum jogo encontrado.</p>';      
-                return;      
-            }      
-
-            filtrados.forEach((game, index) => {      
-                const card = document.createElement('div');      
-                card.className = 'game-card';      
-                card.style.animationDelay = `${index * 0.04}s`; 
-                card.onclick = () => verDetalhesDoJogo(game.id);      
-
-                let botoesAdminHtml = '';      
-                if (localStorage.getItem('isAdmin') === 'true') {      
-                    botoesAdminHtml = `      
-                        <div style="padding: 0 8px 8px 8px;" onclick="event.stopPropagation()">      
-                            <button class="edit-btn" onclick="prepararEdicao(${game.id})">Editar</button>      
-                            <button class="delete-btn" onclick="deleteGame(${game.id})">Excluir</button>      
-                        </div>      
-                    `;      
-                }      
-
-                card.innerHTML = `      
-                    <div>      
-                        <div class="card-img-container">      
-                            <img src="${game.image}" alt="${game.name}">      
-                            <div class="category-tag">${game.category}</div>      
-                        </div>      
-                        <div class="game-info">      
-                            <h3>${game.name}</h3>      
-                            <div class="game-meta">      
-                                <span>Tamanho: ${game.size}</span>      
-                                <span>- ${game.format}</span>      
-                            </div>      
-                            <button class="play-install-btn">Instalar</button>      
-                        </div>      
-                    </div>      
-                    ${botoesAdminHtml}      
-                `;      
-                gamesGrid.appendChild(card);      
-            });      
-        }
-    </script>  
+    <!-- Esquerda: Gerenciador de Arquivos -->
+    <div class="sidebar-left">
+      <div class="sidebar-title">Arquivos do Jogo</div>
+      <label class="upload-area">
+        <p style="font-size: 0.85rem;">Clique para carregar a pasta do GTA / Mods</p>
+        <input type="file" class="file-input" id="fileInput" multiple webkitdirectory />
+      </label>
+
+      <div class="sidebar-title">Mods Gerados</div>
+      <ul class="mod-list" id="modList">
+        <li class="mod-item">
+          <span>super_pulo.cs</span>
+          <small style="color: #00d26a;">Ativo</small>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Centro: Tela de Simulação / Preview -->
+    <div class="preview-area">
+      <div class="canvas-placeholder">
+        <svg width="64" height="64" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15.91 11.672a.375.375 0 010 .656l-5.603 3.113a.375.375 0 01-.557-.328V8.887c0-.286.307-.466.557-.327l5.603 3.112z" />
+        </svg>
+        <p style="margin-top: 15px;">Área de Pré-visualização do Jogo</p>
+        <small>Carregue os arquivos ou digite um comando para simular as alterações</small>
+      </div>
+    </div>
+
+    <!-- Direita: Assistente de IA -->
+    <div class="sidebar-right">
+      <div class="chat-header">Assistente de Criação</div>
+      <div class="chat-messages" id="chatMessages">
+        <div class="message system">
+          Olá! O que você quer criar ou alterar no GTA San Andreas hoje? Digite sua ideia abaixo.
+        </div>
+      </div>
+      <div class="chat-input-container">
+        <input type="text" class="chat-input" id="chatInput" placeholder="Ex: Crie um script para voar..." />
+        <button class="btn-send" onclick="sendMessage()">Gerar</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Lógica da Aplicação -->
+  <script>
+    const generatedScripts = [
+      {
+        filename: "cleo/super_pulo.cs",
+        content: "{$CLEO .cs}\n0000: NOP\n:MAIN\nwait 0\nif\n  key_pressed 32\nthen\n  // Pulo turbinado\nend\njump @MAIN"
+      }
+    ];
+
+    function sendMessage() {
+      const input = document.getElementById('chatInput');
+      const messagesContainer = document.getElementById('chatMessages');
+      const text = input.value.trim();
+
+      if (!text) return;
+
+      // Adiciona mensagem do usuário
+      const userMsg = document.createElement('div');
+      userMsg.className = 'message user';
+      userMsg.innerText = text;
+      messagesContainer.appendChild(userMsg);
+
+      input.value = '';
+      messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+      // Resposta simulada da IA
+      setTimeout(() => {
+        const aiMsg = document.createElement('div');
+        aiMsg.className = 'message system';
+        aiMsg.innerText = `Script gerado com sucesso para: "${text}". Adicionado à lista de mods.`;
+        messagesContainer.appendChild(aiMsg);
+
+        // Adiciona à lista da barra lateral
+        const newFileName = `mod_custom_${Date.now()}.cs`;
+        generatedScripts.push({
+          filename: `cleo/${newFileName}`,
+          content: `// Mod gerado para: ${text}\n{$CLEO .cs}\n0000: NOP\n`
+        });
+
+        const modList = document.getElementById('modList');
+        const item = document.createElement('li');
+        item.className = 'mod-item';
+        item.innerHTML = `<span>${newFileName}</span><small style="color: #00d26a;">Ativo</small>`;
+        modList.appendChild(item);
+
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+      }, 1000);
+    }
+
+    // Função para exportar os arquivos modificados em .ZIP
+    function exportModPack() {
+      const zip = new JSZip();
+      
+      // Adiciona os scripts gerados dentro da pasta /cleo no zip
+      generatedScripts.forEach(script => {
+        zip.file(script.filename, script.content);
+      });
+
+      zip.generateAsync({ type: "blob" }).then(function(content) {
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(content);
+        link.download = "GTA_SA_Modded_Pack.zip";
+        link.click();
+      });
+    }
+
+    // Permitir enviar pressionando a tecla Enter
+    document.getElementById('chatInput').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        sendMessage();
+      }
+    });
+  </script>
 </body>
 </html>
