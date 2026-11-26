@@ -1,474 +1,321 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#171717">
-<title>MOZ MARKET 🇲🇿</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GameHub - Publica o teu Jogo</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
 
-<style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:Arial,sans-serif;background:#f4f5f7;color:#222}
-header{background:#171717;color:white;padding:20px 6%;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:15px}
-.logo{font-size:25px;font-weight:900;color:#ff8717}
-header span{font-size:12px;color:#ddd}
-button{border:0;padding:12px 18px;border-radius:8px;background:#ff8717;color:white;font-weight:bold;cursor:pointer}
-button:hover{opacity:.85}
-button:disabled{opacity:.5;cursor:not-allowed}
-.container{max-width:1100px;margin:30px auto;padding:15px}
-.hero{background:linear-gradient(135deg,#202020,#383838);color:white;padding:45px 20px;border-radius:15px;text-align:center}
-.hero h1{font-size:32px;color:#ff8717;margin-bottom:12px}
-.hero p{color:#ddd;line-height:1.6}
-.search{margin:20px 0}
-input,textarea,select{width:100%;padding:13px;margin:8px 0;border:1px solid #ddd;border-radius:8px;font-size:15px;background:white}
-textarea{min-height:100px;resize:vertical}
-.card{background:white;padding:20px;border-radius:12px;margin-bottom:18px;box-shadow:0 3px 12px #0000000c}
-.card h2{margin-bottom:12px}
-.price{color:#ed7910;font-weight:bold;font-size:23px}
-.plans{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:15px 0}
-.plan{border:2px solid #ff8717;padding:17px;border-radius:10px;cursor:pointer}
-.plan.selected{background:#fff3e7;border-color:#d65f00}
-.plan h3{color:#ed7910;margin-bottom:8px}
-.listings{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:15px;margin-top:20px}
-.listing{background:white;border-radius:12px;padding:17px;box-shadow:0 3px 12px #0000000c;overflow-wrap:anywhere}
-.listing h3{margin:10px 0}
-.listing small{color:#777}
-.listing .category{color:#e77b13;font-weight:bold}
-.status{font-size:12px;font-weight:bold;color:#b66b00}
-.hidden{display:none!important}
-footer{text-align:center;padding:25px;color:#777}
-hr{border:0;border-top:1px solid #eee;margin:18px 0}
-.form-buttons{display:flex;gap:10px;flex-wrap:wrap;margin-top:15px}
-.form-buttons button{flex:1}
-.secondary{background:#555}
-.danger{background:#c62828}
-.success{background:#168447}
-.info{background:#eef6ff;padding:13px;border-radius:8px;color:#24527a;margin:12px 0;font-size:14px}
-.empty{text-align:center;color:#777;padding:25px}
-.badge{display:inline-block;padding:5px 9px;border-radius:20px;font-size:11px;font-weight:bold;background:#fff0db;color:#a95b00}
-.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin:15px 0}
-.stat{background:#f6f6f6;padding:15px;border-radius:9px;text-align:center}
-.stat strong{display:block;font-size:24px;color:#ed7910}
-.listing-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:15px}
-.listing-actions button{flex:1}
-@media(max-width:600px){
- header{padding:17px}
- .hero h1{font-size:25px}
- .container{margin:15px auto}
-}
-</style>
+        body {
+            background-color: #121212;
+            color: #ffffff;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 20px 0;
+            border-bottom: 2px solid #2a2a2a;
+            margin-bottom: 30px;
+        }
+
+        header h1 {
+            color: #00ff88;
+            font-size: 2.5rem;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        /* Formulário de Publicação */
+        .publish-box {
+            background-color: #1e1e1e;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+        }
+
+        .publish-box h2 {
+            margin-bottom: 15px;
+            color: #00ff88;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #cccccc;
+        }
+
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #333;
+            border-radius: 5px;
+            background-color: #2a2a2a;
+            color: #fff;
+            font-size: 1rem;
+        }
+
+        .form-group input:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: #00ff88;
+        }
+
+        button {
+            background-color: #00ff88;
+            color: #121212;
+            border: none;
+            padding: 12px 25px;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background-color: #00cc6a;
+        }
+
+        button:disabled {
+            background-color: #555;
+            cursor: not-allowed;
+        }
+
+        /* Grelha de Jogos */
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .game-card {
+            background-color: #1e1e1e;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.2s;
+        }
+
+        .game-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .game-card img {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+            background-color: #333;
+        }
+
+        .game-info {
+            padding: 15px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .game-info h3 {
+            margin-bottom: 8px;
+            color: #ffffff;
+        }
+
+        .game-info p {
+            color: #aaaaaa;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+
+        .play-btn {
+            display: block;
+            text-align: center;
+            background-color: #6200ea;
+            color: white;
+            text-decoration: none;
+            padding: 10px;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+
+        .play-btn:hover {
+            background-color: #7c4dff;
+        }
+
+        .loading-text {
+            color: #00ff88;
+            font-size: 1.2rem;
+            text-align: center;
+            grid-column: 1 / -1;
+            padding: 20px;
+        }
+    </style>
 </head>
-
 <body>
 
-<header>
- <div>
-  <div class="logo">MOZ MARKET 🇲🇿</div>
-  <span>O mercado digital de Moçambique</span>
- </div>
- <button onclick="showForm()">+ Publicar anúncio</button>
-</header>
+    <header>
+        <h1>🎮 GameHub</h1>
+        <p>Publica e descobre jogos independentes online!</p>
+    </header>
 
-<div class="container">
+    <div class="container">
+        <!-- Secção para publicar -->
+        <section class="publish-box">
+            <h2>🚀 Publicar um Novo Jogo</h2>
+            <form id="gameForm">
+                <div class="form-group">
+                    <label for="title">Nome do Jogo:</label>
+                    <input type="text" id="title" placeholder="Ex: Super Aventura 2D" required>
+                </div>
+                <div class="form-group">
+                    <label for="description">Descrição:</label>
+                    <textarea id="description" rows="3" placeholder="Conta como funciona o teu jogo..." required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="image">Link da Imagem de Capa (URL):</label>
+                    <input type="url" id="image" placeholder="https://exemplo.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="link">Link do Jogo (para jogar ou descarregar):</label>
+                    <input type="url" id="link" placeholder="https://itch.io" required>
+                </div>
+                <button type="submit" id="submitBtn">Publicar Jogo</button>
+            </form>
+        </section>
 
- <section class="hero">
-  <h1>Encontra. Compra. Vende.</h1>
-  <p>Descobre produtos e serviços num só lugar.<br>
-  O teu mercado digital começa aqui!</p>
- </section>
-
- <input class="search" id="search"
- placeholder="🔎 Procurar produtos ou serviços..."
- oninput="render()">
-
- <section id="form" class="card hidden">
-  <h2>📦 Publicar anúncio</h2>
-  <p>Preenche os dados do teu anúncio.</p>
-
-  <form id="adForm">
-   <input id="seller" maxlength="60" placeholder="Nome do vendedor" required>
-   <input id="phone" maxlength="20" placeholder="WhatsApp do vendedor" required>
-   <input id="title" maxlength="100" placeholder="Nome do produto ou serviço" required>
-
-   <select id="category" required>
-    <option value="">Escolher categoria</option>
-    <option>Telemóveis</option>
-    <option>Computadores</option>
-    <option>Automóveis</option>
-    <option>Imóveis</option>
-    <option>Moda</option>
-    <option>Alimentação</option>
-    <option>Serviços</option>
-    <option>Electrónicos</option>
-    <option>Outros</option>
-   </select>
-
-   <input id="price" type="number" min="0" step="0.01" placeholder="Preço em MT" required>
-   <textarea id="description" maxlength="1000" placeholder="Descrição do anúncio..." required></textarea>
-
-   <div class="card">
-    <h3>💳 Plano de publicação</h3>
-
-    <div class="plans">
-     <div class="plan selected" onclick="selectPlan(this,7,100)">
-      <h3>Básico</h3>
-      <p><b>7 dias</b></p>
-      <div class="price">100 MT</div>
-     </div>
-
-     <div class="plan" onclick="selectPlan(this,15,200)">
-      <h3>Standard</h3>
-      <p><b>15 dias</b></p>
-      <div class="price">200 MT</div>
-     </div>
-
-     <div class="plan" onclick="selectPlan(this,30,350)">
-      <h3>Premium</h3>
-      <p><b>30 dias</b></p>
-      <div class="price">350 MT</div>
-     </div>
+        <!-- Lista de Jogos Publicados -->
+        <section>
+            <h2 style="margin-bottom: 20px;">🕹️ Jogos da Comunidade</h2>
+            <div class="games-grid" id="gamesList">
+                <p class="loading-text">A carregar jogos da nuvem...</p>
+            </div>
+        </section>
     </div>
 
-    <p id="selectedPlan"><b>Plano escolhido: Básico — 100 MT</b></p>
-   </div>
-
-   <div class="card">
-    <h3>📲 Pagamento</h3>
-    <div class="info">
-     Os dados oficiais de pagamento devem ser configurados pelo responsável do MOZ MARKET.
-     Nunca partilhes PIN, senha ou código OTP.
-    </div>
-    <input id="reference" maxlength="100" placeholder="Referência da transação" required>
-   </div>
-
-   <label>
-    <input type="checkbox" id="confirm" required style="width:auto">
-    Confirmo que os dados do anúncio são verdadeiros.
-   </label>
-
-   <div class="form-buttons">
-    <button type="submit">Enviar para verificação</button>
-    <button type="button" onclick="hideForm()" class="secondary">Cancelar</button>
-   </div>
-  </form>
- </section>
-
- <section>
-  <h2>🔥 Anúncios disponíveis</h2>
-  <div id="listings" class="listings"></div>
- </section>
-
- <section id="admin" class="card hidden" style="margin-top:30px">
-  <h2>🛡️ Administração MOZ MARKET</h2>
-  <p>Gestão dos anúncios e verificação manual dos pagamentos.</p>
-
-  <div class="stats">
-   <div class="stat"><strong id="totalAds">0</strong>Total</div>
-   <div class="stat"><strong id="pendingAds">0</strong>Pendentes</div>
-   <div class="stat"><strong id="approvedAds">0</strong>Aprovados</div>
-   <div class="stat"><strong id="rejectedAds">0</strong>Rejeitados</div>
-  </div>
-
-  <h3>📥 Anúncios pendentes</h3>
-  <div id="pending"></div>
-
-  <hr>
-  <h3>📋 Histórico de anúncios</h3>
-  <div id="history"></div>
- </section>
-
- <button onclick="adminLogin()" style="margin-top:25px;background:#222">
-  🛡️ Área administrativa
- </button>
-
-</div>
-
-<footer>
- MOZ MARKET 🇲🇿 © 2026
-<br>Comprar. Vender. Crescer.
-</footer>
-
-<script>
-const KEY = "moz_market_ads_v2";
-
-// DEMONSTRAÇÃO LOCAL APENAS.
-// Não utilizar esta senha num site público.
-const ADMIN_PASSWORD = "admin123";
-
-let ads = loadAds();
-let selectedDays = 7;
-let selectedPrice = 100;
-
-function loadAds(){
- try{
-  const data = JSON.parse(localStorage.getItem(KEY) || "[]");
-  return Array.isArray(data) ? data : [];
- }catch(e){
-  return [];
- }
-}
-
-function save(){
- try{
-  localStorage.setItem(KEY,JSON.stringify(ads));
- }catch(e){
-  alert("Não foi possível guardar os dados neste navegador.");
- }
-}
-
-function escapeHTML(value){
- return String(value ?? "").replace(/[&<>"']/g,c=>({
-  "&":"&amp;",
-  "<":"&lt;",
-  ">":"&gt;",
-  '"':"&quot;",
-  "'":"&#39;"
- }[c]));
-}
-
-function showForm(){
- document.getElementById("form").classList.remove("hidden");
- window.scrollTo({top:0,behavior:"smooth"});
-}
-
-function hideForm(){
- document.getElementById("form").classList.add("hidden");
-}
-
-function selectPlan(element,days,price){
- document.querySelectorAll(".plan").forEach(p=>p.classList.remove("selected"));
- element.classList.add("selected");
-
- selectedDays=days;
- selectedPrice=price;
-
- const names={7:"Básico",15:"Standard",30:"Premium"};
-
- document.getElementById("selectedPlan").innerHTML=
- "<b>Plano escolhido: "+names[days]+" — "+price+" MT</b>";
-}
-
-document.getElementById("adForm").addEventListener("submit",function(e){
- e.preventDefault();
-
- const phone=document.getElementById("phone").value.trim();
- const phoneDigits=phone.replace(/\D/g,"");
-
- if(phoneDigits.length<9 || phoneDigits.length>15){
-  alert("Introduz um número de WhatsApp válido.");
-  return;
- }
-
- const ad={
-  id:Date.now(),
-  seller:document.getElementById("seller").value.trim(),
-  phone:phone,
-  title:document.getElementById("title").value.trim(),
-  category:document.getElementById("category").value,
-  price:document.getElementById("price").value,
-  description:document.getElementById("description").value.trim(),
-  reference:document.getElementById("reference").value.trim(),
-  planDays:selectedDays,
-  planPrice:selectedPrice,
-  status:"pending",
-  created:new Date().toISOString(),
-  expires:null
- };
-
- ads.push(ad);
- save();
-
- alert("Anúncio enviado! Aguarda a verificação do pagamento e do conteúdo.");
-
- this.reset();
-
- selectedDays=7;
- selectedPrice=100;
-
- document.querySelectorAll(".plan").forEach((p,i)=>{
-  p.classList.toggle("selected",i===0);
- });
-
- document.getElementById("selectedPlan").innerHTML=
- "<b>Plano escolhido: Básico — 100 MT</b>";
-
- hideForm();
- render();
-});
-
-function render(){
- const search=document.getElementById("search").value.toLowerCase().trim();
-
- const available=ads.filter(a=>
-  a.status==="approved" &&
-  a.expires &&
-  new Date(a.expires)>new Date() &&
-  (a.title+" "+a.category+" "+a.description).toLowerCase().includes(search)
- );
-
- const container=document.getElementById("listings");
-
- if(!available.length){
-  container.innerHTML='<div class="empty">Ainda não existem anúncios disponíveis.</div>';
-  return;
- }
-
- container.innerHTML=available.map(a=>`
-  <div class="listing">
-   <span class="category">${escapeHTML(a.category)}</span>
-   <h3>${escapeHTML(a.title)}</h3>
-   <p>${escapeHTML(a.description)}</p>
-   <br>
-   <p class="price">${escapeHTML(a.price)} MT</p>
-   <br>
-   <small>Vendedor: ${escapeHTML(a.seller)}</small>
-   <br>
-   <small>Publicado: ${new Date(a.created).toLocaleDateString("pt-PT")}</small>
-   <div class="listing-actions">
-    <button onclick="contact('${a.id}')">Contactar vendedor</button>
-   </div>
-  </div>
- `).join("");
-}
-
-function contact(id){
- const ad=ads.find(a=>String(a.id)===String(id));
- if(!ad)return;
-
- const phone=ad.phone.replace(/\D/g,"");
-
- if(phone.length<9 || phone.length>15){
-  alert("Número de contacto inválido.");
-  return;
- }
-
- const message=encodeURIComponent(
-  "Olá! Vi o teu anúncio no MOZ MARKET: "+ad.title
- );
-
- window.open("https://wa.me/"+phone+"?text="+message,"_blank");
-}
-
-function adminLogin(){
- const password=prompt("Palavra-passe administrativa:");
-
- if(password===null)return;
-
- if(password===ADMIN_PASSWORD){
-  document.getElementById("admin").classList.remove("hidden");
-  adminRender();
-  document.getElementById("admin").scrollIntoView({behavior:"smooth"});
- }else{
-  alert("Palavra-passe incorreta.");
- }
-}
-
-function adminRender(){
- const pending=ads.filter(a=>a.status==="pending");
- const approved=ads.filter(a=>a.status==="approved");
- const rejected=ads.filter(a=>a.status==="rejected");
-
- document.getElementById("totalAds").textContent=ads.length;
- document.getElementById("pendingAds").textContent=pending.length;
- document.getElementById("approvedAds").textContent=approved.length;
- document.getElementById("rejectedAds").textContent=rejected.length;
-
- const box=document.getElementById("pending");
-
- box.innerHTML=pending.map(a=>`
-  <div class="card">
-   <h3>${escapeHTML(a.title)}</h3>
-   <p>Vendedor: ${escapeHTML(a.seller)}</p>
-   <p>Telefone: ${escapeHTML(a.phone)}</p>
-   <p>Preço: ${escapeHTML(a.price)} MT</p>
-   <p>Categoria: ${escapeHTML(a.category)}</p>
-   <p>Plano: ${a.planDays} dias — ${a.planPrice} MT</p>
-   <p>Referência: ${escapeHTML(a.reference)}</p>
-   <p>${escapeHTML(a.description)}</p>
-   <p class="status">AGUARDANDO VERIFICAÇÃO</p>
-   <br>
-   <button onclick="approve(${a.id})" class="success">✓ Aprovar</button>
-   <button onclick="reject(${a.id})" class="danger">Rejeitar</button>
-  </div>
- `).join("") || '<p class="empty">Nenhum anúncio pendente.</p>';
-
- const history=document.getElementById("history");
-
- history.innerHTML=ads.slice().reverse().map(a=>`
-  <div class="card">
-   <b>${escapeHTML(a.title)}</b>
-   <p>Vendedor: ${escapeHTML(a.seller)}</p>
-   <p>Estado: <span class="badge">${escapeHTML(a.status)}</span></p>
-   <p>Expira: ${a.expires ? new Date(a.expires).toLocaleString("pt-PT") : "Não publicado"}</p>
-   <br>
-   <button onclick="removeAd(${a.id})" class="danger">Eliminar</button>
-  </div>
- `).join("") || '<p class="empty">Ainda não existem anúncios.</p>';
-}
-
-function approve(id){
- const ad=ads.find(a=>a.id===id);
- if(!ad)return;
-
- if(!confirm("Confirmaste o pagamento e verificaste o anúncio?"))return;
-
- ad.status="approved";
-
- const days=Number(ad.planDays)||7;
-
- ad.expires=new Date(
-  Date.now()+days*24*60*60*1000
- ).toISOString();
-
- save();
- adminRender();
- render();
-
- alert("Anúncio aprovado!");
-}
-
-function reject(id){
- const ad=ads.find(a=>a.id===id);
- if(!ad)return;
-
- if(!confirm("Tens a certeza de que queres rejeitar este anúncio?"))return;
-
- ad.status="rejected";
- save();
-
- adminRender();
- render();
-}
-
-function removeAd(id){
- if(!confirm("Eliminar definitivamente este anúncio deste navegador?"))return;
-
- ads=ads.filter(a=>a.id!==id);
-
- save();
- adminRender();
- render();
-}
-
-function expireAds(){
- const now=Date.now();
-
- ads.forEach(a=>{
-  if(
-   a.status==="approved" &&
-   a.expires &&
-   new Date(a.expires).getTime()<=now
-  ){
-   a.status="expired";
-  }
- });
-
- save();
-}
-
-expireAds();
-render();
-</script>
-
-</body>
-</html>
+    <script>
+        // Configurações da tua API JSONBin.io
+        const BIN_ID = '6ac14773ac6210605a105749';
+        const API_KEY = '$2a$10$IiEJXJC7SzKZwe0fHMpSbu.vrgTI2VdWiSU3ZJXdotVepr1FMekoC';
+        const API_URL = `https://jsonbin.io{BIN_ID}`;
+
+        const gameForm = document.getElementById('gameForm');
+        const gamesList = document.getElementById('gamesList');
+        const submitBtn = document.getElementById('submitBtn');
+
+        let games = [];
+
+        // 1. Buscar os jogos guardados na nuvem
+        async function fetchGames() {
+            try {
+                const response = await fetch(`${API_URL}/latest`, {
+                    method: 'GET',
+                    headers: {
+                        'X-Master-Key': API_KEY
+                    }
+                });
+
+                if (!response.ok) throw new Error('Erro ao ligar à base de dados');
+
+                const data = await response.json();
+                
+                // Verifica se o Bin já tem uma lista de jogos ou se está vazio/novo
+                if (Array.isArray(data.record)) {
+                    games = data.record;
+                } else if (data.record && Array.isArray(data.record.games)) {
+                    games = data.record.games;
+                } else {
+                    games = [];
+                }
+
+                renderGames();
+            } catch (error) {
+                console.error(error);
+                gamesList.innerHTML = '<p class="loading-text" style="color: #ff5252;">Erro ao carregar os jogos. Verifica a tua ligação ou as chaves da API.</p>';
+            }
+        }
+
+        // 2. Guardar a lista atualizada na nuvem
+        async function saveGamesToCloud() {
+            const response = await fetch(API_URL, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Master-Key': API_KEY
+                },
+                body: JSON.stringify({ games: games })
+            });
+
+            if (!response.ok) {
+                throw new Error('Falha ao guardar na nuvem');
+            }
+        }
+
+        // 3. Mostrar os jogos no ecrã
+        function renderGames() {
+            gamesList.innerHTML = '';
+
+            if (games.length === 0) {
+                gamesList.innerHTML = '<p class="loading-text">Ainda não há jogos publicados. Sê o primeiro a publicar!</p>';
+                return;
+            }
+
+            games.forEach(game => {
+                const card = document.createElement('div');
+                card.className = 'game-card';
+                card.innerHTML = `
+                    <img src="${game.image}" alt="${game.title}" onerror="this.src='https://placeholder.com'">
+                    <div class="game-info">
+                        <div>
+                            <h3>${game.title}</h3>
+                            <p>${game.description}</p>
+                        </div>
+                        <a href="${game.link}" target="_blank" class="play-btn">Jogar / Descarregar</a>
+                    </div>
+                `;
+                gamesList.appendChild(card);
+            });
+        }
+
+        // 4. Quando o utilizador publica um jogo
+        gameForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            // Bloqueia o botão enquanto envia para evitar cliques duplos
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'A publicar...';
+
+            const newGame = {
+                title: document.getElementById('title').value,
+                description: document.getElementById('description').value,
+                image: document.getElementById('image').value,
+                link: document.getElementById('link').value
+            };
+
+            try {
+                // Adiciona o novo jogo ao topo da lista
+                games.unshift(newGame);
+
+                // Envia para o JSONBin
+                await saveGamesToCloud();
+
+                // Atualiza o ecrã e limpa o formulário
+                renderGames();
+                gameForm.reset();
+                alert('Jogo publicado na nuvem com sucesso!');
