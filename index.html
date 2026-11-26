@@ -3,69 +3,59 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#171717">
 <title>MOZ MARKET 🇲🇿</title>
 
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{
- font-family:Arial,sans-serif;
- background:#f4f5f7;color:#222;
-}
-header{
- background:#171717;color:white;
- padding:22px 6%;
- display:flex;justify-content:space-between;
- align-items:center;flex-wrap:wrap;gap:12px;
-}
+body{font-family:Arial,sans-serif;background:#f4f5f7;color:#222}
+header{background:#171717;color:white;padding:20px 6%;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:15px}
 .logo{font-size:25px;font-weight:900;color:#ff8717}
 header span{font-size:12px;color:#ddd}
-button{
- border:0;padding:12px 18px;border-radius:8px;
- background:#ff8717;color:white;
- font-weight:bold;cursor:pointer;
-}
+button{border:0;padding:12px 18px;border-radius:8px;background:#ff8717;color:white;font-weight:bold;cursor:pointer}
 button:hover{opacity:.85}
-.container{max-width:1050px;margin:30px auto;padding:15px}
-.hero{
- background:#202020;color:white;padding:35px 20px;
- border-radius:15px;text-align:center;
-}
-.hero h1{font-size:30px;color:#ff8717;margin-bottom:12px}
-.hero p{color:#ddd}
+button:disabled{opacity:.5;cursor:not-allowed}
+.container{max-width:1100px;margin:30px auto;padding:15px}
+.hero{background:linear-gradient(135deg,#202020,#383838);color:white;padding:45px 20px;border-radius:15px;text-align:center}
+.hero h1{font-size:32px;color:#ff8717;margin-bottom:12px}
+.hero p{color:#ddd;line-height:1.6}
 .search{margin:20px 0}
-input,textarea,select{
- width:100%;padding:13px;margin:8px 0;
- border:1px solid #ddd;border-radius:8px;
- font-size:15px;background:white;
-}
-textarea{min-height:90px;resize:vertical}
-.card{
- background:white;padding:20px;border-radius:12px;
- margin-bottom:18px;box-shadow:0 3px 12px #0000000c;
-}
+input,textarea,select{width:100%;padding:13px;margin:8px 0;border:1px solid #ddd;border-radius:8px;font-size:15px;background:white}
+textarea{min-height:100px;resize:vertical}
+.card{background:white;padding:20px;border-radius:12px;margin-bottom:18px;box-shadow:0 3px 12px #0000000c}
 .card h2{margin-bottom:12px}
 .price{color:#ed7910;font-weight:bold;font-size:23px}
-.plans{
- display:flex;gap:12px;flex-wrap:wrap;margin:15px 0;
-}
-.plan{
- flex:1;min-width:150px;border:2px solid #ff8717;
- padding:17px;border-radius:10px;
-}
-.plan h3{color:#ed7910}
-.listings{
- display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
- gap:15px;margin-top:20px;
-}
-.listing{
- background:white;border-radius:12px;
- padding:17px;box-shadow:0 3px 12px #0000000c;
-}
+.plans{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:15px 0}
+.plan{border:2px solid #ff8717;padding:17px;border-radius:10px;cursor:pointer}
+.plan.selected{background:#fff3e7;border-color:#d65f00}
+.plan h3{color:#ed7910;margin-bottom:8px}
+.listings{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:15px;margin-top:20px}
+.listing{background:white;border-radius:12px;padding:17px;box-shadow:0 3px 12px #0000000c;overflow-wrap:anywhere}
 .listing h3{margin:10px 0}
 .listing small{color:#777}
+.listing .category{color:#e77b13;font-weight:bold}
 .status{font-size:12px;font-weight:bold;color:#b66b00}
 .hidden{display:none!important}
 footer{text-align:center;padding:25px;color:#777}
+hr{border:0;border-top:1px solid #eee;margin:18px 0}
+.form-buttons{display:flex;gap:10px;flex-wrap:wrap;margin-top:15px}
+.form-buttons button{flex:1}
+.secondary{background:#555}
+.danger{background:#c62828}
+.success{background:#168447}
+.info{background:#eef6ff;padding:13px;border-radius:8px;color:#24527a;margin:12px 0;font-size:14px}
+.empty{text-align:center;color:#777;padding:25px}
+.badge{display:inline-block;padding:5px 9px;border-radius:20px;font-size:11px;font-weight:bold;background:#fff0db;color:#a95b00}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin:15px 0}
+.stat{background:#f6f6f6;padding:15px;border-radius:9px;text-align:center}
+.stat strong{display:block;font-size:24px;color:#ed7910}
+.listing-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:15px}
+.listing-actions button{flex:1}
+@media(max-width:600px){
+ header{padding:17px}
+ .hero h1{font-size:25px}
+ .container{margin:15px auto}
+}
 </style>
 </head>
 
@@ -83,7 +73,8 @@ footer{text-align:center;padding:25px;color:#777}
 
  <section class="hero">
   <h1>Encontra. Compra. Vende.</h1>
-  <p>Descobre produtos e serviços em Moçambique.</p>
+  <p>Descobre produtos e serviços num só lugar.<br>
+  O teu mercado digital começa aqui!</p>
  </section>
 
  <input class="search" id="search"
@@ -95,9 +86,9 @@ footer{text-align:center;padding:25px;color:#777}
   <p>Preenche os dados do teu anúncio.</p>
 
   <form id="adForm">
-   <input id="seller" placeholder="Nome do vendedor" required>
-   <input id="phone" placeholder="WhatsApp do vendedor" required>
-   <input id="title" placeholder="Nome do produto ou serviço" required>
+   <input id="seller" maxlength="60" placeholder="Nome do vendedor" required>
+   <input id="phone" maxlength="20" placeholder="WhatsApp do vendedor" required>
+   <input id="title" maxlength="100" placeholder="Nome do produto ou serviço" required>
 
    <select id="category" required>
     <option value="">Escolher categoria</option>
@@ -108,29 +99,46 @@ footer{text-align:center;padding:25px;color:#777}
     <option>Moda</option>
     <option>Alimentação</option>
     <option>Serviços</option>
+    <option>Electrónicos</option>
     <option>Outros</option>
    </select>
 
-   <input id="price" placeholder="Preço em MT" required>
-   <textarea id="description" placeholder="Descrição do anúncio..." required></textarea>
+   <input id="price" type="number" min="0" step="0.01" placeholder="Preço em MT" required>
+   <textarea id="description" maxlength="1000" placeholder="Descrição do anúncio..." required></textarea>
 
    <div class="card">
     <h3>💳 Plano de publicação</h3>
+
     <div class="plans">
-     <div class="plan">
-      <h3>7 dias</h3>
+     <div class="plan selected" onclick="selectPlan(this,7,100)">
+      <h3>Básico</h3>
+      <p><b>7 dias</b></p>
       <div class="price">100 MT</div>
-      <small>Publicação durante 7 dias</small>
+     </div>
+
+     <div class="plan" onclick="selectPlan(this,15,200)">
+      <h3>Standard</h3>
+      <p><b>15 dias</b></p>
+      <div class="price">200 MT</div>
+     </div>
+
+     <div class="plan" onclick="selectPlan(this,30,350)">
+      <h3>Premium</h3>
+      <p><b>30 dias</b></p>
+      <div class="price">350 MT</div>
      </div>
     </div>
-    <p><b>Total a pagar: 100 MT</b></p>
+
+    <p id="selectedPlan"><b>Plano escolhido: Básico — 100 MT</b></p>
    </div>
 
    <div class="card">
     <h3>📲 Pagamento</h3>
-    <p>O administrador deverá fornecer os dados oficiais de pagamento.</p>
-    <p>Depois de pagar, informa a referência da transação.</p>
-    <input id="reference" placeholder="Referência da transação" required>
+    <div class="info">
+     Os dados oficiais de pagamento devem ser configurados pelo responsável do MOZ MARKET.
+     Nunca partilhes PIN, senha ou código OTP.
+    </div>
+    <input id="reference" maxlength="100" placeholder="Referência da transação" required>
    </div>
 
    <label>
@@ -138,8 +146,10 @@ footer{text-align:center;padding:25px;color:#777}
     Confirmo que os dados do anúncio são verdadeiros.
    </label>
 
-   <button type="submit">Enviar para verificação</button>
-   <button type="button" onclick="hideForm()" style="background:#555">Cancelar</button>
+   <div class="form-buttons">
+    <button type="submit">Enviar para verificação</button>
+    <button type="button" onclick="hideForm()" class="secondary">Cancelar</button>
+   </div>
   </form>
  </section>
 
@@ -150,8 +160,21 @@ footer{text-align:center;padding:25px;color:#777}
 
  <section id="admin" class="card hidden" style="margin-top:30px">
   <h2>🛡️ Administração MOZ MARKET</h2>
-  <p>Verifica os pagamentos e os anúncios antes de aprovar.</p>
+  <p>Gestão dos anúncios e verificação manual dos pagamentos.</p>
+
+  <div class="stats">
+   <div class="stat"><strong id="totalAds">0</strong>Total</div>
+   <div class="stat"><strong id="pendingAds">0</strong>Pendentes</div>
+   <div class="stat"><strong id="approvedAds">0</strong>Aprovados</div>
+   <div class="stat"><strong id="rejectedAds">0</strong>Rejeitados</div>
+  </div>
+
+  <h3>📥 Anúncios pendentes</h3>
   <div id="pending"></div>
+
+  <hr>
+  <h3>📋 Histórico de anúncios</h3>
+  <div id="history"></div>
  </section>
 
  <button onclick="adminLogin()" style="margin-top:25px;background:#222">
@@ -166,35 +189,87 @@ footer{text-align:center;padding:25px;color:#777}
 </footer>
 
 <script>
-const KEY = "moz_market_ads";
-const ADMIN_PASSWORD = "admin123"; // APENAS DEMONSTRAÇÃO
+const KEY = "moz_market_ads_v2";
 
-let ads = JSON.parse(localStorage.getItem(KEY) || "[]");
+// DEMONSTRAÇÃO LOCAL APENAS.
+// Não utilizar esta senha num site público.
+const ADMIN_PASSWORD = "admin123";
+
+let ads = loadAds();
+let selectedDays = 7;
+let selectedPrice = 100;
+
+function loadAds(){
+ try{
+  const data = JSON.parse(localStorage.getItem(KEY) || "[]");
+  return Array.isArray(data) ? data : [];
+ }catch(e){
+  return [];
+ }
+}
 
 function save(){
- localStorage.setItem(KEY,JSON.stringify(ads));
+ try{
+  localStorage.setItem(KEY,JSON.stringify(ads));
+ }catch(e){
+  alert("Não foi possível guardar os dados neste navegador.");
+ }
+}
+
+function escapeHTML(value){
+ return String(value ?? "").replace(/[&<>"']/g,c=>({
+  "&":"&amp;",
+  "<":"&lt;",
+  ">":"&gt;",
+  '"':"&quot;",
+  "'":"&#39;"
+ }[c]));
 }
 
 function showForm(){
  document.getElementById("form").classList.remove("hidden");
+ window.scrollTo({top:0,behavior:"smooth"});
 }
 
 function hideForm(){
  document.getElementById("form").classList.add("hidden");
 }
 
-document.getElementById("adForm").onsubmit = function(e){
+function selectPlan(element,days,price){
+ document.querySelectorAll(".plan").forEach(p=>p.classList.remove("selected"));
+ element.classList.add("selected");
+
+ selectedDays=days;
+ selectedPrice=price;
+
+ const names={7:"Básico",15:"Standard",30:"Premium"};
+
+ document.getElementById("selectedPlan").innerHTML=
+ "<b>Plano escolhido: "+names[days]+" — "+price+" MT</b>";
+}
+
+document.getElementById("adForm").addEventListener("submit",function(e){
  e.preventDefault();
 
- const ad = {
+ const phone=document.getElementById("phone").value.trim();
+ const phoneDigits=phone.replace(/\D/g,"");
+
+ if(phoneDigits.length<9 || phoneDigits.length>15){
+  alert("Introduz um número de WhatsApp válido.");
+  return;
+ }
+
+ const ad={
   id:Date.now(),
-  seller:document.getElementById("seller").value,
-  phone:document.getElementById("phone").value,
-  title:document.getElementById("title").value,
+  seller:document.getElementById("seller").value.trim(),
+  phone:phone,
+  title:document.getElementById("title").value.trim(),
   category:document.getElementById("category").value,
   price:document.getElementById("price").value,
-  description:document.getElementById("description").value,
-  reference:document.getElementById("reference").value,
+  description:document.getElementById("description").value.trim(),
+  reference:document.getElementById("reference").value.trim(),
+  planDays:selectedDays,
+  planPrice:selectedPrice,
   status:"pending",
   created:new Date().toISOString(),
   expires:null
@@ -204,85 +279,131 @@ document.getElementById("adForm").onsubmit = function(e){
  save();
 
  alert("Anúncio enviado! Aguarda a verificação do pagamento e do conteúdo.");
+
  this.reset();
+
+ selectedDays=7;
+ selectedPrice=100;
+
+ document.querySelectorAll(".plan").forEach((p,i)=>{
+  p.classList.toggle("selected",i===0);
+ });
+
+ document.getElementById("selectedPlan").innerHTML=
+ "<b>Plano escolhido: Básico — 100 MT</b>";
+
  hideForm();
  render();
-};
+});
 
 function render(){
- const search = document.getElementById("search").value.toLowerCase();
+ const search=document.getElementById("search").value.toLowerCase().trim();
 
- const available = ads.filter(a =>
+ const available=ads.filter(a=>
   a.status==="approved" &&
-  a.expires && new Date(a.expires)>new Date() &&
+  a.expires &&
+  new Date(a.expires)>new Date() &&
   (a.title+" "+a.category+" "+a.description).toLowerCase().includes(search)
  );
 
- document.getElementById("listings").innerHTML =
- available.length ? available.map(a=>`
+ const container=document.getElementById("listings");
+
+ if(!available.length){
+  container.innerHTML='<div class="empty">Ainda não existem anúncios disponíveis.</div>';
+  return;
+ }
+
+ container.innerHTML=available.map(a=>`
   <div class="listing">
-   <small>${escapeHTML(a.category)}</small>
+   <span class="category">${escapeHTML(a.category)}</span>
    <h3>${escapeHTML(a.title)}</h3>
    <p>${escapeHTML(a.description)}</p>
+   <br>
    <p class="price">${escapeHTML(a.price)} MT</p>
+   <br>
    <small>Vendedor: ${escapeHTML(a.seller)}</small>
-   <br><br>
-   <button onclick="contact('${a.id}')">Contactar vendedor</button>
+   <br>
+   <small>Publicado: ${new Date(a.created).toLocaleDateString("pt-PT")}</small>
+   <div class="listing-actions">
+    <button onclick="contact('${a.id}')">Contactar vendedor</button>
+   </div>
   </div>
- `).join("") : "<p>Ainda não existem anúncios disponíveis.</p>";
+ `).join("");
 }
 
 function contact(id){
  const ad=ads.find(a=>String(a.id)===String(id));
  if(!ad)return;
+
  const phone=ad.phone.replace(/\D/g,"");
- if(!/^[0-9]{9,15}$/.test(phone)){
+
+ if(phone.length<9 || phone.length>15){
   alert("Número de contacto inválido.");
   return;
  }
- window.open("https://wa.me/"+phone,"_blank");
+
+ const message=encodeURIComponent(
+  "Olá! Vi o teu anúncio no MOZ MARKET: "+ad.title
+ );
+
+ window.open("https://wa.me/"+phone+"?text="+message,"_blank");
 }
 
 function adminLogin(){
  const password=prompt("Palavra-passe administrativa:");
+
+ if(password===null)return;
+
  if(password===ADMIN_PASSWORD){
   document.getElementById("admin").classList.remove("hidden");
   adminRender();
+  document.getElementById("admin").scrollIntoView({behavior:"smooth"});
  }else{
   alert("Palavra-passe incorreta.");
  }
 }
 
 function adminRender(){
+ const pending=ads.filter(a=>a.status==="pending");
+ const approved=ads.filter(a=>a.status==="approved");
+ const rejected=ads.filter(a=>a.status==="rejected");
+
+ document.getElementById("totalAds").textContent=ads.length;
+ document.getElementById("pendingAds").textContent=pending.length;
+ document.getElementById("approvedAds").textContent=approved.length;
+ document.getElementById("rejectedAds").textContent=rejected.length;
+
  const box=document.getElementById("pending");
 
- box.innerHTML=ads.filter(a=>a.status==="pending").map(a=>`
+ box.innerHTML=pending.map(a=>`
   <div class="card">
    <h3>${escapeHTML(a.title)}</h3>
    <p>Vendedor: ${escapeHTML(a.seller)}</p>
    <p>Telefone: ${escapeHTML(a.phone)}</p>
    <p>Preço: ${escapeHTML(a.price)} MT</p>
    <p>Categoria: ${escapeHTML(a.category)}</p>
+   <p>Plano: ${a.planDays} dias — ${a.planPrice} MT</p>
    <p>Referência: ${escapeHTML(a.reference)}</p>
    <p>${escapeHTML(a.description)}</p>
    <p class="status">AGUARDANDO VERIFICAÇÃO</p>
    <br>
-   <button onclick="approve(${a.id})">✓ Aprovar</button>
-   <button onclick="reject(${a.id})" style="background:#c62828">Rejeitar</button>
+   <button onclick="approve(${a.id})" class="success">✓ Aprovar</button>
+   <button onclick="reject(${a.id})" class="danger">Rejeitar</button>
   </div>
- `).join("") || "<p>Nenhum anúncio pendente.</p>";
+ `).join("") || '<p class="empty">Nenhum anúncio pendente.</p>';
 
- box.innerHTML += `
- <h3>📋 Histórico de anúncios</h3>
- ${ads.map(a=>`
+ const history=document.getElementById("history");
+
+ history.innerHTML=ads.slice().reverse().map(a=>`
   <div class="card">
    <b>${escapeHTML(a.title)}</b>
-   <p>Estado: ${escapeHTML(a.status)}</p>
+   <p>Vendedor: ${escapeHTML(a.seller)}</p>
+   <p>Estado: <span class="badge">${escapeHTML(a.status)}</span></p>
    <p>Expira: ${a.expires ? new Date(a.expires).toLocaleString("pt-PT") : "Não publicado"}</p>
-   <button onclick="removeAd(${a.id})" style="background:#c62828">Eliminar</button>
+   <br>
+   <button onclick="removeAd(${a.id})" class="danger">Eliminar</button>
   </div>
- `).join("")}
- `;
+ `).join("") || '<p class="empty">Ainda não existem anúncios.</p>';
 }
 
 function approve(id){
@@ -292,43 +413,60 @@ function approve(id){
  if(!confirm("Confirmaste o pagamento e verificaste o anúncio?"))return;
 
  ad.status="approved";
- ad.expires=new Date(Date.now()+7*24*60*60*1000).toISOString();
+
+ const days=Number(ad.planDays)||7;
+
+ ad.expires=new Date(
+  Date.now()+days*24*60*60*1000
+ ).toISOString();
 
  save();
  adminRender();
  render();
+
+ alert("Anúncio aprovado!");
 }
 
 function reject(id){
  const ad=ads.find(a=>a.id===id);
  if(!ad)return;
+
+ if(!confirm("Tens a certeza de que queres rejeitar este anúncio?"))return;
+
  ad.status="rejected";
  save();
+
  adminRender();
+ render();
 }
 
 function removeAd(id){
- if(!confirm("Eliminar este anúncio?"))return;
+ if(!confirm("Eliminar definitivamente este anúncio deste navegador?"))return;
+
  ads=ads.filter(a=>a.id!==id);
+
  save();
  adminRender();
  render();
 }
 
-function escapeHTML(value){
- return String(value).replace(/[&<>"']/g,c=>({
-  "&":"&amp;","<":"&lt;",">":"&gt;",
-  '"':"&quot;","'":"&#39;"
- }[c]));
+function expireAds(){
+ const now=Date.now();
+
+ ads.forEach(a=>{
+  if(
+   a.status==="approved" &&
+   a.expires &&
+   new Date(a.expires).getTime()<=now
+  ){
+   a.status="expired";
+  }
+ });
+
+ save();
 }
 
-// Remover anúncios expirados automaticamente
-ads.forEach(a=>{
- if(a.status==="approved" && a.expires && new Date(a.expires)<=new Date()){
-  a.status="expired";
- }
-});
-save();
+expireAds();
 render();
 </script>
 
