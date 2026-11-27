@@ -733,7 +733,7 @@
                 <th>Preço</th>
                 <th>Ref. Pagamento</th>
                 <th>Estado</th>
-                <th>Validade</th>
+                <th>Validade / Dias</th>
                 <th>Ações</th>
               </tr>
             </thead>
@@ -753,47 +753,7 @@
           </div>
         </div>
 
-        <div class="plans-grid">
-          <div class="plan-card">
-            <span class="pill">Plano Free</span>
-            <div class="plan-price">0 MT</div>
-            <p style="font-weight:700; margin-bottom:8px;">⏱️ 1 dia de publicação grátis</p>
-            <p style="font-size:0.88rem; color:var(--muted);">Experimenta 1 dia grátis; depois de 1 dia grátis terás de pagar para continuar.</p>
-            <button class="btn btn-primary btn-sm" style="margin-top:14px; width:100%;" onclick="selectPlanAndGoSeller('Free')">Escolher Free (1 dia)</button>
-          </div>
-
-          <div class="plan-card">
-            <span class="pill">Plano Mini</span>
-            <div class="plan-price">50 MT</div>
-            <p style="font-weight:700; margin-bottom:8px;">⏱️ 3 dias de publicação</p>
-            <p style="font-size:0.88rem; color:var(--muted);">Opção económica de 3 dias para divulgar rápido no mercado local.</p>
-            <button class="btn btn-primary btn-sm" style="margin-top:14px; width:100%;" onclick="selectPlanAndGoSeller('Mini')">Escolher Mini (50 MT)</button>
-          </div>
-
-          <div class="plan-card">
-            <span class="pill">Plano Básico</span>
-            <div class="plan-price">100 MT</div>
-            <p style="font-weight:700; margin-bottom:8px;">⏱️ 7 dias de publicação</p>
-            <p style="font-size:0.88rem; color:var(--muted);">Ideal para vendas rápidas, serviços locais e testes de mercado.</p>
-            <button class="btn btn-primary btn-sm" style="margin-top:14px; width:100%;" onclick="selectPlanAndGoSeller('Básico')">Escolher Básico</button>
-          </div>
-
-          <div class="plan-card selected">
-            <span class="pill" style="background:#e0f2fe; color:#0369a1;">Mais Popular</span>
-            <div class="plan-price">200 MT</div>
-            <p style="font-weight:700; margin-bottom:8px;">⏱️ 15 dias de publicação</p>
-            <p style="font-size:0.88rem; color:var(--muted);">Mais tempo de exposição para eletrónicos, móveis, roupa e serviços.</p>
-            <button class="btn btn-primary btn-sm" style="margin-top:14px; width:100%;" onclick="selectPlanAndGoSeller('Standard')">Escolher Standard</button>
-          </div>
-
-          <div class="plan-card" style="border-color:var(--accent);">
-            <span class="pill" style="background:#fef3c7; color:#b45309;">Destaque Máximo</span>
-            <div class="plan-price">350 MT</div>
-            <p style="font-weight:700; margin-bottom:8px;">⏱️ 30 dias de publicação</p>
-            <p style="font-size:0.88rem; color:var(--muted);">Um mês inteiro ativo com selo Premium para viaturas, imóveis e negócios.</p>
-            <button class="btn btn-primary btn-sm" style="margin-top:14px; width:100%;" onclick="selectPlanAndGoSeller('Premium')">Escolher Premium</button>
-          </div>
-        </div>
+        <div class="plans-grid" id="plansCatalogGrid"></div>
 
         <div style="background:var(--surface-2); padding:16px; border-radius:14px; font-size:0.9rem;">
           <strong>Como funciona o pagamento manual verificado:</strong>
@@ -841,6 +801,32 @@
           <div id="planBreakdown" style="margin-top:12px; display:grid; grid-template-columns:repeat(auto-fit, minmax(220px,1fr)); gap:12px;"></div>
         </div>
 
+        <!-- ADICIONAR PLANOS -->
+        <div class="panel">
+          <h3 style="margin-bottom:12px;">💳 Adicionar Novo Plano</h3>
+          <form onsubmit="addPlan(event)" class="form-grid-2">
+            <div class="field">
+              <label>Nome do Plano *</label>
+              <input type="text" id="newPlanName" required placeholder="Ex: Semanal / VIP" />
+            </div>
+            <div class="field">
+              <label>Preço (MT) *</label>
+              <input type="number" id="newPlanPrice" required min="0" placeholder="Ex: 150" />
+            </div>
+            <div class="field">
+              <label>Duração (Dias) *</label>
+              <input type="number" id="newPlanDays" required min="1" placeholder="Ex: 10" />
+            </div>
+            <div class="field">
+              <label>Descrição *</label>
+              <input type="text" id="newPlanDesc" required placeholder="Ex: 10 dias de publicação" />
+            </div>
+            <div style="grid-column:1/-1;">
+              <button type="submit" class="btn btn-primary">+ Adicionar Plano</button>
+            </div>
+          </form>
+        </div>
+
         <!-- ANÚNCIOS PENDENTES E TODOS -->
         <div class="panel">
           <div class="panel-header">
@@ -860,6 +846,7 @@
                   <th>Título</th>
                   <th>Vendedor</th>
                   <th>Plano / Valor</th>
+                  <th>Dias Restantes</th>
                   <th>Ref. Pagamento</th>
                   <th>Estado</th>
                   <th>Ações</th>
@@ -1008,7 +995,7 @@
       "Niassa (Lichinga)"
     ];
 
-    const PLANOS = {
+    const DEFAULT_PLANOS = {
       "Free": { nome: "Free", preco: 0, dias: 1, desc: "1 dia grátis (depois paga)" },
       "Mini": { nome: "Mini", preco: 50, dias: 3, desc: "3 dias de publicação" },
       "Básico": { nome: "Básico", preco: 100, dias: 7, desc: "7 dias de publicação" },
@@ -1111,6 +1098,7 @@
 
     let state = {
       ads: JSON.parse(localStorage.getItem("km_ads")) || DEFAULT_ADS,
+      planos: JSON.parse(localStorage.getItem("km_planos")) || DEFAULT_PLANOS,
       categories: JSON.parse(localStorage.getItem("km_cats")) || DEFAULT_CATEGORIES,
       favorites: JSON.parse(localStorage.getItem("km_favs")) || [],
       users: JSON.parse(localStorage.getItem("km_users")) || DEFAULT_USERS,
@@ -1124,6 +1112,18 @@
       uploadedPhotoDataUrl: "",
       isAdminLoggedIn: sessionStorage.getItem("km_admin_auth") === "true"
     };
+
+    function getRemainingDaysText(ad) {
+      if (!ad.expiraEm) return "—";
+      if (ad.estado === "pendente") return "Aguarda aprovação";
+      if (ad.estado === "rejeitado") return "Rejeitado";
+      const nowMs = new Date().setHours(0, 0, 0, 0);
+      const expMs = new Date(ad.expiraEm + "T00:00:00").getTime();
+      const diffDays = Math.ceil((expMs - nowMs) / 86400000);
+      if (diffDays <= 0 || ad.estado === "expirado") return "Expirado (0 dias)";
+      if (diffDays === 1) return "1 dia restante";
+      return `${diffDays} dias restantes`;
+    }
 
     function checkExpiredAds() {
       const today = new Date().toISOString().slice(0, 10);
@@ -1139,6 +1139,7 @@
 
     function saveState() {
       localStorage.setItem("km_ads", JSON.stringify(state.ads));
+      localStorage.setItem("km_planos", JSON.stringify(state.planos));
       localStorage.setItem("km_cats", JSON.stringify(state.categories));
       localStorage.setItem("km_favs", JSON.stringify(state.favorites));
       localStorage.setItem("km_users", JSON.stringify(state.users));
@@ -1159,14 +1160,16 @@
 
         if (record && typeof record === "object") {
           const hasCloudAds = Array.isArray(record.ads) && record.ads.length > 0;
+          const hasCloudPlanos = record.planos && typeof record.planos === "object" && Object.keys(record.planos).length > 0;
           const hasCloudCats = Array.isArray(record.categories) && record.categories.length > 0;
           const hasCloudUsers = Array.isArray(record.users) && record.users.length > 0;
 
           if (hasCloudAds) state.ads = record.ads;
+          if (hasCloudPlanos) state.planos = record.planos;
           if (hasCloudCats) state.categories = record.categories;
           if (hasCloudUsers) state.users = record.users;
 
-          if (!hasCloudAds && !hasCloudCats && !hasCloudUsers) {
+          if (!hasCloudAds && !hasCloudPlanos && !hasCloudCats && !hasCloudUsers) {
             await syncCloudData();
           } else {
             saveState();
@@ -1181,6 +1184,7 @@
       saveState();
       const payload = {
         ads: state.ads,
+        planos: state.planos,
         categories: state.categories,
         users: state.users,
         updatedAt: new Date().toISOString()
@@ -1222,6 +1226,7 @@
       if (tabName === "marketplace") renderAds();
       if (tabName === "favoritos") renderFavorites();
       if (tabName === "vendedor") renderSellerArea();
+      if (tabName === "planos") renderPlansCatalog();
       if (tabName === "admin") renderAdminArea();
     }
 
@@ -1294,7 +1299,7 @@
           const matchPrice = ad.preco >= minP && ad.preco <= maxP;
           return matchQ && matchCat && matchLoc && matchPrice;
         })
-        .sort((a, b) => (planRank[b.plano] || 0) - (planRank[a.plano] || 0));
+        .sort((a, b) => (planRank[b.plano] || state.planos[b.plano]?.dias || 0) - (planRank[a.plano] || state.planos[a.plano]?.dias || 0));
     }
 
     function createAdCardHtml(ad) {
@@ -1446,21 +1451,39 @@
       reader.readAsDataURL(file);
     }
 
+    function renderPlansCatalog() {
+      const wrap = document.getElementById("plansCatalogGrid");
+      wrap.innerHTML = Object.values(state.planos).map(p => {
+        const isPopular = p.nome === "Standard";
+        const isPremium = p.nome === "Premium";
+        return `
+          <div class="plan-card ${isPopular ? "selected" : ""}" ${isPremium ? 'style="border-color:var(--accent);"' : ""}>
+            <span class="pill" ${isPopular ? 'style="background:#e0f2fe; color:#0369a1;"' : isPremium ? 'style="background:#fef3c7; color:#b45309;"' : ""}>Plano ${escapeHtml(p.nome)}</span>
+            <div class="plan-price">${formatMT(p.preco)}</div>
+            <p style="font-weight:700; margin-bottom:8px;">⏱️ ${Number(p.dias)} ${Number(p.dias) === 1 ? "dia" : "dias"} de publicação</p>
+            <p style="font-size:0.88rem; color:var(--muted);">${escapeHtml(p.desc)}</p>
+            <button class="btn btn-primary btn-sm" style="margin-top:14px; width:100%;" onclick="selectPlanAndGoSeller('${escapeHtml(p.nome)}')">Escolher ${escapeHtml(p.nome)}</button>
+          </div>
+        `;
+      }).join("");
+    }
+
     function renderSellerPlans() {
       const wrap = document.getElementById("sellerPlansGrid");
-      wrap.innerHTML = Object.values(PLANOS).map(p => {
+      wrap.innerHTML = Object.values(state.planos).map(p => {
         const active = state.selectedPlan === p.nome;
         return `
-          <div class="plan-card ${active ? "selected" : ""}" onclick="choosePlan('${p.nome}')">
-            <strong>${p.nome}</strong>
+          <div class="plan-card ${active ? "selected" : ""}" onclick="choosePlan('${escapeHtml(p.nome)}')">
+            <strong>${escapeHtml(p.nome)}</strong>
             <div class="plan-price">${formatMT(p.preco)}</div>
-            <div style="font-size:0.84rem; color:var(--muted);">${p.desc}</div>
+            <div style="font-size:0.84rem; color:var(--muted);">${escapeHtml(p.desc)}</div>
           </div>
         `;
       }).join("");
 
       const refInput = document.getElementById("adPayRef");
-      if (state.selectedPlan === "Free") {
+      const currentPlanObj = state.planos[state.selectedPlan];
+      if (currentPlanObj && Number(currentPlanObj.preco) === 0) {
         refInput.required = false;
         refInput.placeholder = "Opcional no Free (aguarda confirmação do Admin)";
       } else {
@@ -1478,7 +1501,8 @@
       state.selectedPlan = planName;
       switchTab("vendedor");
       renderSellerPlans();
-      showToast(`Plano ${planName} (${formatMT(PLANOS[planName].preco)}) selecionado.`);
+      const preco = state.planos[planName]?.preco ?? 0;
+      showToast(`Plano ${planName} (${formatMT(preco)}) selecionado.`);
     }
 
     function renderSellerArea() {
@@ -1506,7 +1530,7 @@
           <td>${formatMT(ad.preco)}</td>
           <td><code>${escapeHtml(ad.refPagamento || "FREE-1D")}</code> (${escapeHtml(ad.metodoPagamento)})</td>
           <td><span class="status ${ad.estado}">${ad.estado.toUpperCase()}</span></td>
-          <td>${ad.criadoEm} → ${ad.expiraEm}</td>
+          <td>${ad.criadoEm} → ${ad.expiraEm}<div style="font-size:0.78rem; color:var(--muted);">${escapeHtml(getRemainingDaysText(ad))}</div></td>
           <td style="white-space:nowrap;">
             ${ad.estado === "expirado" ? `<button class="btn btn-primary btn-sm" onclick="payToRenewAd('${ad.id}')">Pagar Plano</button>` : ""}
             <button class="btn btn-outline btn-sm" onclick="editAd('${ad.id}')">Editar</button>
@@ -1521,7 +1545,7 @@
       if (!ad) return;
       editAd(id);
       if (state.selectedPlan === "Free") {
-        state.selectedPlan = "Mini";
+        state.selectedPlan = state.planos["Mini"] ? "Mini" : Object.keys(state.planos)[0];
         renderSellerPlans();
       }
       document.getElementById("adPayRef").focus();
@@ -1541,17 +1565,17 @@
       const metodoPagamento = document.getElementById("adPayMethod").value;
       const refPagamentoInput = document.getElementById("adPayRef").value.trim();
 
-      const planObj = PLANOS[state.selectedPlan] || PLANOS.Standard;
-      if (planObj.preco > 0 && !refPagamentoInput) {
+      const planObj = state.planos[state.selectedPlan] || DEFAULT_PLANOS.Standard;
+      if (Number(planObj.preco) > 0 && !refPagamentoInput) {
         showToast("Insere a referência de pagamento para planos pagos.");
         return;
       }
-      const refPagamento = planObj.preco === 0 ? (refPagamentoInput || "GRATIS-1DIA") : refPagamentoInput;
+      const refPagamento = Number(planObj.preco) === 0 ? (refPagamentoInput || "GRATIS-1DIA") : refPagamentoInput;
       const fotoFinal = state.uploadedPhotoDataUrl || fotoUrl || "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=800&q=80";
 
       const now = new Date();
       const criadoEm = now.toISOString().slice(0, 10);
-      const expDate = new Date(now.getTime() + planObj.dias * 86400000);
+      const expDate = new Date(now.getTime() + Number(planObj.dias) * 86400000);
       const expiraEm = expDate.toISOString().slice(0, 10);
       const novoEstado = "pendente";
 
@@ -1563,7 +1587,7 @@
             titulo, preco, categoria, localizacao, whatsapp, descricao,
             foto: fotoFinal,
             plano: planObj.nome,
-            valorPago: planObj.preco,
+            valorPago: Number(planObj.preco),
             metodoPagamento,
             refPagamento,
             estado: state.ads[idx].estado === "expirado" ? "pendente" : state.ads[idx].estado,
@@ -1583,7 +1607,7 @@
           descricao,
           foto: fotoFinal,
           plano: planObj.nome,
-          valorPago: planObj.preco,
+          valorPago: Number(planObj.preco),
           metodoPagamento,
           refPagamento,
           estado: novoEstado,
@@ -1663,6 +1687,26 @@
       renderAdminArea();
     }
 
+    async function addPlan(e) {
+      e.preventDefault();
+      const nome = document.getElementById("newPlanName").value.trim();
+      const preco = Number(document.getElementById("newPlanPrice").value);
+      const dias = Number(document.getElementById("newPlanDays").value);
+      const desc = document.getElementById("newPlanDesc").value.trim();
+      if (!nome || dias < 1 || preco < 0) return;
+
+      state.planos[nome] = { nome, preco, dias, desc };
+      await syncCloudData();
+      document.getElementById("newPlanName").value = "";
+      document.getElementById("newPlanPrice").value = "";
+      document.getElementById("newPlanDays").value = "";
+      document.getElementById("newPlanDesc").value = "";
+      renderPlansCatalog();
+      renderSellerPlans();
+      renderAdminArea();
+      showToast(`Plano "${nome}" adicionado!`);
+    }
+
     function renderAdminArea() {
       const locked = document.getElementById("adminLockedBox");
       const content = document.getElementById("adminPanelContent");
@@ -1691,8 +1735,12 @@
         <div class="kpi-card"><span>Receita Registada</span><strong style="color:var(--primary);">${formatMT(receita)}</strong></div>
       `;
 
-      const planCounts = { Free: 0, Mini: 0, Básico: 0, Standard: 0, Premium: 0 };
-      const planRevenue = { Free: 0, Mini: 0, Básico: 0, Standard: 0, Premium: 0 };
+      const planCounts = {};
+      const planRevenue = {};
+      Object.keys(state.planos).forEach(k => {
+        planCounts[k] = 0;
+        planRevenue[k] = 0;
+      });
       state.ads.forEach(a => {
         if (planCounts[a.plano] !== undefined) {
           planCounts[a.plano] += 1;
@@ -1700,11 +1748,11 @@
         }
       });
 
-      document.getElementById("planBreakdown").innerHTML = Object.keys(PLANOS).map(k => `
+      document.getElementById("planBreakdown").innerHTML = Object.keys(state.planos).map(k => `
         <div style="background:var(--surface-2); padding:14px; border-radius:12px;">
-          <strong>Plano ${k}</strong>
+          <strong>Plano ${escapeHtml(k)}</strong>
           <div style="font-size:0.86rem; color:var(--muted); margin-top:4px;">
-            Publicações: <strong>${planCounts[k]}</strong> • Receita Ativa: <strong>${formatMT(planRevenue[k])}</strong>
+            Publicações: <strong>${planCounts[k] || 0}</strong> • Receita Ativa: <strong>${formatMT(planRevenue[k] || 0)}</strong>
           </div>
         </div>
       `).join("");
@@ -1724,6 +1772,7 @@
           <td><strong>${escapeHtml(ad.titulo)}</strong><div style="font-size:0.78rem; color:var(--muted);">${escapeHtml(ad.localizacao)}</div></td>
           <td>${escapeHtml(ad.vendedor)}</td>
           <td>${escapeHtml(ad.plano)} — <strong>${formatMT(ad.valorPago)}</strong></td>
+          <td><strong>${escapeHtml(getRemainingDaysText(ad))}</strong><div style="font-size:0.76rem; color:var(--muted);">Expira: ${escapeHtml(ad.expiraEm || "—")}</div></td>
           <td><code>${escapeHtml(ad.refPagamento || "FREE-1D")}</code><div style="font-size:0.76rem; color:var(--muted);">${escapeHtml(ad.metodoPagamento)}</div></td>
           <td><span class="status ${ad.estado}">${ad.estado.toUpperCase()}</span></td>
           <td style="white-space:nowrap;">
@@ -1740,10 +1789,10 @@
       if (!ad) return;
       ad.estado = status;
       if (status === "ativo") {
-        const planObj = PLANOS[ad.plano] || PLANOS.Standard;
+        const planObj = state.planos[ad.plano] || DEFAULT_PLANOS.Standard;
         const now = new Date();
         ad.criadoEm = now.toISOString().slice(0, 10);
-        ad.expiraEm = new Date(now.getTime() + planObj.dias * 86400000).toISOString().slice(0, 10);
+        ad.expiraEm = new Date(now.getTime() + Number(planObj.dias) * 86400000).toISOString().slice(0, 10);
       }
       await syncCloudData();
       renderAdminArea();
@@ -1820,6 +1869,7 @@
         await syncCloudData();
       }
       populateSelects();
+      renderPlansCatalog();
       renderUserBox();
       renderAds();
       renderFavorites();
