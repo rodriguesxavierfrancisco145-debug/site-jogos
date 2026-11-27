@@ -967,6 +967,14 @@
   <div class="toast" id="toast"></div>
 
   <script>
+    const JSONBIN_CONFIG = {
+      binId: "6ac14773ac6210605a105749",
+      masterKey: "$2a$10$IiEJXJC7SzKZwe0fHMpSbu.vrgTI2VdWiSU3ZJXdotVepr1FMekoC",
+      get url() {
+        return `https://api.jsonbin.io/v3/b/${this.binId}`;
+      }
+    };
+
     const PROVINCIAS_MZ = [
       "Maputo Cidade",
       "Maputo Província (Matola)",
@@ -1102,6 +1110,62 @@
       localStorage.setItem("km_favs", JSON.stringify(state.favorites));
       localStorage.setItem("km_users", JSON.stringify(state.users));
       localStorage.setItem("km_curr_user", JSON.stringify(state.currentUser));
+    }
+
+    async function loadCloudData() {
+      try {
+        const res = await fetch(`${JSONBIN_CONFIG.url}/latest`, {
+          method: "GET",
+          headers: {
+            "X-Master-Key": JSONBIN_CONFIG.masterKey
+          }
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const json = await res.json();
+        const record = json.record;
+
+        if (record && typeof record === "object") {
+          const hasCloudAds = Array.isArray(record.ads) && record.ads.length > 0;
+          const hasCloudCats = Array.isArray(record.categories) && record.categories.length > 0;
+          const hasCloudUsers = Array.isArray(record.users) && record.users.length > 0;
+
+          if (hasCloudAds) state.ads = record.ads;
+          if (hasCloudCats) state.categories = record.categories;
+          if (hasCloudUsers) state.users = record.users;
+
+          if (!hasCloudAds && !hasCloudCats && !hasCloudUsers) {
+            await syncCloudData();
+          } else {
+            saveState();
+          }
+        }
+      } catch (err) {
+        console.error("Erro ao carregar do JSONBin:", err);
+      }
+    }
+
+    async function syncCloudData() {
+      saveState();
+      const payload = {
+        ads: state.ads,
+        categories: state.categories,
+        users: state.users,
+        updatedAt: new Date().toISOString()
+      };
+      try {
+        const res = await fetch(JSONBIN_CONFIG.url, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            "X-Master-Key": JSONBIN_CONFIG.masterKey
+          },
+          body: JSON.stringify(payload)
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      } catch (err) {
+        console.error("Erro ao sincronizar com JSONBin:", err);
+        showToast("Aviso: falha ao sincronizar com o JSONBin.");
+      }
     }
 
     function showToast(msg) {
@@ -1311,7 +1375,7 @@
       document.getElementById("authModal").classList.remove("open");
     }
 
-    function saveUserAccount(e) {
+    async function saveUserAccount(e) {
       e.preventDefault();
       const nome = document.getElementById("authName").value.trim();
       const role = document.getElementById("authRole").value;
@@ -1330,7 +1394,7 @@
           estado: "ativo"
         });
       }
-      saveState();
+      await syncCloudData();
       renderUserBox();
       renderSellerArea();
       renderAdminArea();
@@ -1409,7 +1473,7 @@
       `).join("");
     }
 
-    function submitAd(e) {
+    async function submitAd(e) {
       e.preventDefault();
       const editId = document.getElementById("editingAdId").value;
       const titulo = document.getElementById("adTitle").value.trim();
@@ -1466,7 +1530,7 @@
         showToast("Anúncio enviado com referência! Aguarda aprovação do Admin.");
       }
 
-      saveState();
+      await syncCloudData();
       resetAdForm();
       renderSellerArea();
       renderAds();
@@ -1503,10 +1567,10 @@
       if (state.currentUser?.localizacao) document.getElementById("adLocation").value = state.currentUser.localizacao;
     }
 
-    function deleteAd(id) {
+    async function deleteAd(id) {
       state.ads = state.ads.filter(a => a.id !== id);
       state.favorites = state.favorites.filter(f => f !== id);
-      saveState();
+      await syncCloudData();
       renderAds();
       renderFavorites();
       renderSellerArea();
@@ -1607,11 +1671,11 @@
       `).join("");
     }
 
-    function setAdStatus(id, status) {
+    async function setAdStatus(id, status) {
       const ad = state.ads.find(a => a.id === id);
       if (!ad) return;
       ad.estado = status;
-      saveState();
+      await syncCloudData();
       renderAdminArea();
       renderAds();
       renderSellerArea();
@@ -1635,22 +1699,22 @@
       `).join("");
     }
 
-    function toggleUserBlock(userId) {
+    async function toggleUserBlock(userId) {
       const u = state.users.find(item => item.id === userId);
       if (!u) return;
       u.estado = u.estado === "bloqueado" ? "ativo" : "bloqueado";
-      saveState();
+      await syncCloudData();
       renderAdminUsers();
       showToast(`Conta de ${u.nome} marcada como ${u.estado}.`);
     }
 
-    function addCategory() {
+    async function addCategory() {
       const input = document.getElementById("newCategoryInput");
       const val = input.value.trim();
       if (!val) return;
       if (!state.categories.includes(val)) {
         state.categories.push(val);
-        saveState();
+        await syncCloudData();
         populateSelects();
         renderAdminCategories();
         showToast("Categoria adicionada!");
@@ -1658,13 +1722,13 @@
       input.value = "";
     }
 
-    function removeCategory(catName) {
+    async function removeCategory(catName) {
       if (state.categories.length <= 2) {
         showToast("Mantém pelo menos 2 categorias.");
         return;
       }
       state.categories = state.categories.filter(c => c !== catName);
-      saveState();
+      await syncCloudData();
       populateSelects();
       renderAdminCategories();
       showToast("Categoria removida.");
@@ -1680,12 +1744,15 @@
     }
 
     // Inicialização
-    populateSelects();
-    renderUserBox();
-    renderAds();
-    renderFavorites();
-    renderSellerArea();
-    renderAdminArea();
+    (async function init() {
+      await loadCloudData();
+      populateSelects();
+      renderUserBox();
+      renderAds();
+      renderFavorites();
+      renderSellerArea();
+      renderAdminArea();
+    })();
   </script>
 </body>
 </html>
