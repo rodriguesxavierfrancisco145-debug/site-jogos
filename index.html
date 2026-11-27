@@ -1462,7 +1462,7 @@
       const refInput = document.getElementById("adPayRef");
       if (state.selectedPlan === "Free") {
         refInput.required = false;
-        refInput.placeholder = "Não precisa referência no plano Free (1 dia)";
+        refInput.placeholder = "Opcional no Free (aguarda confirmação do Admin)";
       } else {
         refInput.required = true;
         refInput.placeholder = "Ex: MP261127.1840.A9182";
@@ -1553,7 +1553,7 @@
       const criadoEm = now.toISOString().slice(0, 10);
       const expDate = new Date(now.getTime() + planObj.dias * 86400000);
       const expiraEm = expDate.toISOString().slice(0, 10);
-      const novoEstado = planObj.preco === 0 ? "ativo" : "pendente";
+      const novoEstado = "pendente";
 
       if (editId) {
         const idx = state.ads.findIndex(a => a.id === editId);
@@ -1566,8 +1566,8 @@
             valorPago: planObj.preco,
             metodoPagamento,
             refPagamento,
-            estado: planObj.preco > 0 && state.ads[idx].estado === "expirado" ? "pendente" : state.ads[idx].estado,
-            expiraEm: planObj.preco > 0 && state.ads[idx].estado === "expirado" ? expiraEm : state.ads[idx].expiraEm
+            estado: state.ads[idx].estado === "expirado" ? "pendente" : state.ads[idx].estado,
+            expiraEm: state.ads[idx].estado === "expirado" ? expiraEm : state.ads[idx].expiraEm
           };
           showToast("Anúncio atualizado!");
         }
@@ -1590,9 +1590,7 @@
           criadoEm,
           expiraEm
         });
-        showToast(planObj.preco === 0
-          ? "Anúncio Free ativado por 1 dia! Depois terás de pagar."
-          : "Anúncio enviado com referência! Aguarda aprovação do Admin.");
+        showToast("Enviado! Aguarda confirmação do Admin para curtires o teu plano.");
       }
 
       await syncCloudData();
@@ -1741,11 +1739,17 @@
       const ad = state.ads.find(a => a.id === id);
       if (!ad) return;
       ad.estado = status;
+      if (status === "ativo") {
+        const planObj = PLANOS[ad.plano] || PLANOS.Standard;
+        const now = new Date();
+        ad.criadoEm = now.toISOString().slice(0, 10);
+        ad.expiraEm = new Date(now.getTime() + planObj.dias * 86400000).toISOString().slice(0, 10);
+      }
       await syncCloudData();
       renderAdminArea();
       renderAds();
       renderSellerArea();
-      showToast(status === "ativo" ? "Pagamento verificado e anúncio ativado!" : "Anúncio rejeitado.");
+      showToast(status === "ativo" ? "Pagamento confirmado! O vendedor já pode curtir o plano." : "Anúncio rejeitado.");
     }
 
     function renderAdminUsers() {
