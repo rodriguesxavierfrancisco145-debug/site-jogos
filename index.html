@@ -329,6 +329,8 @@
     .badge-plano.Premium { background: #b45309; color: #fff; }
     .badge-plano.Standard { background: #0369a1; color: #fff; }
     .badge-plano.Básico { background: #0b6e4f; color: #fff; }
+    .badge-plano.Mini { background: #4338ca; color: #fff; }
+    .badge-plano.Free { background: #334155; color: #fff; }
 
     .ad-body {
       padding: 16px;
@@ -396,7 +398,7 @@
 
     .plans-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
       gap: 18px;
       margin-bottom: 22px;
     }
@@ -453,7 +455,7 @@
     }
     .status.ativo { background: #dcfce7; color: #166534; }
     .status.pendente { background: #fef9c3; color: #854d0e; }
-    .status.rejeitado, .status.bloqueado { background: #fee2e2; color: #991b1b; }
+    .status.rejeitado, .status.bloqueado, .status.expirado { background: #fee2e2; color: #991b1b; }
 
     /* KPIs Dashboard */
     .kpi-grid {
@@ -578,7 +580,7 @@
           <p>Produtos e serviços de Maputo a Cabo Delgado, com preços em Meticais (MT), contacto direto via WhatsApp e pagamentos por M-Pesa e e-Mola.</p>
           <div style="display:flex; gap:10px; flex-wrap:wrap;">
             <button class="btn btn-primary" style="background:#fff; color:var(--primary);" onclick="switchTab('vendedor')">+ Publicar Anúncio</button>
-            <button class="btn btn-outline" style="background:transparent; color:#fff; border-color:rgba(255,255,255,0.35);" onclick="switchTab('planos')">Ver Planos (desde 100 MT)</button>
+            <button class="btn btn-outline" style="background:transparent; color:#fff; border-color:rgba(255,255,255,0.35);" onclick="switchTab('planos')">Ver Planos (Free / 50 MT+)</button>
           </div>
         </div>
         <div class="hero-stats">
@@ -647,7 +649,7 @@
         <div class="panel-header">
           <div>
             <h2>🏪 Área do Vendedor & Perfil</h2>
-            <p style="color:var(--muted); font-size:0.9rem;">Cria ou edita o teu perfil de vendedor e publica anúncios com pagamento via M-Pesa ou e-Mola.</p>
+            <p style="color:var(--muted); font-size:0.9rem;">Cria ou edita o teu perfil de vendedor e publica anúncios com teste Free de 1 dia ou planos via M-Pesa / e-Mola.</p>
           </div>
           <button class="btn btn-outline" onclick="openAuthModal('vendedor')">Trocar / Criar Conta Vendedor</button>
         </div>
@@ -707,12 +709,12 @@
             </div>
             <div class="field">
               <label>Referência / Código da Transação *</label>
-              <input type="text" id="adPayRef" required placeholder="Ex: MP261127.1840.A9182" />
+              <input type="text" id="adPayRef" placeholder="Ex: MP261127.1840.A9182" />
             </div>
           </div>
 
           <div style="margin-top:18px; display:flex; gap:10px; flex-wrap:wrap;">
-            <button type="submit" class="btn btn-primary" id="submitAdBtn">Submeter Anúncio para Aprovação</button>
+            <button type="submit" class="btn btn-primary" id="submitAdBtn">Submeter Anúncio</button>
             <button type="button" class="btn btn-outline" onclick="resetAdForm()">Limpar Formulário</button>
           </div>
         </form>
@@ -747,11 +749,27 @@
         <div class="panel-header">
           <div>
             <h2>💳 Planos de Publicação em Meticais (MT)</h2>
-            <p style="color:var(--muted); font-size:0.9rem;">Pagamentos via <strong>M-Pesa</strong> ou <strong>e-Mola</strong>. Após enviar a referência, o administrador valida e ativa o anúncio.</p>
+            <p style="color:var(--muted); font-size:0.9rem;">Começa com <strong>Free (1 dia grátis)</strong> — após 1 dia grátis terás de pagar — ou escolhe um plano via <strong>M-Pesa</strong> / <strong>e-Mola</strong>.</p>
           </div>
         </div>
 
         <div class="plans-grid">
+          <div class="plan-card">
+            <span class="pill">Plano Free</span>
+            <div class="plan-price">0 MT</div>
+            <p style="font-weight:700; margin-bottom:8px;">⏱️ 1 dia de publicação grátis</p>
+            <p style="font-size:0.88rem; color:var(--muted);">Experimenta 1 dia grátis; depois de 1 dia grátis terás de pagar para continuar.</p>
+            <button class="btn btn-primary btn-sm" style="margin-top:14px; width:100%;" onclick="selectPlanAndGoSeller('Free')">Escolher Free (1 dia)</button>
+          </div>
+
+          <div class="plan-card">
+            <span class="pill">Plano Mini</span>
+            <div class="plan-price">50 MT</div>
+            <p style="font-weight:700; margin-bottom:8px;">⏱️ 3 dias de publicação</p>
+            <p style="font-size:0.88rem; color:var(--muted);">Opção económica de 3 dias para divulgar rápido no mercado local.</p>
+            <button class="btn btn-primary btn-sm" style="margin-top:14px; width:100%;" onclick="selectPlanAndGoSeller('Mini')">Escolher Mini (50 MT)</button>
+          </div>
+
           <div class="plan-card">
             <span class="pill">Plano Básico</span>
             <div class="plan-price">100 MT</div>
@@ -831,6 +849,7 @@
               <option value="todos">Todos os estados</option>
               <option value="pendente">Apenas Pendentes</option>
               <option value="ativo">Ativos</option>
+              <option value="expirado">Expirados</option>
               <option value="rejeitado">Rejeitados</option>
             </select>
           </div>
@@ -990,6 +1009,8 @@
     ];
 
     const PLANOS = {
+      "Free": { nome: "Free", preco: 0, dias: 1, desc: "1 dia grátis (depois paga)" },
+      "Mini": { nome: "Mini", preco: 50, dias: 3, desc: "3 dias de publicação" },
       "Básico": { nome: "Básico", preco: 100, dias: 7, desc: "7 dias de publicação" },
       "Standard": { nome: "Standard", preco: 200, dias: 15, desc: "15 dias de publicação" },
       "Premium": { nome: "Premium", preco: 350, dias: 30, desc: "30 dias de publicação" }
@@ -1103,6 +1124,18 @@
       uploadedPhotoDataUrl: "",
       isAdminLoggedIn: sessionStorage.getItem("km_admin_auth") === "true"
     };
+
+    function checkExpiredAds() {
+      const today = new Date().toISOString().slice(0, 10);
+      let changed = false;
+      state.ads.forEach(ad => {
+        if (ad.estado === "ativo" && ad.expiraEm && today >= ad.expiraEm) {
+          ad.estado = "expirado";
+          changed = true;
+        }
+      });
+      return changed;
+    }
 
     function saveState() {
       localStorage.setItem("km_ads", JSON.stringify(state.ads));
@@ -1250,7 +1283,7 @@
       const minP = Number(document.getElementById("minPrice").value) || 0;
       const maxP = Number(document.getElementById("maxPrice").value) || Infinity;
 
-      const planRank = { Premium: 3, Standard: 2, Básico: 1 };
+      const planRank = { Premium: 5, Standard: 4, Básico: 3, Mini: 2, Free: 1 };
 
       return state.ads
         .filter(ad => ad.estado === "ativo")
@@ -1425,6 +1458,15 @@
           </div>
         `;
       }).join("");
+
+      const refInput = document.getElementById("adPayRef");
+      if (state.selectedPlan === "Free") {
+        refInput.required = false;
+        refInput.placeholder = "Não precisa referência no plano Free (1 dia)";
+      } else {
+        refInput.required = true;
+        refInput.placeholder = "Ex: MP261127.1840.A9182";
+      }
     }
 
     function choosePlan(planName) {
@@ -1462,15 +1504,28 @@
           <td><strong>${escapeHtml(ad.titulo)}</strong></td>
           <td>${escapeHtml(ad.plano)} (${formatMT(ad.valorPago)})</td>
           <td>${formatMT(ad.preco)}</td>
-          <td><code>${escapeHtml(ad.refPagamento)}</code> (${escapeHtml(ad.metodoPagamento)})</td>
+          <td><code>${escapeHtml(ad.refPagamento || "FREE-1D")}</code> (${escapeHtml(ad.metodoPagamento)})</td>
           <td><span class="status ${ad.estado}">${ad.estado.toUpperCase()}</span></td>
           <td>${ad.criadoEm} → ${ad.expiraEm}</td>
           <td style="white-space:nowrap;">
+            ${ad.estado === "expirado" ? `<button class="btn btn-primary btn-sm" onclick="payToRenewAd('${ad.id}')">Pagar Plano</button>` : ""}
             <button class="btn btn-outline btn-sm" onclick="editAd('${ad.id}')">Editar</button>
             <button class="btn btn-danger btn-sm" onclick="deleteAd('${ad.id}')">Eliminar</button>
           </td>
         </tr>
       `).join("");
+    }
+
+    function payToRenewAd(id) {
+      const ad = state.ads.find(a => a.id === id);
+      if (!ad) return;
+      editAd(id);
+      if (state.selectedPlan === "Free") {
+        state.selectedPlan = "Mini";
+        renderSellerPlans();
+      }
+      document.getElementById("adPayRef").focus();
+      showToast("O período grátis terminou. Escolhe um plano pago e insere a referência.");
     }
 
     async function submitAd(e) {
@@ -1484,15 +1539,21 @@
       const descricao = document.getElementById("adDesc").value.trim();
       const fotoUrl = document.getElementById("adPhotoUrl").value.trim();
       const metodoPagamento = document.getElementById("adPayMethod").value;
-      const refPagamento = document.getElementById("adPayRef").value.trim();
+      const refPagamentoInput = document.getElementById("adPayRef").value.trim();
 
       const planObj = PLANOS[state.selectedPlan] || PLANOS.Standard;
+      if (planObj.preco > 0 && !refPagamentoInput) {
+        showToast("Insere a referência de pagamento para planos pagos.");
+        return;
+      }
+      const refPagamento = planObj.preco === 0 ? (refPagamentoInput || "GRATIS-1DIA") : refPagamentoInput;
       const fotoFinal = state.uploadedPhotoDataUrl || fotoUrl || "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=800&q=80";
 
       const now = new Date();
       const criadoEm = now.toISOString().slice(0, 10);
       const expDate = new Date(now.getTime() + planObj.dias * 86400000);
       const expiraEm = expDate.toISOString().slice(0, 10);
+      const novoEstado = planObj.preco === 0 ? "ativo" : "pendente";
 
       if (editId) {
         const idx = state.ads.findIndex(a => a.id === editId);
@@ -1504,7 +1565,9 @@
             plano: planObj.nome,
             valorPago: planObj.preco,
             metodoPagamento,
-            refPagamento
+            refPagamento,
+            estado: planObj.preco > 0 && state.ads[idx].estado === "expirado" ? "pendente" : state.ads[idx].estado,
+            expiraEm: planObj.preco > 0 && state.ads[idx].estado === "expirado" ? expiraEm : state.ads[idx].expiraEm
           };
           showToast("Anúncio atualizado!");
         }
@@ -1523,11 +1586,13 @@
           valorPago: planObj.preco,
           metodoPagamento,
           refPagamento,
-          estado: "pendente",
+          estado: novoEstado,
           criadoEm,
           expiraEm
         });
-        showToast("Anúncio enviado com referência! Aguarda aprovação do Admin.");
+        showToast(planObj.preco === 0
+          ? "Anúncio Free ativado por 1 dia! Depois terás de pagar."
+          : "Anúncio enviado com referência! Aguarda aprovação do Admin.");
       }
 
       await syncCloudData();
@@ -1548,7 +1613,7 @@
       document.getElementById("adDesc").value = ad.descricao;
       document.getElementById("adPhotoUrl").value = ad.foto.startsWith("data:") ? "" : ad.foto;
       document.getElementById("adPayMethod").value = ad.metodoPagamento || "M-Pesa";
-      document.getElementById("adPayRef").value = ad.refPagamento || "";
+      document.getElementById("adPayRef").value = ad.refPagamento === "GRATIS-1DIA" ? "" : (ad.refPagamento || "");
       state.selectedPlan = ad.plano;
       state.uploadedPhotoDataUrl = "";
       document.getElementById("formAdTitle").textContent = "Editar Anúncio";
@@ -1562,9 +1627,10 @@
       document.getElementById("editingAdId").value = "";
       state.uploadedPhotoDataUrl = "";
       document.getElementById("formAdTitle").textContent = "Publicar Novo Anúncio";
-      document.getElementById("submitAdBtn").textContent = "Submeter Anúncio para Aprovação";
+      document.getElementById("submitAdBtn").textContent = "Submeter Anúncio";
       if (state.currentUser?.whatsapp) document.getElementById("adWhatsapp").value = state.currentUser.whatsapp;
       if (state.currentUser?.localizacao) document.getElementById("adLocation").value = state.currentUser.localizacao;
+      renderSellerPlans();
     }
 
     async function deleteAd(id) {
@@ -1627,8 +1693,8 @@
         <div class="kpi-card"><span>Receita Registada</span><strong style="color:var(--primary);">${formatMT(receita)}</strong></div>
       `;
 
-      const planCounts = { Básico: 0, Standard: 0, Premium: 0 };
-      const planRevenue = { Básico: 0, Standard: 0, Premium: 0 };
+      const planCounts = { Free: 0, Mini: 0, Básico: 0, Standard: 0, Premium: 0 };
+      const planRevenue = { Free: 0, Mini: 0, Básico: 0, Standard: 0, Premium: 0 };
       state.ads.forEach(a => {
         if (planCounts[a.plano] !== undefined) {
           planCounts[a.plano] += 1;
@@ -1660,7 +1726,7 @@
           <td><strong>${escapeHtml(ad.titulo)}</strong><div style="font-size:0.78rem; color:var(--muted);">${escapeHtml(ad.localizacao)}</div></td>
           <td>${escapeHtml(ad.vendedor)}</td>
           <td>${escapeHtml(ad.plano)} — <strong>${formatMT(ad.valorPago)}</strong></td>
-          <td><code>${escapeHtml(ad.refPagamento)}</code><div style="font-size:0.76rem; color:var(--muted);">${escapeHtml(ad.metodoPagamento)}</div></td>
+          <td><code>${escapeHtml(ad.refPagamento || "FREE-1D")}</code><div style="font-size:0.76rem; color:var(--muted);">${escapeHtml(ad.metodoPagamento)}</div></td>
           <td><span class="status ${ad.estado}">${ad.estado.toUpperCase()}</span></td>
           <td style="white-space:nowrap;">
             ${ad.estado !== "ativo" ? `<button class="btn btn-primary btn-sm" onclick="setAdStatus('${ad.id}', 'ativo')">Aprovar</button>` : ""}
@@ -1746,6 +1812,9 @@
     // Inicialização
     (async function init() {
       await loadCloudData();
+      if (checkExpiredAds()) {
+        await syncCloudData();
+      }
       populateSelects();
       renderUserBox();
       renderAds();
